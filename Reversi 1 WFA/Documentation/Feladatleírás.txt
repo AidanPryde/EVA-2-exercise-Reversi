@@ -39,4 +39,13 @@ több irányban is) a saját színünkre cseréljük.
 Mindkét játékosnak, minden lépésben ütnie kell. Ha egy állásban nincs olyan
 lépés, amivel a játékos ollóba tudna fogni legalább egy ellenséges korongot,
 passzolnia kell és újra ellenfele lép. A játékosok célja, hogy a játék végére minél
-több saját színû korongjuk legyen a táblán. 
+több saját színû korongjuk legyen a táblán.
+A játék akkor ér véget, ha a tábla megtelik, vagy ha mindkét játékos passzol. A
+játék gyõztese az a játékos, akinek a játék végén több korongja van a táblán. A
+játék döntetlen, ha mindkét játékosnak ugyanannyi korongja van a játék végén.
+A program biztosítson lehetõséget új játék kezdésére a táblaméret megadásával
+(10 × 10, 20 × 20, 30 × 30), játék szüneteltetésére, valamint játék mentésére és
+betöltésére. Ismerje fel, ha vége a játéknak, és jelenítse meg, melyik játékos
+gyõzött. A program folyamatosan jelezze külön-külön a két játékos gondolkodási
+idejét (azon idõk összessége, ami az elõzõ játékos lépésétõl a saját lépéséig tart,
+ezt is mentsük el és töltsük be).

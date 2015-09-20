@@ -9,5 +9,6 @@ namespace Reversi.Model
     /// </summary>
     public class ReversiGameModel
     {
+        ReversiTable _table;
     }
 }
