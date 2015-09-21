@@ -2,6 +2,8 @@
 
 namespace Reversi.Persistence
 {
+    public enum ReversiDataExceptionType { UnknownException, StreamReaderException, ReadLineAsyncException, FormatException }
+
     /// <summary>
     /// The type of the Reversi data access exception.
     /// </summary>
@@ -10,6 +12,6 @@ namespace Reversi.Persistence
         /// <summary>
         /// Create Reversi data access exception instance.
         /// </summary>
-        public ReversiDataException() { }
+        public ReversiDataException(String source, String message, ReversiDataExceptionType exceptionTyep) { }
     }
 }
