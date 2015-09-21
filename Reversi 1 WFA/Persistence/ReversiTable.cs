@@ -10,17 +10,17 @@ namespace Reversi.Persistence
 
         #region Constant Default Values
 
-        const Int32 defaultTableSize = 10; // The default table size.
+        private const Int32 defaultTableSize = 10; // The default table size.
 
         #endregion
 
         #region Fields
 
-        Int32 _tableSize; // The size of the table.
-        Int32[,] _tableValues; // The table itself.
+        private Int32 _tableSize; // The size of the table.
+        private Int32[,] _tableValues; // The table itself.
 
-        Int32 _player1Time;
-        Int32 _player2Time;
+        private Int32 _player1Time;
+        private Int32 _player2Time;
 
         #endregion
 
@@ -46,6 +46,7 @@ namespace Reversi.Persistence
                 }
                 return _tableValues[x,y];
             }
+
             set
             {
                 if (x < 0 || x >= _tableSize)

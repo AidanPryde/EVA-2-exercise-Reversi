@@ -89,14 +89,15 @@ namespace Reversi.Persistence
             {
                 using (StreamWriter writer = new StreamWriter(path)) // opening file
                 {
-                    writer.Write(table.Size + " " + table); // kiírjuk a méreteket
+                    writer.Write(table.Size.ToString() + " " + table.ToString()); // kiírjuk a méreteket
                     await writer.WriteLineAsync();
-                    for (Int32 i = 0; i < table.Size; i++)
+                    for (Int32 i = 0; i < table.Size; ++i)
                     {
-                        for (Int32 j = 0; j < table.Size; j++)
+                        for (Int32 j = 0; j <= table.Size; ++j)
                         {
-                            await writer.WriteAsync(table[i, j] + " "); // kiírjuk az értékeket
+                            await writer.WriteAsync(table[i, j].ToString() + " "); // kiírjuk az értékeket
                         }
+                        await writer.WriteAsync(table[i, table.Size - 1].ToString());
                         await writer.WriteLineAsync();
                     }
                 }
