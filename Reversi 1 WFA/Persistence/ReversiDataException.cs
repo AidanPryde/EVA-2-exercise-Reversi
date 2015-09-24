@@ -18,6 +18,7 @@ namespace Reversi.Persistence
         #endregion
 
         #region Properties
+
         override public String Message
         {
             get
@@ -25,7 +26,10 @@ namespace Reversi.Persistence
                 return _message;
             }
         }
+
         #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Create Reversi data access exception instance.
@@ -35,6 +39,25 @@ namespace Reversi.Persistence
             this.Source = source;
             _message = message;
             _exceptionTyep = exceptionTyep;
+            if (exceptionTyep == ReversiDataExceptionType.FormatException)
+            {
+
+            }
+            else if (exceptionTyep == ReversiDataExceptionType.StreamReaderException)
+            {
+
+            }
+            else if (exceptionTyep == ReversiDataExceptionType.ReadLineAsyncException)
+            {
+
+            }
+            else
+            {
+
+            }
         }
+
+        #endregion
+
     }
 }

@@ -12,14 +12,14 @@ namespace Reversi.Persistence
         /// Loading file.
         /// </summary>
         /// <param name="path">File path.</param>
-        /// <returns>A square Reversi game table, uploaded with the read data.</returns>
-        Task<ReversiTable> Load(String path);
+        /// <returns>All the data to recover the game state. The game table size, the put downs and the players game times.</returns>
+        Task<ReversiGameDescriptiveData> Load(String path);
 
         /// <summary>
         /// Saving file.
         /// </summary>
         /// <param name="path">File path.</param>
-        /// <param name="table">A square Reversi game table, that we write into the truncated file.</param>
-        Task Save(String fileName, ReversiTable path);
+        /// <param name="data">All the data to recover the game state. The game table size, the put downs and the players game times.</param>
+        Task Save(String path, ReversiGameDescriptiveData data);
     }
 }

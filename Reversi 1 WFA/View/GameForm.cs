@@ -12,7 +12,7 @@ namespace Reversi.View
     public partial class GameForm : Form
     {
 
-        #region Constructors
+        #region Constructor
 
         public GameForm()
         {
