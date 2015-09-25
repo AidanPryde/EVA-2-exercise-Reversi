@@ -13,19 +13,9 @@ namespace Reversi.Persistence
 
         #region Fields 
 
-        private readonly Int32[] _acceptableGameTableSizeArray;
-
         #endregion
 
         #region Constructors
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public ReversiFileDataAccess(Int32[] acceptableGameTableSizeArray)
-        {
-            _acceptableGameTableSizeArray = acceptableGameTableSizeArray;
-        }
 
         #endregion
 
@@ -51,21 +41,6 @@ namespace Reversi.Persistence
                     Int32 player1Time = Int32.Parse(numbers[1]);
                     Int32 player2Time = Int32.Parse(numbers[2]);
                     Int32 putDownsCount = Int32.Parse(numbers[3]);
-
-                    // Check for wrong table size.
-                    Boolean isBadTableSize = true;
-                    for (Int32 i = 0; i < _acceptableGameTableSizeArray.GetLength(0); ++i)
-                    {
-                        if (tableSize == _acceptableGameTableSizeArray[0])
-                        {
-                            isBadTableSize = false;
-                        }
-                    }
-                    if (isBadTableSize)
-                    {
-                        //TODO: Not like this.
-                        throw new ReversiDataException("Source is public async Task<ReversiTable> Load(String path) in public class ReversiFileDataAccess : IReversiDataAccess.", "Not supported table size. 'tableSize' ", ReversiDataExceptionType.FormatException); ;
-                    }
 
                     // Creating the game descriptive data class.
                     ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time);
@@ -131,15 +106,15 @@ namespace Reversi.Persistence
                 using (StreamWriter writer = new StreamWriter(path)) // opening file
                 {
                     // Writing the fist line with the size if the table, with the players played times and with the coordinats count.
-                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsCount.ToString()); // kiírjuk a méreteket
+                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsCoordinatesCount.ToString()); // kiírjuk a méreteket
                     await writer.WriteLineAsync();
 
                     // Writing the second line with the coordinates.
-                    for (Int32 i = 0; i < data.PutDownsCount - 1; ++i)
+                    for (Int32 i = 0; i < data.PutDownsCoordinatesCount - 1; ++i)
                     {
                         await writer.WriteAsync(data[i].ToString() + " ");
                     }
-                    await writer.WriteAsync(data[data.PutDownsCount - 1].ToString());
+                    await writer.WriteAsync(data[data.PutDownsCoordinatesCount - 1].ToString());
                 }
             }
             catch (Exception e)
