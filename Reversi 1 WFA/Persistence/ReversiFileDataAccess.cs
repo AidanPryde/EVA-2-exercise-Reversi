@@ -50,7 +50,7 @@ namespace Reversi.Persistence
                     Int32 tableSize = Int32.Parse(numbers[0]);
                     Int32 player1Time = Int32.Parse(numbers[1]);
                     Int32 player2Time = Int32.Parse(numbers[2]);
-                    Int32 putDownsCoordinatesCount = Int32.Parse(numbers[3]);
+                    Int32 putDownsCount = Int32.Parse(numbers[3]);
 
                     // Check for wrong table size.
                     Boolean isBadTableSize = true;
@@ -75,13 +75,9 @@ namespace Reversi.Persistence
                     numbers = line.Split(' ');
 
                     // Setup values of the putDown array.
-                    for (Int32 i = 0; i < putDownsCoordinatesCount; i += 2)
+                    for (Int32 i = 0; i < putDownsCount; i += 2)
                     {
-                        Int32 coordinate = Int32.Parse(numbers[i]);
-                        data[i] = coordinate;
-
-                        coordinate = Int32.Parse(numbers[i + 1]);
-                        data[i + 1] = coordinate;
+                        data[i] = Int32.Parse(numbers[i]);
                     }
 
                     return data;
@@ -135,16 +131,15 @@ namespace Reversi.Persistence
                 using (StreamWriter writer = new StreamWriter(path)) // opening file
                 {
                     // Writing the fist line with the size if the table, with the players played times and with the coordinats count.
-                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.CoordinatesCount.ToString()); // kiírjuk a méreteket
+                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsCount.ToString()); // kiírjuk a méreteket
                     await writer.WriteLineAsync();
 
                     // Writing the second line with the coordinates.
-                    int coordinateCountMinusTwo = data.CoordinatesCount - 2;
-                    for (Int32 i = 0; i <= coordinateCountMinusTwo; ++i)
+                    for (Int32 i = 0; i < data.PutDownsCount - 1; ++i)
                     {
-                        await writer.WriteAsync(data[i].ToString() + " " + data[i + 1].ToString() + " ");
+                        await writer.WriteAsync(data[i].ToString() + " ");
                     }
-                    await writer.WriteAsync(data[coordinateCountMinusTwo].ToString() + " " + data[coordinateCountMinusTwo + 1].ToString());
+                    await writer.WriteAsync(data[data.PutDownsCount - 1].ToString());
                 }
             }
             catch (Exception e)

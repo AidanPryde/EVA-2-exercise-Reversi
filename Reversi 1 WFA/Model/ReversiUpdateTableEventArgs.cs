@@ -9,10 +9,8 @@ namespace Reversi.Model
     {
         private Int32 _updatedFieldsCount;
         private Int32[] _updatedFieldsDatas;
-        private Int32 _player1PossiblePutDownCount;
-        private Int32[] _player1PossiblePutDownCoordinates;
-        private Int32 _player2PossiblePutDownCount;
-        private Int32[] _player2PossiblePutDownCoordinates;
+        private Int32 _player1Points;
+        private Int32 _player2Points;
 
         /// <summary>
         /// Quary of the '_updatedFieldsCount' field value.
@@ -37,46 +35,24 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Quary of the '_player1PossiblePutDownCount' field value.
+        /// Quary of the '_player1Points' field value. The actual points of player 1 has.
         /// </summary>
-        public Int32 Player1PossiblePutDownCount
+        public Int32 Player1Points
         {
             get
             {
-                return _player1PossiblePutDownCount;
+                return _player1Points;
             }
         }
 
         /// <summary>
-        /// Quary of the '_player1PossiblePutDownCoordinates' field value.
+        /// Quary of the '_player2Points' field value. The actual points of player 2 has.
         /// </summary>
-        public Int32[] Player1PossiblePutDownCoordinates
+        public Int32 Player2Points
         {
             get
             {
-                return _player1PossiblePutDownCoordinates;
-            }
-        }
-
-        /// <summary>
-        /// Quary of the '_player2PossiblePutDownCount' field value.
-        /// </summary>
-        public Int32 Player2PossiblePutDownCount
-        {
-            get
-            {
-                return _player2PossiblePutDownCount;
-            }
-        }
-
-        /// <summary>
-        /// Quary of the '_player2PossiblePutDownCoordinates' field value.
-        /// </summary>
-        public Int32[] Player2PossiblePutDownCoordinates
-        {
-            get
-            {
-                return _player2PossiblePutDownCoordinates;
+                return _player2Points;
             }
         }
 
@@ -88,20 +64,15 @@ namespace Reversi.Model
         /// </summary>
         /// <param name="updatedFieldsCount">The updated fields count.</param>
         /// <param name="updatedFieldsDatas">The updated fields data.</param>
-        /// <param name="player1PossiblePutDownCount">The possible put down places count for player 1.</param>
-        /// <param name="player1PossiblePutDownCoordinates">The coordinates of the possible put down places for player 1.</param>
-        /// <param name="player2PossiblePutDownCount">The possible put down places count for player 2.</param>
-        /// <param name="player2PossiblePutDownCoordinates">The coordinates of the possible put down places for player 2.</param>
+        /// <param name="player1Points">The points of player 1 has.</param>
+        /// <param name="player2Points">The points of player 2 has.</param>
         public ReversiUpdateTableEventArgs(Int32 updatedFieldsCount, Int32[] updatedFieldsDatas,
-            Int32 player1PossiblePutDownCount, Int32[] player1PossiblePutDownCoordinates,
-            Int32 player2PossiblePutDownCount, Int32[] player2PossiblePutDownCoordinates)
+            Int32 player1Points, Int32 player2Points)
         {
             _updatedFieldsCount = updatedFieldsCount;
             _updatedFieldsDatas = updatedFieldsDatas;
-            _player1PossiblePutDownCount = player1PossiblePutDownCount;
-            _player1PossiblePutDownCoordinates = player1PossiblePutDownCoordinates;
-            _player2PossiblePutDownCount = player2PossiblePutDownCount;
-            _player2PossiblePutDownCoordinates = player2PossiblePutDownCoordinates;
+            _player1Points = player1Points;
+            _player2Points = player2Points;
         }
     }
 }

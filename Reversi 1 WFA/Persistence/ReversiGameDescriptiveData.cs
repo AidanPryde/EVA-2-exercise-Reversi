@@ -96,11 +96,14 @@ namespace Reversi.Persistence
             }
         }
 
-        public Int32 CoordinatesCount
+        /// <summary>
+        /// 
+        /// </summary>
+        public Int32 PutDownsCount
         {
             get
             {
-                return _putDowns.GetLength(0) / 2;
+                return _putDowns.GetLength(0);
             }
         }
 
@@ -132,9 +135,27 @@ namespace Reversi.Persistence
         /// 
         /// </summary>
         /// <returns></returns>
-        public Int32[] GeneratePossiblePutDownsCoordinates()
+        public void UpdateModelField(Int32[,] table, Int32 possiblePutDownsCoordinatesCount, Int32[] possiblePutDownsCoordinates, Boolean isPlayer1TurnOn, Int32 player1Points, Int32 player2Points)
         {
-            return new Int32[10];
+            isPlayer1TurnOn = true;
+            for (Int32 i = 0; i < _putDowns.GetLength(0); i += 2)
+            {
+                if (isPlayer1TurnOn)
+                {
+                    if (table[_putDowns[i], _putDowns[i + 1]] == 3)
+                    {
+
+                    }
+                    else
+                    {
+                        throw new ReversiDataException("Source 01", "message 01", ReversiDataExceptionType.FormatException);
+                    }
+                }
+                else
+                {
+
+                }
+            }
         }
 
         #endregion

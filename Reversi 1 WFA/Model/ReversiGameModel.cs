@@ -3,6 +3,8 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
+
+
 namespace Reversi.Model
 {
     /// <summary>
@@ -21,12 +23,20 @@ namespace Reversi.Model
         #region Fields
 
         private IReversiDataAccess _dataAccess;
+
         private ReversiGameDescriptiveData _data;
+
+        private Int32[,] _table;
+
+        private Boolean _isPlayer1TurnOn;
         private Int32 _player1Points;
         private Int32 _player2Points;
 
-        private Boolean _isGameStarted;
+        private Int32[] _possiblePutDownsCoordinates;
+        private Int32 _possiblePutDownsCoordinatesCount;
+
         private Timer _timer;
+        private Boolean _isGameStarted;
 
         private Int32 _tableSizeSetting;
 
@@ -34,7 +44,7 @@ namespace Reversi.Model
 
         #region Properties
 
-        public Int32 TableSizeSetting   
+        public Int32 TableSizeSetting
         {
             set
             {
@@ -104,12 +114,9 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            if (_data.TableSize != _tableSizeSetting)
-            {
-                _data = new ReversiGameDescriptiveData(_tableSizeSetting);
-            }
+            _data = new ReversiGameDescriptiveData(_tableSizeSetting);
 
-            InitializeFields(true);
+            InitializeFields(false);
 
             _timer.Enabled = true;
         }
@@ -123,8 +130,9 @@ namespace Reversi.Model
             _timer.Enabled = false;
 
             _data = await _dataAccess.Load(path);
+            _tableSizeSetting = _data.TableSize;
 
-            InitializeFields(false);
+            InitializeFields(true);
 
             _timer.Enabled = true;
         }
@@ -137,7 +145,7 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            await _dataAccess.Save(path, _table);
+            await _dataAccess.Save(path, _data);
 
             _timer.Enabled = true;
         }
@@ -170,99 +178,84 @@ namespace Reversi.Model
 
         #region Private game methods
 
-        private void InitializeFields(Boolean isNewGame)
+        private void InitializeFields(Boolean isLoadedGame)
         {
-            // We started a new game.
-            if (isNewGame)
+            if (_data.TableSize != _table.GetLength(0))
             {
-                for (Int32 x = 0; x < _table.Size; ++x)
-                {
-                    for (Int32 y = 0; y < _table.Size; ++y)
-                    {
-                        // We clear the table.
-                        _table[x, y] = 0;
-                    }
-                }
-
-                // The 12 * 2 size for the 12 starting possible put down coordinates.
-                _posiblePutDownCoordinatesCount = 24;
-
-                // The starting points for player 1.
-                _table[_table.Size - 1, _table.Size - 1] = 1;
-                _table[_table.Size, _table.Size] = 1;
-
-                // The starting points for player 2.
-                _table[_table.Size - 1, _table.Size] = 2;
-                _table[_table.Size, _table.Size - 1] = 2;
-
-
-                // The possible put down coordinates around the starting points.
-                _table[_table.Size - 2, _table.Size - 2] = 3;
-                _posiblePutDownCoordinates[0] = _table.Size - 2;
-                _posiblePutDownCoordinates[1] = _table.Size - 2;
-                _table[_table.Size - 1, _table.Size - 2] = 3;
-                _posiblePutDownCoordinates[2] = _table.Size - 1;
-                _posiblePutDownCoordinates[3] = _table.Size - 2;
-                _table[_table.Size, _table.Size - 2] = 3;
-                _posiblePutDownCoordinates[4] = _table.Size;
-                _posiblePutDownCoordinates[5] = _table.Size - 2;
-                _table[_table.Size + 1, _table.Size - 2] = 3;
-                _posiblePutDownCoordinates[6] = _table.Size + 1;
-                _posiblePutDownCoordinates[7] = _table.Size - 2;
-                _table[_table.Size + 1, _table.Size - 1] = 3;
-                _posiblePutDownCoordinates[8] = _table.Size + 1;
-                _posiblePutDownCoordinates[9] = _table.Size - 1;
-                _table[_table.Size + 1, _table.Size] = 3;
-                _posiblePutDownCoordinates[10] = _table.Size + 1;
-                _posiblePutDownCoordinates[11] = _table.Size;
-                _table[_table.Size + 1, _table.Size + 1] = 3;
-                _posiblePutDownCoordinates[12] = _table.Size + 1;
-                _posiblePutDownCoordinates[13] = _table.Size + 1;
-                _table[_table.Size, _table.Size + 1] = 3;
-                _posiblePutDownCoordinates[14] = _table.Size;
-                _posiblePutDownCoordinates[15] = _table.Size + 1;
-                _table[_table.Size - 1, _table.Size + 1] = 3;
-                _posiblePutDownCoordinates[16] = _table.Size - 1;
-                _posiblePutDownCoordinates[17] = _table.Size + 1;
-                _table[_table.Size - 2, _table.Size + 1] = 3;
-                _posiblePutDownCoordinates[18] = _table.Size - 2;
-                _posiblePutDownCoordinates[19] = _table.Size + 1;
-                _table[_table.Size - 2, _table.Size] = 3;
-                _posiblePutDownCoordinates[20] = _table.Size - 2;
-                _posiblePutDownCoordinates[21] = _table.Size;
-                _table[_table.Size - 2, _table.Size - 1] = 3;
-                _posiblePutDownCoordinates[22] = _table.Size - 2;
-                _posiblePutDownCoordinates[23] = _table.Size - 1;
-
-
-                // The staring points of the players.
-                _player1Points = 2;
-                _player2Points = 2;
+                _table = new Int32[_data.TableSize, _data.TableSize];
+                _possiblePutDownsCoordinates = new Int32[_data.TableSize * _data.TableSize * 2]; //TODO: It can be smaller. How much?
             }
-            else // We loaded the game.
-            {
-                _posiblePutDownCoordinatesCount = 0;
 
-                for (Int32 x = 0; x < _table.Size; ++x)
+            Int32[] updatedFieldsDatas = new Int32[_data.TableSize * _data.TableSize];
+
+            for (Int32 x = 0; x < _data.TableSize; ++x)
+            {
+                for (Int32 y = 0; y < _data.TableSize; ++y)
                 {
-                    for (Int32 y = 0; y < _table.Size; ++y)
-                    {
-                        if (_table[x, y] == 1) // We count the player 1 points.
-                        {
-                            ++_player1Points;
-                        }
-                        else if (_table[x, y] == 2) // We count the player 2 points.
-                        {
-                            ++_player2Points;
-                        }
-                        else if (_table[x, y] == 3) // We count the possible put down coordinates and save them.
-                        {
-                            _posiblePutDownCoordinates[_posiblePutDownCoordinatesCount] = x;
-                            _posiblePutDownCoordinates[_posiblePutDownCoordinatesCount + 1] = y;
-                            _posiblePutDownCoordinatesCount += 2;
-                        }
-                    }
+                    // We clear the table.
+                    _table[x, y] = 0;
                 }
+            }
+
+            _isPlayer1TurnOn = true;
+
+            // The 12 * 2 size for the 12 starting possible put down coordinates.
+            _possiblePutDownsCoordinatesCount = 24;
+
+            // The starting put downs for player 1.
+            _table[_data.TableSize - 1, _data.TableSize - 1] = 1;
+            _table[_data.TableSize, _data.TableSize] = 1;
+
+            // The starting put downs for player 2.
+            _table[_data.TableSize - 1, _data.TableSize] = 2;
+            _table[_data.TableSize, _data.TableSize - 1] = 2;
+
+            // The possible put down coordinates around the starting points.
+            _table[_data.TableSize - 2, _data.TableSize - 2] = 3;
+            _possiblePutDownsCoordinates[0] = _data.TableSize - 2;
+            _possiblePutDownsCoordinates[1] = _data.TableSize - 2;
+            _table[_data.TableSize - 1, _data.TableSize - 2] = 3;
+            _possiblePutDownsCoordinates[2] = _data.TableSize - 1;
+            _possiblePutDownsCoordinates[3] = _data.TableSize - 2;
+            _table[_data.TableSize, _data.TableSize - 2] = 3;
+            _possiblePutDownsCoordinates[4] = _data.TableSize;
+            _possiblePutDownsCoordinates[5] = _data.TableSize - 2;
+            _table[_data.TableSize + 1, _data.TableSize - 2] = 3;
+            _possiblePutDownsCoordinates[6] = _data.TableSize + 1;
+            _possiblePutDownsCoordinates[7] = _data.TableSize - 2;
+            _table[_data.TableSize + 1, _data.TableSize - 1] = 3;
+            _possiblePutDownsCoordinates[8] = _data.TableSize + 1;
+            _possiblePutDownsCoordinates[9] = _data.TableSize - 1;
+            _table[_data.TableSize + 1, _data.TableSize] = 3;
+            _possiblePutDownsCoordinates[10] = _data.TableSize + 1;
+            _possiblePutDownsCoordinates[11] = _data.TableSize;
+            _table[_data.TableSize + 1, _data.TableSize + 1] = 3;
+            _possiblePutDownsCoordinates[12] = _data.TableSize + 1;
+            _possiblePutDownsCoordinates[13] = _data.TableSize + 1;
+            _table[_data.TableSize, _data.TableSize + 1] = 3;
+            _possiblePutDownsCoordinates[14] = _data.TableSize;
+            _possiblePutDownsCoordinates[15] = _data.TableSize + 1;
+            _table[_data.TableSize - 1, _data.TableSize + 1] = 3;
+            _possiblePutDownsCoordinates[16] = _data.TableSize - 1;
+            _possiblePutDownsCoordinates[17] = _data.TableSize + 1;
+            _table[_data.TableSize - 2, _data.TableSize + 1] = 3;
+            _possiblePutDownsCoordinates[18] = _data.TableSize - 2;
+            _possiblePutDownsCoordinates[19] = _data.TableSize + 1;
+            _table[_data.TableSize - 2, _data.TableSize] = 3;
+            _possiblePutDownsCoordinates[20] = _data.TableSize - 2;
+            _possiblePutDownsCoordinates[21] = _data.TableSize;
+            _table[_data.TableSize - 2, _data.TableSize - 1] = 3;
+            _possiblePutDownsCoordinates[22] = _data.TableSize - 2;
+            _possiblePutDownsCoordinates[23] = _data.TableSize - 1;
+
+            // The staring points of the players.
+            _player1Points = 2;
+            _player2Points = 2;
+
+            // We loaded the game.
+            if (isLoadedGame)
+            {
+                _data.UpdateModelField(_table, _possiblePutDownsCoordinatesCount, _possiblePutDownsCoordinates, _isPlayer1TurnOn, _player1Points, _player2Points);
             }
             
             // We started at least one game.
@@ -299,13 +292,13 @@ namespace Reversi.Model
 
         private void Timer_Elapsed(Object sender, ElapsedEventArgs e)
         {
-            if(_table.IsPlayer1sTurn)
+            if(_isPlayer1TurnOn)
             {
-                ++(_table.Player1Time);
+                ++(_data.Player1Time);
             }
             else
             {
-                ++(_table.Player2Time);
+                ++(_data.Player2Time);
             }
         }
 
