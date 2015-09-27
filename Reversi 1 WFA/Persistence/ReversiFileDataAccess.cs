@@ -43,7 +43,7 @@ namespace Reversi.Persistence
                     Int32 putDownsCount = Int32.Parse(numbers[3]);
 
                     // Creating the game descriptive data class.
-                    ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time);
+                    ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsCount);
 
                     // Read a line of the file, then split it bye one space.
                     line = await reader.ReadLineAsync();

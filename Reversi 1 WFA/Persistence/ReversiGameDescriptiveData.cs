@@ -16,6 +16,8 @@ namespace Reversi.Persistence
         /// </summary>
         private Int32[] _putDowns;
 
+        private Int32 _putDownsCount;
+
         /// <summary>
         /// Player 1 game time.
         /// </summary>
@@ -103,7 +105,12 @@ namespace Reversi.Persistence
         {
             get
             {
-                return _putDowns.GetLength(0);
+                return _putDownsCount;
+            }
+
+            set
+            {
+                _putDownsCount = value;
             }
         }
 
@@ -117,14 +124,16 @@ namespace Reversi.Persistence
         /// <param name="tableSize">The size of the square game table.</param>
         /// <param name="player1Time">The player 1 play time.</param>
         /// <param name="player2Time">The player 2 play time.</param>
-        public ReversiGameDescriptiveData(Int32 tableSize, Int32 player1Time = 0, Int32 player2Time = 0)
+        public ReversiGameDescriptiveData(Int32 tableSize, Int32 player1Time = 0, Int32 player2Time = 0, Int32 putDownsCount = 0)
         {
             _tableSize = tableSize;
 
             _putDowns = new Int32[(_tableSize * 2) - 4];
-            
-            Player1Time = player1Time;
-            Player2Time = player2Time;
+
+            _player1Time = player1Time;
+            _player2Time = player2Time;
+
+            _putDownsCount = putDownsCount;
         }
 
         #endregion

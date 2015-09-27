@@ -3,8 +3,6 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
-
-
 namespace Reversi.Model
 {
     /// <summary>
@@ -25,17 +23,17 @@ namespace Reversi.Model
         private IReversiDataAccess _dataAccess;
 
         private ReversiGameDescriptiveData _data;
-        //TODO: Is it a state 5 possible?
+        //TODO: Is it a state 4 possible?
         /// <summary>
-        /// The table itself. Its values can be 0, 1, 2, 3, 4, 5, 6.
+        /// The table itself. Its values can be -1, 0, 1, 2, 3, 4, 5, 6.
         /// The 0 means it is uncharted field. No put downs even near.
         /// The -1 means it is a player 1 put down field.
         /// The 1 means it is a player 2 put down field.
         /// The 3 means it is a field, where player 2 can possible put down.
         /// The 4 means it is a field, where both player can possible put down.
-        /// The 5 means it is a field, that is a candidate to be a possible put down in the future.
+        /// The 5 means it is a field, that is a candidate to be a possible put down in the next turn.
         /// The 6 means it is a field, where player 1 can possible put down.
-        /// If we out of range it returns -1. We only check it if we are not sure.
+        /// If we out of range it returns -2. We only check it if we are not sure.
         /// </summary>
         private Int32[,] _table;
 
@@ -51,13 +49,16 @@ namespace Reversi.Model
         private Int32[] _possiblePutDownsCoordinates;
         private Int32 _possiblePutDownsCoordinatesCount;
 
+        private Int32[] _reversedPutDownsCoordinates;
+        private Int32 _reversedPutDownsCoordinatesCount;
+
         private Timer _timer;
         private Boolean _isGameStarted;
 
         private Int32 _tableSizeSetting;
 
         private Direction[] _allDirections;
-        private Direction[] _allReverseDirections;
+        private Direction[] _allReversedDirections;
 
         #endregion
 
@@ -115,7 +116,7 @@ namespace Reversi.Model
 
         #endregion
 
-        #region Constructor
+        #region Constructors
 
         /// <summary>
         /// The Reversi game model constructor. It generates a valid game state.
@@ -131,7 +132,7 @@ namespace Reversi.Model
             _timer.Elapsed += Timer_Elapsed;
 
             _allDirections = new Direction[] { ToUp, ToRightUp, ToRight, ToRightDown, ToDown, ToLeftDown, ToLeft, ToLeftUp };
-            _allReverseDirections = new Direction[] { ToDown, ToLeftDown, ToLeft, ToLeftUp, ToUp, ToRightUp, ToRight, ToRightDown };
+            _allReversedDirections = new Direction[] { ToDown, ToLeftDown, ToLeft, ToLeftUp, ToUp, ToRightUp, ToRight, ToRightDown };
         }
 
         #endregion
@@ -183,9 +184,13 @@ namespace Reversi.Model
 
         public void PutDown(Int32 x, Int32 y)
         {
-            if (_isGameStarted && _timer.Enabled)
+            if (_isGameStarted && _timer.Enabled && IsValidIndexes(x, y))
             {
-                MakePutDown(x, y);
+                if (MakePutDown(x, y))
+                {
+                    _timer.Enabled = false;
+                    OnSetGameEnded(new ReversiSetGameEndedEventArgs(_points[0], _points[2]));
+                }
             }
         }
 
@@ -298,13 +303,16 @@ namespace Reversi.Model
                 for (Int32 i = 0; i < _data.PutDownsCoordinatesCount; i += 2)
                 {
                     // Corrupt loaded data.
-                    if (_data[i] < 0 || _data[i] >= _data.TableSize || _data[i + 1] < 0 || _data[i + 1] >= _data.TableSize)
+                    if (!IsValidIndexes(_data[i], _data[i + 1]))
                     {
                         throw new ReversiDataException("asd", "asd", ReversiDataExceptionType.FormatException);
                     }
 
                     // Make the put down.
-                    MakePutDown(_data[i], _data[i + 1]);
+                    if (MakePutDown(_data[i], _data[i + 1], false))
+                    {
+                        throw new ReversiDataException("asd", "asd", ReversiDataExceptionType.FormatException);
+                    }
                 }
             }
 
@@ -320,7 +328,7 @@ namespace Reversi.Model
                 }
             }
 
-            UpdateTable(this, new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2]));
+            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2]));
             
             // We started at least one game.
             _isGameStarted = true;
@@ -331,7 +339,7 @@ namespace Reversi.Model
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void MakePutDown(Int32 x, Int32 y)
+        private Boolean MakePutDown(Int32 x, Int32 y, Boolean isUpdateNeeded = true)
         {
             // Updating the table put downs positions. 
             if (_isPlayer1TurnOn) // Player 1 put down.
@@ -342,7 +350,7 @@ namespace Reversi.Model
 
                     for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
                     {
-                        SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReverseDirections[i]);
+                        SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReversedDirections[i]);
                     }
                 }
                 else
@@ -358,7 +366,7 @@ namespace Reversi.Model
 
                     for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
                     {
-                        SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReverseDirections[i]);
+                        SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReversedDirections[i]);
                     }
                 }
                 else
@@ -401,6 +409,62 @@ namespace Reversi.Model
                     _possiblePutDownsCoordinatesCount += 2;
                 }
             }
+
+            Boolean isOver = false;
+
+            // Change the aktív player Boolean, if the other player can make a put down. It is over, if none can make a put donwn.
+            for (Int32 i = 0; i < _possiblePutDownsCoordinatesCount; i += 2)
+            {
+                if (_isPlayer1TurnOn
+                    && (_table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 4
+                    || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 3))
+                {
+                    _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                    isOver = false;
+                    break;
+                }
+                else if (!_isPlayer1TurnOn
+                    && (_table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 4
+                    || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 6))
+                {
+                    _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                    isOver = false;
+                    break;
+                }
+            }
+
+            if (isUpdateNeeded)
+            {
+                Int32 updatedFieldsDatasCount = ((_possiblePutDownsCoordinatesCount + _reversedPutDownsCoordinatesCount) * 3) / 2;
+                Int32[] updatedFieldsDatas = new Int32[updatedFieldsDatasCount];
+
+                for (Int32 i = 0; i < _possiblePutDownsCoordinatesCount; i += 2)
+                {
+                    updatedFieldsDatas[i] = _possiblePutDownsCoordinates[i];
+                    updatedFieldsDatas[i + 1] = _possiblePutDownsCoordinates[i + 1];
+                    updatedFieldsDatas[i + 2] = _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]];
+                }
+
+                for (Int32 i = 0; i < _reversedPutDownsCoordinatesCount; i += 2)
+                {
+                    updatedFieldsDatas[_possiblePutDownsCoordinatesCount + i] = _reversedPutDownsCoordinates[i];
+                    updatedFieldsDatas[_possiblePutDownsCoordinatesCount + i + 1] = _reversedPutDownsCoordinates[i + 1];
+                    updatedFieldsDatas[_possiblePutDownsCoordinatesCount + i + 2] = _table[_reversedPutDownsCoordinates[i], _reversedPutDownsCoordinates[i + 1]];
+                }
+
+                _data[_data.PutDownsCoordinatesCount] = x;
+                _data[_data.PutDownsCoordinatesCount + 1] = y;
+                _data.PutDownsCoordinatesCount += 2;
+
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2]));
+            }
+
+            if (isOver)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -439,6 +503,11 @@ namespace Reversi.Model
                         while (GetSearchValue(ref xFrom, ref yFrom) == valueOriginal * -1)
                         {
                             _table[xFrom, yFrom] = valueOriginal;
+                            _reversedPutDownsCoordinates[_reversedPutDownsCoordinatesCount] = xFrom;
+                            _reversedPutDownsCoordinates[_reversedPutDownsCoordinatesCount + 1] = yFrom;
+                            _reversedPutDownsCoordinates[_reversedPutDownsCoordinatesCount + 2] = valueOriginal;
+                            ++_reversedPutDownsCoordinatesCount;
+
                             ++(_points[valueOriginal + 1]);
                             --(_points[(valueOriginal * -1) + 1]);
                             --_points[1];
@@ -550,7 +619,7 @@ namespace Reversi.Model
                 return _table[x, y];
             }
 
-            return -1;
+            return -2;
         }
 
         /// <summary>
@@ -693,6 +762,7 @@ namespace Reversi.Model
             {
                 ++(_data.Player2Time);
             }
+            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_data.Player1Time, _data.Player2Time));
         }
 
         #endregion

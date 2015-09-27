@@ -37,8 +37,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.fileExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gamePauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.gameSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameSizeSmallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameSizeMediumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,8 +47,25 @@
             this.helpAboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mainFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.topFlowLayoutPanelForAll = new System.Windows.Forms.FlowLayoutPanel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.player1TimeValueLabel = new System.Windows.Forms.Label();
+            this.player1TimeNameLabel = new System.Windows.Forms.Label();
+            this.topFlowLayoutPanelForButtons = new System.Windows.Forms.FlowLayoutPanel();
+            this.passButton = new System.Windows.Forms.Button();
+            this.pauseButton = new System.Windows.Forms.Button();
+            this.player2GroupBox = new System.Windows.Forms.GroupBox();
+            this.player2TimeValueLabel = new System.Windows.Forms.Label();
+            this.player2TimeNameLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.mainFlowLayoutPanel.SuspendLayout();
+            this.topFlowLayoutPanelForAll.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.topFlowLayoutPanelForButtons.SuspendLayout();
+            this.player2GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -81,57 +96,49 @@
             // fileNewToolStripMenuItem
             // 
             this.fileNewToolStripMenuItem.Name = "fileNewToolStripMenuItem";
-            this.fileNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileNewToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.fileNewToolStripMenuItem.Text = "New";
+            this.fileNewToolStripMenuItem.Click += new System.EventHandler(this.fileNewToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(97, 6);
             // 
             // fileLoadToolStripMenuItem
             // 
             this.fileLoadToolStripMenuItem.Name = "fileLoadToolStripMenuItem";
-            this.fileLoadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileLoadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.fileLoadToolStripMenuItem.Text = "Load";
+            this.fileLoadToolStripMenuItem.Click += new System.EventHandler(this.fileLoadToolStripMenuItem_Click);
             // 
             // fileSaveToolStripMenuItem
             // 
+            this.fileSaveToolStripMenuItem.Enabled = false;
             this.fileSaveToolStripMenuItem.Name = "fileSaveToolStripMenuItem";
-            this.fileSaveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileSaveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.fileSaveToolStripMenuItem.Text = "Save";
+            this.fileSaveToolStripMenuItem.Click += new System.EventHandler(this.fileSaveToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(97, 6);
             // 
             // fileExitToolStripMenuItem
             // 
             this.fileExitToolStripMenuItem.Name = "fileExitToolStripMenuItem";
-            this.fileExitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileExitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.fileExitToolStripMenuItem.Text = "Exit";
+            this.fileExitToolStripMenuItem.Click += new System.EventHandler(this.fileExitToolStripMenuItem_Click);
             // 
             // gameToolStripMenuItem
             // 
             this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gamePauseToolStripMenuItem,
-            this.toolStripSeparator3,
             this.gameSizeToolStripMenuItem});
             this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
             this.gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.gameToolStripMenuItem.Text = "Game";
-            // 
-            // gamePauseToolStripMenuItem
-            // 
-            this.gamePauseToolStripMenuItem.Name = "gamePauseToolStripMenuItem";
-            this.gamePauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.gamePauseToolStripMenuItem.Text = "Pause";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // gameSizeToolStripMenuItem
             // 
@@ -151,18 +158,21 @@
             this.gameSizeSmallToolStripMenuItem.Name = "gameSizeSmallToolStripMenuItem";
             this.gameSizeSmallToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.gameSizeSmallToolStripMenuItem.Text = "Small (10 × 10)";
+            this.gameSizeSmallToolStripMenuItem.Click += new System.EventHandler(this.gameSizeSmallToolStripMenuItem_Click);
             // 
             // gameSizeMediumToolStripMenuItem
             // 
             this.gameSizeMediumToolStripMenuItem.Name = "gameSizeMediumToolStripMenuItem";
             this.gameSizeMediumToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.gameSizeMediumToolStripMenuItem.Text = "Medium (20 × 20)";
+            this.gameSizeMediumToolStripMenuItem.Click += new System.EventHandler(this.gameSizeMediumToolStripMenuItem_Click);
             // 
             // gameSizeLargeToolStripMenuItem
             // 
             this.gameSizeLargeToolStripMenuItem.Name = "gameSizeLargeToolStripMenuItem";
             this.gameSizeLargeToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.gameSizeLargeToolStripMenuItem.Text = "Large  (30 × 30)";
+            this.gameSizeLargeToolStripMenuItem.Click += new System.EventHandler(this.gameSizeLargeToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -179,6 +189,7 @@
             this.helpRulesToolStripMenuItem.Name = "helpRulesToolStripMenuItem";
             this.helpRulesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.helpRulesToolStripMenuItem.Text = "Rules";
+            this.helpRulesToolStripMenuItem.Click += new System.EventHandler(this.helpRulesToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -190,6 +201,7 @@
             this.helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
             this.helpAboutToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.helpAboutToolStripMenuItem.Text = "About Reversi Game";
+            this.helpAboutToolStripMenuItem.Click += new System.EventHandler(this.helpAboutToolStripMenuItem_Click);
             // 
             // statusStrip
             // 
@@ -206,16 +218,139 @@
             this.toolStripStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Adjust;
             this.toolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(638, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(669, 17);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.Text = "toolStripStatusLabel";
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // mainFlowLayoutPanel
+            // 
+            this.mainFlowLayoutPanel.Controls.Add(this.topFlowLayoutPanelForAll);
+            this.mainFlowLayoutPanel.Controls.Add(this.panel1);
+            this.mainFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainFlowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.mainFlowLayoutPanel.Location = new System.Drawing.Point(0, 24);
+            this.mainFlowLayoutPanel.Name = "mainFlowLayoutPanel";
+            this.mainFlowLayoutPanel.Size = new System.Drawing.Size(684, 420);
+            this.mainFlowLayoutPanel.TabIndex = 2;
+            // 
+            // topFlowLayoutPanelForAll
+            // 
+            this.topFlowLayoutPanelForAll.AutoSize = true;
+            this.topFlowLayoutPanelForAll.Controls.Add(this.groupBox1);
+            this.topFlowLayoutPanelForAll.Controls.Add(this.topFlowLayoutPanelForButtons);
+            this.topFlowLayoutPanelForAll.Controls.Add(this.player2GroupBox);
+            this.topFlowLayoutPanelForAll.Location = new System.Drawing.Point(3, 3);
+            this.topFlowLayoutPanelForAll.Name = "topFlowLayoutPanelForAll";
+            this.topFlowLayoutPanelForAll.Size = new System.Drawing.Size(499, 106);
+            this.topFlowLayoutPanelForAll.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.player1TimeValueLabel);
+            this.groupBox1.Controls.Add(this.player1TimeNameLabel);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Player 1";
+            // 
+            // player1TimeValueLabel
+            // 
+            this.player1TimeValueLabel.AutoSize = true;
+            this.player1TimeValueLabel.Location = new System.Drawing.Point(70, 20);
+            this.player1TimeValueLabel.Name = "player1TimeValueLabel";
+            this.player1TimeValueLabel.Size = new System.Drawing.Size(13, 13);
+            this.player1TimeValueLabel.TabIndex = 1;
+            this.player1TimeValueLabel.Text = "0";
+            // 
+            // player1TimeNameLabel
+            // 
+            this.player1TimeNameLabel.AutoSize = true;
+            this.player1TimeNameLabel.Location = new System.Drawing.Point(7, 20);
+            this.player1TimeNameLabel.Name = "player1TimeNameLabel";
+            this.player1TimeNameLabel.Size = new System.Drawing.Size(57, 13);
+            this.player1TimeNameLabel.TabIndex = 0;
+            this.player1TimeNameLabel.Text = "Used time:";
+            // 
+            // topFlowLayoutPanelForButtons
+            // 
+            this.topFlowLayoutPanelForButtons.Controls.Add(this.passButton);
+            this.topFlowLayoutPanelForButtons.Controls.Add(this.pauseButton);
+            this.topFlowLayoutPanelForButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topFlowLayoutPanelForButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.topFlowLayoutPanelForButtons.Location = new System.Drawing.Point(209, 3);
+            this.topFlowLayoutPanelForButtons.Name = "topFlowLayoutPanelForButtons";
+            this.topFlowLayoutPanelForButtons.Size = new System.Drawing.Size(81, 100);
+            this.topFlowLayoutPanelForButtons.TabIndex = 0;
+            // 
+            // passButton
+            // 
+            this.passButton.Enabled = false;
+            this.passButton.Location = new System.Drawing.Point(3, 3);
+            this.passButton.Name = "passButton";
+            this.passButton.Size = new System.Drawing.Size(75, 23);
+            this.passButton.TabIndex = 0;
+            this.passButton.Text = "Pass";
+            this.passButton.UseVisualStyleBackColor = true;
+            this.passButton.Click += new System.EventHandler(this.passButton_Click);
+            // 
+            // pauseButton
+            // 
+            this.pauseButton.Enabled = false;
+            this.pauseButton.Location = new System.Drawing.Point(3, 32);
+            this.pauseButton.Name = "pauseButton";
+            this.pauseButton.Size = new System.Drawing.Size(75, 23);
+            this.pauseButton.TabIndex = 1;
+            this.pauseButton.Text = "Pause";
+            this.pauseButton.UseVisualStyleBackColor = true;
+            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
+            // 
+            // player2GroupBox
+            // 
+            this.player2GroupBox.Controls.Add(this.player2TimeValueLabel);
+            this.player2GroupBox.Controls.Add(this.player2TimeNameLabel);
+            this.player2GroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.player2GroupBox.Location = new System.Drawing.Point(296, 3);
+            this.player2GroupBox.Name = "player2GroupBox";
+            this.player2GroupBox.Size = new System.Drawing.Size(200, 100);
+            this.player2GroupBox.TabIndex = 1;
+            this.player2GroupBox.TabStop = false;
+            this.player2GroupBox.Text = "Player 2";
+            // 
+            // player2TimeValueLabel
+            // 
+            this.player2TimeValueLabel.AutoSize = true;
+            this.player2TimeValueLabel.Location = new System.Drawing.Point(70, 20);
+            this.player2TimeValueLabel.Name = "player2TimeValueLabel";
+            this.player2TimeValueLabel.Size = new System.Drawing.Size(13, 13);
+            this.player2TimeValueLabel.TabIndex = 1;
+            this.player2TimeValueLabel.Text = "0";
+            // 
+            // player2TimeNameLabel
+            // 
+            this.player2TimeNameLabel.AutoSize = true;
+            this.player2TimeNameLabel.Location = new System.Drawing.Point(7, 20);
+            this.player2TimeNameLabel.Name = "player2TimeNameLabel";
+            this.player2TimeNameLabel.Size = new System.Drawing.Size(57, 13);
+            this.player2TimeNameLabel.TabIndex = 0;
+            this.player2TimeNameLabel.Text = "Used time:";
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(3, 115);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 100);
+            this.panel1.TabIndex = 1;
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 466);
+            this.Controls.Add(this.mainFlowLayoutPanel);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
@@ -225,6 +360,14 @@
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.mainFlowLayoutPanel.ResumeLayout(false);
+            this.mainFlowLayoutPanel.PerformLayout();
+            this.topFlowLayoutPanelForAll.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.topFlowLayoutPanelForButtons.ResumeLayout(false);
+            this.player2GroupBox.ResumeLayout(false);
+            this.player2GroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -242,8 +385,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem fileExitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gamePauseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem gameSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpRulesToolStripMenuItem;
@@ -253,6 +394,18 @@
         private System.Windows.Forms.ToolStripMenuItem gameSizeLargeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.FlowLayoutPanel mainFlowLayoutPanel;
+        private System.Windows.Forms.FlowLayoutPanel topFlowLayoutPanelForAll;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label player1TimeValueLabel;
+        private System.Windows.Forms.Label player1TimeNameLabel;
+        private System.Windows.Forms.FlowLayoutPanel topFlowLayoutPanelForButtons;
+        private System.Windows.Forms.Button passButton;
+        private System.Windows.Forms.Button pauseButton;
+        private System.Windows.Forms.GroupBox player2GroupBox;
+        private System.Windows.Forms.Label player2TimeValueLabel;
+        private System.Windows.Forms.Label player2TimeNameLabel;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
