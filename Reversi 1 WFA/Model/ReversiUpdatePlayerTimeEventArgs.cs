@@ -7,22 +7,23 @@ namespace Reversi.Model
     /// </summary>
     public class ReversiUpdatePlayerTimeEventArgs : EventArgs
     {
-        private Boolean _isPlayer1TimeOn;
+        private Boolean _isPlayer1TimeNeedUpdate;
         private Int32 _newTime;
 
         /// <summary>
-        /// Quary of the '_type' field value.
+        /// Quary of the '_isPlayer1TimeNeedUpdate' field value.
+        /// If it is true we need to update player 1 time. If it is false we need to update player 2 time.
         /// </summary>
-        public Boolean IsPlayer1TimeOn
+        public Boolean IsPlayer1TimeNeedUpdate
         {
             get
             {
-                return _isPlayer1TimeOn;
+                return _isPlayer1TimeNeedUpdate;
             }
         }
 
         /// <summary>
-        /// Quary of the '_newTime' field value.
+        /// Quary of the '_newTime' field value. The new time value for the active player.
         /// </summary>
         public Int32 NewTime
         {
@@ -34,15 +35,12 @@ namespace Reversi.Model
 
         /// <summary>
         /// Creating Reversi update player time event argument instance.
-        /// If the "type" is set to 0, then set both time to 0.
-        /// If the "type" is set to 1, then set player 1 time to "newTime".
-        /// If the "type" is set to 2, then set player 2 time to "newTime".
         /// </summary>
-        /// <param name="type">The type of the update</param>
-        /// <param name="newTime">The new time for the update.</param>
-        public ReversiUpdatePlayerTimeEventArgs(Boolean isPlayer1TimeOn, Int32 newTime)
+        /// <param name="isPlayer1TimeNeedUpdate">Whos time needs to be updated?</param>
+        /// <param name="newTime">The new time for the player.</param>
+        public ReversiUpdatePlayerTimeEventArgs(Boolean isPlayer1TimeNeedUpdate, Int32 newTime)
         {
-            _isPlayer1TimeOn = isPlayer1TimeOn;
+            _isPlayer1TimeNeedUpdate = isPlayer1TimeNeedUpdate;
             _newTime = newTime;
         }
     }

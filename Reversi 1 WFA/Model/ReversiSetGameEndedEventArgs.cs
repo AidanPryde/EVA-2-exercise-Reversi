@@ -15,7 +15,7 @@ namespace Reversi.Model
         private Int32 _player2Points;
 
         /// <summary>
-        /// Quary of the '_player1Points' field value.
+        /// Quary of the '_player1Points' field value. Player 1 points.
         /// </summary>
         public Int32 Player1Points
         {
@@ -26,7 +26,7 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Quary of the '_player2Points' field value.
+        /// Quary of the '_player2Points' field value. Player 2 points.
         /// </summary>
         public Int32 Player2Points
         {

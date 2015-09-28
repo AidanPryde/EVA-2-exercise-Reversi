@@ -15,7 +15,9 @@ namespace Reversi.Persistence
         /// The array of the put downs as pair of coordinates.
         /// </summary>
         private Int32[] _putDowns;
-
+        /// <summary>
+        /// Helper variable for maintaining '_putDowns' array. The amount of coordinates keeped in the '_putDowns' array.
+        /// </summary>
         private Int32 _putDownsCount;
 
         /// <summary>
@@ -32,10 +34,10 @@ namespace Reversi.Persistence
         #region Properties
 
         /// <summary>
-        /// The query of a '_putDowns' array value, with the [] operator. It gives you one of the coordinate. 
+        /// The query of a '_putDowns' array value, with the [] operator. It gives you one of the coordinate of a put down. 
         /// </summary>
         /// <param name="i">The 'i'. index of a '_putDowns' array.</param>
-        /// <returns>The 'i'. element of a '_putDowns' array.</returns>
+        /// <returns>The 'i'. value of a '_putDowns' array.</returns>
         public Int32 this[Int32 i]
         {
             get
@@ -45,7 +47,6 @@ namespace Reversi.Persistence
 
             set
             {
-
                 _putDowns[i] = value;
             }
         }
@@ -68,6 +69,7 @@ namespace Reversi.Persistence
 
         /// <summary>
         /// The query of a '_player1Time' field value. Which contains the time player 1 used in seconds.
+        /// We do not keep it up to date.
         /// </summary>
         public Int32 Player1Time
         {
@@ -124,6 +126,7 @@ namespace Reversi.Persistence
         /// <param name="tableSize">The size of the square game table.</param>
         /// <param name="player1Time">The player 1 play time.</param>
         /// <param name="player2Time">The player 2 play time.</param>
+        /// <param name="putDownsCount">The put downs coordinates count.</param>
         public ReversiGameDescriptiveData(Int32 tableSize, Int32 player1Time = 0, Int32 player2Time = 0, Int32 putDownsCount = 0)
         {
             _tableSize = tableSize;

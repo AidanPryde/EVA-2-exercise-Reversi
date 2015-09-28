@@ -368,6 +368,7 @@ namespace Reversi.Model
                 }
             }
 
+            // Geather and send the table values to view.
             Int32[] updatedFieldsDatas = new Int32[_data.TableSize * _data.TableSize];
 
             Int32 k = 0;
@@ -390,20 +391,23 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// 
+        /// The actual code for make a put down on the table.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">The first coordinate of the origin of the put down.</param>
+        /// <param name="y">The second coordinate of the origin of the put down.</param>
+        /// <param name="isUpdateNeeded">Do we need to send the new values to the view?</param>
+        /// <returns>Is the game over?</returns>
         private Boolean MakePutDown(Int32 x, Int32 y, Boolean isUpdateNeeded = true)
         {
             // Updating the table put downs positions. 
             if (_isPlayer1TurnOn) // Player 1 put down.
             {
-                if (_table[_data[x], _data[y]] == 3 || _table[_data[x], _data[y]] == 5)
+                // Do we try to make a valid put down? We only check it if loaded the game.
+                if (isUpdateNeeded || _table[_data[x], _data[y]] == 4 || _table[_data[x], _data[y]] == 6) 
                 {
-                    _table[_data[x], _data[y]] = 1;
+                    _table[_data[x], _data[y]] = 1; // The put down.
 
-                    for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
+                    for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // We do the reverses.
                     {
                         SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReversedDirections[i]);
                     }
@@ -415,11 +419,12 @@ namespace Reversi.Model
             }
             else // Player 2 put down.
             {
-                if (_table[_data[x], _data[y]] == 4)
+                // Do we try to make a valid put down? We only check it if loaded the game.
+                if (isUpdateNeeded || _table[_data[x], _data[y]] == 4 || _table[_data[x], _data[y]] == 3)
                 {
-                    _table[_data[x], _data[y]] = 2;
+                    _table[_data[x], _data[y]] = 2; // The put down.
 
-                    for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
+                    for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // We do the reverses.
                     {
                         SearchAndReverse(_data[x], _data[y], _allDirections[i], _allReversedDirections[i]);
                     }
@@ -434,7 +439,7 @@ namespace Reversi.Model
             for (Int32 i = 0; i < _possiblePutDownsCoordinatesCount; i += 2)
             {
                 if (_table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 1
-                    || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 2)
+                    || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == -1)
                 {
                     _possiblePutDownsCoordinates[i] = _possiblePutDownsCoordinates[_possiblePutDownsCoordinatesCount - 2];
                     _possiblePutDownsCoordinates[i + 1] = _possiblePutDownsCoordinates[_possiblePutDownsCoordinatesCount - 1];
@@ -451,7 +456,7 @@ namespace Reversi.Model
                 }
             }
 
-            // Updating the table new possible put down positions and add them.
+            // Updating the table new possible put down positions and add them to the end of the array.
             for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
             {
                 if (SearchAndAddThenSetPossiblePutDown(_possiblePutDownsCoordinates[x], _possiblePutDownsCoordinates[y], _allDirections[i]))
@@ -488,7 +493,7 @@ namespace Reversi.Model
                 }
             }
 
-            if (isUpdateNeeded)
+            if (isUpdateNeeded) // We harvest the changed coordinates and values, from '_possiblePutDownsCoordinates' and '_reversedPutDownsCoordinates'
             {
                 Int32 updatedFieldsDatasCount = ((_possiblePutDownsCoordinatesCount + _reversedPutDownsCoordinatesCount) * 3) / 2;
                 Int32[] updatedFieldsDatas = new Int32[updatedFieldsDatasCount];
@@ -507,16 +512,20 @@ namespace Reversi.Model
                     updatedFieldsDatas[_possiblePutDownsCoordinatesCount + i + 2] = _table[_reversedPutDownsCoordinates[i], _reversedPutDownsCoordinates[i + 1]];
                 }
 
+                // Save the put down.
                 _data[_data.PutDownsCoordinatesCount] = x;
                 _data[_data.PutDownsCoordinatesCount + 1] = y;
                 _data.PutDownsCoordinatesCount += 2;
 
+                // Make the view update call.
                 OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2], _isPlayer1TurnOn));
 
+                // Reset for the next put down.
                 _reversedPutDownsCoordinatesCount = 0;
             }
 
-            if (isOver)
+            // Is the game over?
+            if (isOver) 
             {
                 return true;
             }
@@ -525,12 +534,13 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// 
+        /// Search if there is any put downs to reverse in one direction, and revers them,
+        /// then save coordinates for the possible view update.
         /// </summary>
-        /// <param name="xFrom"></param>
-        /// <param name="yFrom"></param>
-        /// <param name="direction"></param>
-        /// <param name="reversedDirection"></param>
+        /// <param name="xFrom">The first coordinate of the origin of the search.</param>
+        /// <param name="yFrom">The second coordinate of the origin of the search.</param>
+        /// <param name="direction">The direction where we start the search.</param>
+        /// <param name="reversedDirection">The riverse of the parameter direction for step back.</param>
         private void SearchAndReverse(Int32 xFrom, Int32 yFrom, Direction direction, Direction reversedDirection)
         {
             Int32 valueOriginal = _table[xFrom, yFrom];
@@ -584,35 +594,45 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xFrom">The first coordinate of the origin of the search.</param>
+        /// <param name="yFrom">the second coordinate of the origin of the search.</param>
+        /// <param name="direction">>The direction where we start the search.</param>
         private void SearchAndSetPossiblePutDown(Int32 xFrom, Int32 yFrom, Direction direction)
         {
             Int32 valueOriginal = _table[xFrom, yFrom];
             Int32 xOriginal = xFrom;
             Int32 yOriginal = yFrom;
 
-            if (valueOriginal == 4)
+            if (valueOriginal == 4) // If we already set to 4 (both can put down here), we dont need to check for anything else.
             {
                 return;
             }
 
+            // Make a step.
             direction(ref xFrom, ref yFrom);
-            if (GetSearchValue(ref xFrom, ref yFrom) == 1)
+            if (GetSearchValue(ref xFrom, ref yFrom) == -1) // Player 1 put down found.
             {
-                if (valueOriginal == 3)
+                if (valueOriginal == 3) //  The original was player 2 possible put down.
                 {
                     return;
                 }
 
+                // Make a step.
                 direction(ref xFrom, ref yFrom);
                 while (true)
                 {
                     Int32 valueSearch = GetSearchValue(ref xFrom, ref yFrom);
-                    if (valueSearch == 2)
+                    if (valueSearch == 1) // Possible put down.
                     {
+                        // If it was 5 (neither can put here), it will be 3 (player 2 possible put down).
+                        // If it was 6 (player 1 possible put down), it will be 4 (both can put down).
                         _table[xOriginal, yOriginal] -= 2;
                         return;
                     }
-                    else if (valueSearch == 1)
+                    else if (valueSearch == -1) // It still can be a possible put down.
                     {
                         direction(ref xFrom, ref yFrom);
                     }
@@ -622,23 +642,26 @@ namespace Reversi.Model
                     }
                 }
             }
-            else if (GetSearchValue(ref xFrom, ref yFrom) == 2)
+            else if (GetSearchValue(ref xFrom, ref yFrom) == 1) // Player 2 put down found.
             {
-                if (valueOriginal == 6)
+                if (valueOriginal == 6) // The original was player 1 possible put down.
                 {
                     return;
                 }
 
+                // Make a step.
                 direction(ref xFrom, ref yFrom);
                 while (true)
                 {
                     Int32 valueSearch = GetSearchValue(ref xFrom, ref yFrom);
-                    if (valueSearch == 1)
+                    if (valueSearch == -1) // Possible put down.
                     {
+                        // If it was 5 (neither can put here), it will be 6 (player 1 possible put down).
+                        // If it was 3 (player 2 possible put down), it will be 4 (both can put down).
                         ++(_table[xOriginal, yOriginal]);
                         return;
                     }
-                    else if (valueSearch == 2)
+                    else if (valueSearch == 1) // It still can be a possible put down.
                     {
                         direction(ref xFrom, ref yFrom);
                     }
@@ -650,13 +673,21 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// Search for the new possible put downs. If we find one we set them.
+        /// </summary>
+        /// <param name="xFrom">The first coordinate of the origin of the search.</param>
+        /// <param name="yFrom">The second coordinate of the origin of the search.</param>
+        /// <param name="direction">The direction, where we start the search.</param>
+        /// <returns>Did we find a possible put down position in this direction?</returns>
         private Boolean SearchAndAddThenSetPossiblePutDown(Int32 xFrom, Int32 yFrom, Direction direction)
         {
+            // Make a step.
             direction(ref xFrom, ref yFrom);
-            if (GetSearchValue(ref xFrom, ref yFrom) == 0)
+            if (GetSearchValue(ref xFrom, ref yFrom) == 0) // Found a new possible put down position.
             {
-                _table[xFrom, yFrom] = 5;
-                for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
+                _table[xFrom, yFrom] = 5; // So far it is niether player's possible put down position.
+                for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // Set it.
                 {
                     SearchAndSetPossiblePutDown(xFrom, yFrom, _allDirections[i]);
                 }
@@ -667,6 +698,14 @@ namespace Reversi.Model
             return false;
         }
 
+        /// <summary>
+        /// Get the value of the table position at these coordinates given as parameters.
+        /// If it is out of the table we return -2, otherwise the value.
+        /// We use this when we search on the table.
+        /// </summary>
+        /// <param name="x">The first coordinate of the position.</param>
+        /// <param name="y">The second coordinate of the position.</param>
+        /// <returns>The value of the table or -2.</returns>
         private Int32 GetSearchValue(ref Int32 x, ref Int32 y)
         {
             if (x < 0 || x >= _data.TableSize || y < 0 || y >= _data.TableSize)
@@ -678,9 +717,12 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// 
+        /// We check if the table position at these coordinates given as parameters are valid.
+        /// We use it when we get position from the view or from the loaded data.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="x">The first coordinate of the position.</param>
+        /// <param name="y">The second coordinate of the position.</param>
+        /// <returns>True if it is a valid position, false otherwise.</returns>
         private Boolean IsValidIndexes(Int32 x, Int32 y)
         {
             if (x < 0 || x >= _data.TableSize || y < 0 || y >= _data.TableSize)
@@ -694,20 +736,20 @@ namespace Reversi.Model
         #region Private delegates methods
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToUp(ref Int32 x, ref Int32 y)
         {
             --x;
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToRightUp(ref Int32 x, ref Int32 y)
         {
             --x;
@@ -715,20 +757,20 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToRight(ref Int32 x, ref Int32 y)
         {
             ++y;
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToRightDown(ref Int32 x, ref Int32 y)
         {
             ++x;
@@ -736,20 +778,20 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToDown(ref Int32 x, ref Int32 y)
         {
             ++x;
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToLeftDown(ref Int32 x, ref Int32 y)
         {
             ++x;
@@ -757,20 +799,20 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToLeft(ref Int32 x, ref Int32 y)
         {
             --y;
         }
 
         /// <summary>
-        /// Set a new position from coordinates.
+        /// Set the parameter coordinates to a new position.
         /// </summary>
-        /// <param name="x">The first coordinate.</param>
-        /// <param name="y">The second coordinate.</param>
+        /// <param name="x">The first coordinate of the original position.</param>
+        /// <param name="y">The second coordinate of the original position.</param>
         private void ToLeftUp(ref Int32 x, ref Int32 y)
         {
             --x;
@@ -783,6 +825,10 @@ namespace Reversi.Model
 
         #region Private event methods
 
+        /// <summary>
+        /// Invoke the 'SetGameEnded' event handler if it is set.
+        /// </summary>
+        /// <param name="arg">The event hadler argumentum.</param>
         private void OnSetGameEnded(ReversiSetGameEndedEventArgs arg)
         {
             if (SetGameEnded != null)
@@ -791,6 +837,10 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// Invoke the 'UpdatePlayerTime' event handler if it is set.
+        /// </summary>
+        /// <param name="arg">The event hadler argumentum.</param>
         private void OnUpdatePlayerTime(ReversiUpdatePlayerTimeEventArgs arg)
         {
             if (UpdatePlayerTime != null)
@@ -799,6 +849,10 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// Invoke the 'UpdateTable' event handler if it is set.
+        /// </summary>
+        /// <param name="arg">The event hadler argumentum.</param>
         private void OnUpdateTable(ReversiUpdateTableEventArgs arg)
         {
             if (UpdateTable != null)
@@ -807,6 +861,11 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// The timer call this at every tick.
+        /// </summary>
+        /// <param name="sender">Provides data for the Timer.Elapsed event</param>
+        /// <param name="e">The caller object. This class: ReversiGameModel.</param>
         private void Timer_Elapsed(Object sender, ElapsedEventArgs e)
         {
             if(_isPlayer1TurnOn)
