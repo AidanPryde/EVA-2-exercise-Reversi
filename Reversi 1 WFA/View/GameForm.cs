@@ -12,6 +12,27 @@ namespace Reversi.View
     public partial class GameForm : Form
     {
 
+        #region Constant Default Values
+
+        /// <summary>
+        /// Array of the allowed table sizes. It is readonly.
+        /// </summary>
+        public readonly Int32[] _supportedGameTableSizesArray = new int[] { 10, 20, 30 };
+        /// <summary>
+        ///The default table size. It is readonly.
+        /// </summary>
+        private readonly Int32 _tableSizeSettingDefault = 10;
+
+        #endregion
+
+        #region Fields
+
+        private IReversiDataAccess _dataAccess;
+        private ReversiGameModel _model;
+        private Button[,] _buttonGrid;
+
+        #endregion
+
         #region Constructor
 
         public GameForm()
@@ -20,6 +41,14 @@ namespace Reversi.View
         }
 
         #endregion
+
+        #region Form event Handlers
+
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+            _dataAccess = new ReversiFileDataAccess(_supportedGameTableSizesArray);
+            _model = new ReversiGameModel(_dataAccess, _tableSizeSettingDefault);
+        }
 
         private void fileNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -75,5 +104,9 @@ namespace Reversi.View
         {
 
         }
+
+        #endregion
+
+        
     }
 }

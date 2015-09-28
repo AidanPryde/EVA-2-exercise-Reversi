@@ -13,16 +13,26 @@ namespace Reversi.Model
 
         #region Constant Default Values
 
-        public readonly Int32[] _supportedGameTableSizesArray = new int[] { 10, 20, 30 };
-        private readonly Int32 _tableSizeSettingDefault = 10;
+        /// <summary>
+        ///The default table size. It is readonly.
+        /// </summary>
+        private readonly Int32 _tableSizeSettingDefault;
 
         #endregion
 
         #region Fields
 
+        /// <summary>
+        /// The interface that we get form view. We need to implement this.
+        /// </summary>
         private IReversiDataAccess _dataAccess;
 
+        /// <summary>
+        /// All the data we need for saving or loading a game.
+        /// The put downs coordinates in order, the players times and the size of the table.
+        /// </summary>
         private ReversiGameDescriptiveData _data;
+
         //TODO: Is it a state 4 possible?
         /// <summary>
         /// The table itself. Its values can be -1, 0, 1, 2, 3, 4, 5, 6.
@@ -37,6 +47,11 @@ namespace Reversi.Model
         /// </summary>
         private Int32[,] _table;
 
+        /// <summary>
+        /// Indicate which player turn it is.
+        /// If it is true it is player 1's turn.
+        /// If it is false it is player 2's turn.
+        /// </summary>
         private Boolean _isPlayer1TurnOn;
 
         /// <summary>
@@ -46,18 +61,46 @@ namespace Reversi.Model
         /// </summary>
         private Int32[] _points;
 
+        /// <summary>
+        /// We use this array for saving the possible put downs coordinates.
+        /// </summary>
         private Int32[] _possiblePutDownsCoordinates;
+        /// <summary>
+        /// It is a helper variable, for maintain the '_possiblePutDownsCoordinates' array.
+        /// </summary>
         private Int32 _possiblePutDownsCoordinatesCount;
 
+        /// <summary>
+        /// We save the reversed put downs coordiantes in it.
+        /// </summary>
         private Int32[] _reversedPutDownsCoordinates;
+        /// <summary>
+        /// It is a helper variable, for maintain the '_reversedPutDownsCoordinates' array.
+        /// </summary>
         private Int32 _reversedPutDownsCoordinatesCount;
 
+        /// <summary>
+        /// The timer which, invoke the Timer_Elapsed event. This helps count the players time.
+        /// </summary>
         private Timer _timer;
+        /// <summary>
+        /// A bool for know that if at least one time a NewGame or the Load functions were called.
+        /// So we know that we had called InicializeFields.
+        /// </summary>
         private Boolean _isGameStarted;
 
+        /// <summary>
+        /// we save the user choosen table size for the next NewGame.
+        /// </summary>
         private Int32 _tableSizeSetting;
 
+        /// <summary>
+        /// Helper delegate array for searching from one point on the table to a direction.
+        /// </summary>
         private Direction[] _allDirections;
+        /// <summary>
+        /// Helper delegate array for searching from one point on the table to a reversed direction.
+        /// </summary>
         private Direction[] _allReversedDirections;
 
         #endregion
@@ -65,27 +108,13 @@ namespace Reversi.Model
         #region Properties
 
         /// <summary>
-        /// 
+        /// The property that the view will use for setting the table size for the model, which will use it at a NewGame.
         /// </summary>
         public Int32 TableSizeSetting
         {
             set
             {
-                for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
-                {
-                    if (value == _supportedGameTableSizesArray[0])
-                    {
-                        _tableSizeSetting = value;
-                    }
-                }
-
-                String supportedGameTableSizesString = "";
-                for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
-                {
-                    supportedGameTableSizesString += _supportedGameTableSizesArray[i].ToString() + " ";
-                }
-
-                throw new ArgumentOutOfRangeException("value", value, "Not supported table size. The supported table sizes: " + supportedGameTableSizesString + ".");
+                _tableSizeSetting = value;
             }
         }
 
@@ -93,6 +122,11 @@ namespace Reversi.Model
 
         #region Delegates
 
+        /// <summary>
+        /// Delegate that get the coordinates of the new position from the given coordinates.
+        /// </summary>
+        /// <param name="x">The first coordinate.</param>
+        /// <param name="y">The second coordinate.</param>
         private delegate void Direction(ref Int32 x, ref Int32 y);
 
         #endregion
@@ -100,12 +134,12 @@ namespace Reversi.Model
         #region Events
 
         /// <summary>
-        /// An in game second passed, we need to update one of the person's time on the view.
+        /// An in game second passed (no pause), we need to update one of the person's time on the view.
         /// </summary>
         public event EventHandler<ReversiUpdatePlayerTimeEventArgs> UpdatePlayerTime;
 
         /// <summary>
-        /// The game table changed, we need to update it on the view.
+        /// The game table changed, we will update it on the view.
         /// </summary>
         public event EventHandler<ReversiUpdateTableEventArgs> UpdateTable;
 
@@ -119,17 +153,20 @@ namespace Reversi.Model
         #region Constructors
 
         /// <summary>
-        /// The Reversi game model constructor. It generates a valid game state.
+        /// The Reversi game model constructor. It dose not generate a game.
         /// </summary>
         /// <param name="dataAccess">The data access.</param>
-        public ReversiGameModel()
+        /// <param name="defaultGameTableSizes">The default game size.</param>
+        public ReversiGameModel(IReversiDataAccess dataAccess, Int32 defaultGameTableSizes)
         {
-            _dataAccess = new ReversiFileDataAccess();
+            _tableSizeSettingDefault = defaultGameTableSizes;
+
+            _dataAccess = dataAccess;
             _tableSizeSetting = _tableSizeSettingDefault;
             _isGameStarted = false;
 
-            _timer = new Timer(1000.0);
-            _timer.Elapsed += Timer_Elapsed;
+            _timer = new Timer(1000.0); // It will invoke every 1 second.
+            _timer.Elapsed += Timer_Elapsed; // It will invoke Timer_Elapsed private method
 
             _allDirections = new Direction[] { ToUp, ToRightUp, ToRight, ToRightDown, ToDown, ToLeftDown, ToLeft, ToLeftUp };
             _allReversedDirections = new Direction[] { ToDown, ToLeftDown, ToLeft, ToLeftUp, ToUp, ToRightUp, ToRight, ToRightDown };
@@ -140,7 +177,7 @@ namespace Reversi.Model
         #region Public methods
 
         /// <summary>
-        /// Creating new reversi game with the presetted settings.
+        /// Creating new reversi game with the presetted table size.
         /// </summary>
         public void NewGame()
         {
@@ -154,7 +191,7 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Loading a reversi game. It may have an invalide state. We do not check if it is valid or not.
+        /// Loading a reversi game. We check if it is valid or not while setting up the game table.
         /// </summary>
         /// <param name="path">The path to the file, that contains the saved game data.</param>
         public async Task LoadGame(String path)
@@ -162,8 +199,7 @@ namespace Reversi.Model
             _timer.Enabled = false;
 
             _data = await _dataAccess.Load(path);
-
-            TableSizeSetting = _data.TableSize;
+            
             InitializeFields(true);
 
             _timer.Enabled = true;
@@ -182,6 +218,11 @@ namespace Reversi.Model
             _timer.Enabled = true;
         }
 
+        /// <summary>
+        /// Make a put down by the parameter coordinates. The view sent these, so we will check if they are valid coordinates.
+        /// </summary>
+        /// <param name="x">The first coordinate of the put down position.</param>
+        /// <param name="y">The second coordinate of the put down position.</param>
         public void PutDown(Int32 x, Int32 y)
         {
             if (_isGameStarted && _timer.Enabled && IsValidIndexes(x, y))
@@ -194,6 +235,9 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// Stop the game. The view uses it.
+        /// </summary>
         public void GamePause()
         {
             if (_isGameStarted)
@@ -202,6 +246,9 @@ namespace Reversi.Model
             }
         }
 
+        /// <summary>
+        /// We start the game again. The view uses it.
+        /// </summary>
         public void GameUnPause()
         {
             if (_isGameStarted)
@@ -214,6 +261,11 @@ namespace Reversi.Model
 
         #region Private methods
 
+        /// <summary>
+        /// First reset the variables to the starting values, then if we loaded the game we replay it from the read data.
+        /// While we are building the table we are checking if it is valid. After that send the updated table values to the view.
+        /// </summary>
+        /// <param name="isLoadedGame">True if we inicialize for a load game. False if we inicialize for a new game.</param>
         private void InitializeFields(Boolean isLoadedGame)
         {
             if (_data.TableSize != _table.GetLength(0))
@@ -294,7 +346,7 @@ namespace Reversi.Model
             _possiblePutDownsCoordinates[23] = _data.TableSize - 1;
 
             // The staring points of the players.
-            _points = new Int32[] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };
+            _points = new Int32[3] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };
 
             // We loaded the game.
             if (isLoadedGame)
@@ -328,7 +380,10 @@ namespace Reversi.Model
                 }
             }
 
-            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2]));
+            _reversedPutDownsCoordinatesCount = 0;
+            _reversedPutDownsCoordinates = new Int32[(_data.TableSize * 12) - 39];
+
+            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2], _isPlayer1TurnOn));
             
             // We started at least one game.
             _isGameStarted = true;
@@ -456,7 +511,9 @@ namespace Reversi.Model
                 _data[_data.PutDownsCoordinatesCount + 1] = y;
                 _data.PutDownsCoordinatesCount += 2;
 
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2]));
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2], _isPlayer1TurnOn));
+
+                _reversedPutDownsCoordinatesCount = 0;
             }
 
             if (isOver)
@@ -472,8 +529,6 @@ namespace Reversi.Model
         /// </summary>
         /// <param name="xFrom"></param>
         /// <param name="yFrom"></param>
-        /// <param name="equelsTo"></param>
-        /// <param name="changeTo"></param>
         /// <param name="direction"></param>
         /// <param name="reversedDirection"></param>
         private void SearchAndReverse(Int32 xFrom, Int32 yFrom, Direction direction, Direction reversedDirection)
@@ -762,7 +817,7 @@ namespace Reversi.Model
             {
                 ++(_data.Player2Time);
             }
-            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_data.Player1Time, _data.Player2Time));
+            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player2Time));
         }
 
         #endregion

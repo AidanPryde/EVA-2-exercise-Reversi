@@ -147,7 +147,7 @@
             this.gameSizeMediumToolStripMenuItem,
             this.gameSizeLargeToolStripMenuItem});
             this.gameSizeToolStripMenuItem.Name = "gameSizeToolStripMenuItem";
-            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.gameSizeToolStripMenuItem.Text = "Size";
             // 
             // gameSizeSmallToolStripMenuItem
@@ -356,6 +356,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "GameForm";
             this.Text = "Reversi";
+            this.Load += new System.EventHandler(this.GameForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);

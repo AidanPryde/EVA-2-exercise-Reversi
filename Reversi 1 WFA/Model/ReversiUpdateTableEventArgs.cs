@@ -11,9 +11,13 @@ namespace Reversi.Model
         private Int32[] _updatedFieldsDatas;
         private Int32 _player1Points;
         private Int32 _player2Points;
+        private Boolean _isPlayer1TurnOn;
+
 
         /// <summary>
-        /// Quary of the '_updatedFieldsCount' field value.
+        /// Quary of the '_updatedFieldsCount' field value. If its value 0,
+        /// then the '_updatedFieldsDatas' the hole table values without the coordinates.
+        /// Otherwise it the size on the '_updatedFieldsDatas'. One unite is two coordinate and a data value.
         /// </summary>
         public Int32 UpdatedFieldsCount
         {
@@ -24,7 +28,8 @@ namespace Reversi.Model
         }
 
         /// <summary>
-        /// Quary of the '_updatedFieldsDatas' field value.
+        /// Quary of the '_updatedFieldsDatas' field value. It may contain the hole talve values without the coordinates, or
+        /// its format is two coordinate, then the value.
         /// </summary>
         public Int32[] UpdatedFieldsDatas
         {
@@ -57,8 +62,19 @@ namespace Reversi.Model
         }
 
         /// <summary>
+        /// Quary of the '_isPlayer1TurnOn' field value. True if it is player 1 turn. False if it is player 2 turn.
+        /// </summary>
+        public Boolean IsPlayer1TurnOn
+        {
+            get
+            {
+                return _isPlayer1TurnOn;
+            }
+        }
+
+        /// <summary>
         /// Creating Reversi update table event argument instance.
-        /// If the "updatedFieldsSerialNumbers" parameter equels to the max (table size * table size),
+        /// If the "updatedFieldsCount" parameter equels to 0,
         /// then we send the new values only, without the coordinates. Otherwise we send the data as:
         /// X, Y, new data, X, Y, new data, ... .
         /// </summary>
@@ -66,13 +82,15 @@ namespace Reversi.Model
         /// <param name="updatedFieldsDatas">The updated fields data.</param>
         /// <param name="player1Points">The points of player 1 has.</param>
         /// <param name="player2Points">The points of player 2 has.</param>
+        /// <param name="isPlayer1TurnOn">Indicate which player can put down, this turn.</param>
         public ReversiUpdateTableEventArgs(Int32 updatedFieldsCount, Int32[] updatedFieldsDatas,
-            Int32 player1Points, Int32 player2Points)
+            Int32 player1Points, Int32 player2Points, Boolean isPlayer1TurnOn)
         {
             _updatedFieldsCount = updatedFieldsCount;
             _updatedFieldsDatas = updatedFieldsDatas;
             _player1Points = player1Points;
             _player2Points = player2Points;
+            _isPlayer1TurnOn = isPlayer1TurnOn;
         }
     }
 }

@@ -12,10 +12,15 @@ namespace Reversi.Persistence
     {
 
         #region Fields 
-
+        private readonly Int32[] _supportedGameTableSizesArray;
         #endregion
 
         #region Constructors
+
+        public ReversiFileDataAccess(Int32[] supportedGameTableSizesArray)
+        {
+            _supportedGameTableSizesArray = supportedGameTableSizesArray;
+        }
 
         #endregion
 
@@ -41,6 +46,26 @@ namespace Reversi.Persistence
                     Int32 player1Time = Int32.Parse(numbers[1]);
                     Int32 player2Time = Int32.Parse(numbers[2]);
                     Int32 putDownsCount = Int32.Parse(numbers[3]);
+
+                    Boolean found = false;
+                    for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0) && !found; ++i)
+                    {
+                        if (tableSize == _supportedGameTableSizesArray[0])
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        String supportedGameTableSizesString = "";
+                        for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
+                        {
+                            supportedGameTableSizesString += _supportedGameTableSizesArray[i].ToString() + " ";
+                        }
+                    
+                        throw new ReversiDataException("?222?", "1221", ReversiDataExceptionType.FormatException);
+                    }
 
                     // Creating the game descriptive data class.
                     ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsCount);

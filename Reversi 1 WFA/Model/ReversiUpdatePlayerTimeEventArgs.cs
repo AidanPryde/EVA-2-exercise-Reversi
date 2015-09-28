@@ -7,17 +7,17 @@ namespace Reversi.Model
     /// </summary>
     public class ReversiUpdatePlayerTimeEventArgs : EventArgs
     {
-        private Int32 _type;
+        private Boolean _isPlayer1TimeOn;
         private Int32 _newTime;
 
         /// <summary>
         /// Quary of the '_type' field value.
         /// </summary>
-        public Int32 Player1TimeUpdatedOn
+        public Boolean IsPlayer1TimeOn
         {
             get
             {
-                return _type;
+                return _isPlayer1TimeOn;
             }
         }
 
@@ -40,9 +40,9 @@ namespace Reversi.Model
         /// </summary>
         /// <param name="type">The type of the update</param>
         /// <param name="newTime">The new time for the update.</param>
-        public ReversiUpdatePlayerTimeEventArgs(Int32 type, Int32 newTime = 0)
+        public ReversiUpdatePlayerTimeEventArgs(Boolean isPlayer1TimeOn, Int32 newTime)
         {
-            _type = type;
+            _isPlayer1TimeOn = isPlayer1TimeOn;
             _newTime = newTime;
         }
     }
