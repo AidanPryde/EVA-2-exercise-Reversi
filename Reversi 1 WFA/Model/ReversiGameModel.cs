@@ -112,6 +112,10 @@ namespace Reversi.Model
         /// </summary>
         public Int32 TableSizeSetting
         {
+            get
+            {
+                return _tableSizeSetting;
+            }
             set
             {
                 _tableSizeSetting = value;
@@ -249,7 +253,7 @@ namespace Reversi.Model
         /// <summary>
         /// We start the game again. The view uses it.
         /// </summary>
-        public void GameUnPause()
+        public void GameUnpause()
         {
             if (_isGameStarted)
             {
@@ -268,7 +272,7 @@ namespace Reversi.Model
         /// <param name="isLoadedGame">True if we inicialize for a load game. False if we inicialize for a new game.</param>
         private void InitializeFields(Boolean isLoadedGame)
         {
-            if (_data.TableSize != _table.GetLength(0))
+            if (_table == null || _data.TableSize != _table.GetLength(0))
             {
                 _table = new Int32[_data.TableSize, _data.TableSize];
                 _possiblePutDownsCoordinates = new Int32[_data.TableSize * _data.TableSize * 2]; //TODO: It can be smaller. How much?
@@ -288,62 +292,64 @@ namespace Reversi.Model
             // The 12 * 2 size for the 12 starting possible put down coordinates.
             _possiblePutDownsCoordinatesCount = 24;
 
+            Int32 halfTableSize = (_data.TableSize / 2);
+
             // The starting put downs for player 1.
-            _table[_data.TableSize - 1, _data.TableSize - 1] = -1;
-            _table[_data.TableSize, _data.TableSize] = -1;
+            _table[halfTableSize - 1, halfTableSize - 1] = -1;
+            _table[halfTableSize, halfTableSize] = -1;
 
             // The starting put downs for player 2.
-            _table[_data.TableSize - 1, _data.TableSize] = 1;
-            _table[_data.TableSize, _data.TableSize - 1] = 1;
+            _table[halfTableSize - 1, halfTableSize] = 1;
+            _table[halfTableSize, halfTableSize - 1] = 1;
 
             // The possible put down coordinates around the starting points.
-            _table[_data.TableSize - 2, _data.TableSize - 2] = 5;
-            _possiblePutDownsCoordinates[0] = _data.TableSize - 2;
-            _possiblePutDownsCoordinates[1] = _data.TableSize - 2;
+            _table[halfTableSize - 2, halfTableSize - 2] = 5;
+            _possiblePutDownsCoordinates[0] = halfTableSize - 2;
+            _possiblePutDownsCoordinates[1] = halfTableSize - 2;
 
-            _table[_data.TableSize - 1, _data.TableSize - 2] = 3;
-            _possiblePutDownsCoordinates[2] = _data.TableSize - 1;
-            _possiblePutDownsCoordinates[3] = _data.TableSize - 2;
+            _table[halfTableSize - 1, halfTableSize - 2] = 3;
+            _possiblePutDownsCoordinates[2] = halfTableSize - 1;
+            _possiblePutDownsCoordinates[3] = halfTableSize - 2;
 
-            _table[_data.TableSize, _data.TableSize - 2] = 6;
-            _possiblePutDownsCoordinates[4] = _data.TableSize;
-            _possiblePutDownsCoordinates[5] = _data.TableSize - 2;
+            _table[halfTableSize, halfTableSize - 2] = 6;
+            _possiblePutDownsCoordinates[4] = halfTableSize;
+            _possiblePutDownsCoordinates[5] = halfTableSize - 2;
 
-            _table[_data.TableSize + 1, _data.TableSize - 2] = 5;
-            _possiblePutDownsCoordinates[6] = _data.TableSize + 1;
-            _possiblePutDownsCoordinates[7] = _data.TableSize - 2;
+            _table[halfTableSize + 1, halfTableSize - 2] = 5;
+            _possiblePutDownsCoordinates[6] = halfTableSize + 1;
+            _possiblePutDownsCoordinates[7] = halfTableSize - 2;
 
-            _table[_data.TableSize + 1, _data.TableSize - 1] = 6;
-            _possiblePutDownsCoordinates[8] = _data.TableSize + 1;
-            _possiblePutDownsCoordinates[9] = _data.TableSize - 1;
+            _table[halfTableSize + 1, halfTableSize - 1] = 6;
+            _possiblePutDownsCoordinates[8] = halfTableSize + 1;
+            _possiblePutDownsCoordinates[9] = halfTableSize - 1;
 
-            _table[_data.TableSize + 1, _data.TableSize] = 3;
-            _possiblePutDownsCoordinates[10] = _data.TableSize + 1;
-            _possiblePutDownsCoordinates[11] = _data.TableSize;
+            _table[halfTableSize + 1, halfTableSize] = 3;
+            _possiblePutDownsCoordinates[10] = halfTableSize + 1;
+            _possiblePutDownsCoordinates[11] = halfTableSize;
 
-            _table[_data.TableSize + 1, _data.TableSize + 1] = 5;
-            _possiblePutDownsCoordinates[12] = _data.TableSize + 1;
-            _possiblePutDownsCoordinates[13] = _data.TableSize + 1;
+            _table[halfTableSize + 1, halfTableSize + 1] = 5;
+            _possiblePutDownsCoordinates[12] = halfTableSize + 1;
+            _possiblePutDownsCoordinates[13] = halfTableSize + 1;
 
-            _table[_data.TableSize, _data.TableSize + 1] = 3;
-            _possiblePutDownsCoordinates[14] = _data.TableSize;
-            _possiblePutDownsCoordinates[15] = _data.TableSize + 1;
+            _table[halfTableSize, halfTableSize + 1] = 3;
+            _possiblePutDownsCoordinates[14] = halfTableSize;
+            _possiblePutDownsCoordinates[15] = halfTableSize + 1;
 
-            _table[_data.TableSize - 1, _data.TableSize + 1] = 6;
-            _possiblePutDownsCoordinates[16] = _data.TableSize - 1;
-            _possiblePutDownsCoordinates[17] = _data.TableSize + 1;
+            _table[halfTableSize - 1, halfTableSize + 1] = 6;
+            _possiblePutDownsCoordinates[16] = halfTableSize - 1;
+            _possiblePutDownsCoordinates[17] = halfTableSize + 1;
 
-            _table[_data.TableSize - 2, _data.TableSize + 1] = 5;
-            _possiblePutDownsCoordinates[18] = _data.TableSize - 2;
-            _possiblePutDownsCoordinates[19] = _data.TableSize + 1;
+            _table[halfTableSize - 2, halfTableSize + 1] = 5;
+            _possiblePutDownsCoordinates[18] = halfTableSize - 2;
+            _possiblePutDownsCoordinates[19] = halfTableSize + 1;
 
-            _table[_data.TableSize - 2, _data.TableSize] = 6;
-            _possiblePutDownsCoordinates[20] = _data.TableSize - 2;
-            _possiblePutDownsCoordinates[21] = _data.TableSize;
+            _table[halfTableSize - 2, halfTableSize] = 6;
+            _possiblePutDownsCoordinates[20] = halfTableSize - 2;
+            _possiblePutDownsCoordinates[21] = halfTableSize;
 
-            _table[_data.TableSize - 2, _data.TableSize - 1] = 3;
-            _possiblePutDownsCoordinates[22] = _data.TableSize - 2;
-            _possiblePutDownsCoordinates[23] = _data.TableSize - 1;
+            _table[halfTableSize - 2, halfTableSize - 1] = 3;
+            _possiblePutDownsCoordinates[22] = halfTableSize - 2;
+            _possiblePutDownsCoordinates[23] = halfTableSize - 1;
 
             // The staring points of the players.
             _points = new Int32[3] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };

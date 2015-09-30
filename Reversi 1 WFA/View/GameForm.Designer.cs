@@ -49,7 +49,7 @@
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.topFlowLayoutPanelForAll = new System.Windows.Forms.FlowLayoutPanel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.player1GroupBox = new System.Windows.Forms.GroupBox();
             this.player1TimeValueLabel = new System.Windows.Forms.Label();
             this.player1TimeNameLabel = new System.Windows.Forms.Label();
             this.topFlowLayoutPanelForButtons = new System.Windows.Forms.FlowLayoutPanel();
@@ -58,12 +58,14 @@
             this.player2GroupBox = new System.Windows.Forms.GroupBox();
             this.player2TimeValueLabel = new System.Windows.Forms.Label();
             this.player2TimeNameLabel = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.bottomButtonPanel = new System.Windows.Forms.Panel();
+            this.loadFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.mainFlowLayoutPanel.SuspendLayout();
             this.topFlowLayoutPanelForAll.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.player1GroupBox.SuspendLayout();
             this.topFlowLayoutPanelForButtons.SuspendLayout();
             this.player2GroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +78,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(684, 24);
+            this.menuStrip.Size = new System.Drawing.Size(505, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -207,9 +209,9 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 444);
+            this.statusStrip.Location = new System.Drawing.Point(0, 136);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(684, 22);
+            this.statusStrip.Size = new System.Drawing.Size(505, 22);
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -225,19 +227,20 @@
             // 
             // mainFlowLayoutPanel
             // 
+            this.mainFlowLayoutPanel.AutoSize = true;
             this.mainFlowLayoutPanel.Controls.Add(this.topFlowLayoutPanelForAll);
-            this.mainFlowLayoutPanel.Controls.Add(this.panel1);
+            this.mainFlowLayoutPanel.Controls.Add(this.bottomButtonPanel);
             this.mainFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainFlowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.mainFlowLayoutPanel.Location = new System.Drawing.Point(0, 24);
             this.mainFlowLayoutPanel.Name = "mainFlowLayoutPanel";
-            this.mainFlowLayoutPanel.Size = new System.Drawing.Size(684, 420);
+            this.mainFlowLayoutPanel.Size = new System.Drawing.Size(505, 112);
             this.mainFlowLayoutPanel.TabIndex = 2;
             // 
             // topFlowLayoutPanelForAll
             // 
             this.topFlowLayoutPanelForAll.AutoSize = true;
-            this.topFlowLayoutPanelForAll.Controls.Add(this.groupBox1);
+            this.topFlowLayoutPanelForAll.Controls.Add(this.player1GroupBox);
             this.topFlowLayoutPanelForAll.Controls.Add(this.topFlowLayoutPanelForButtons);
             this.topFlowLayoutPanelForAll.Controls.Add(this.player2GroupBox);
             this.topFlowLayoutPanelForAll.Location = new System.Drawing.Point(3, 3);
@@ -245,17 +248,17 @@
             this.topFlowLayoutPanelForAll.Size = new System.Drawing.Size(499, 106);
             this.topFlowLayoutPanelForAll.TabIndex = 0;
             // 
-            // groupBox1
+            // player1GroupBox
             // 
-            this.groupBox1.Controls.Add(this.player1TimeValueLabel);
-            this.groupBox1.Controls.Add(this.player1TimeNameLabel);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Player 1";
+            this.player1GroupBox.Controls.Add(this.player1TimeValueLabel);
+            this.player1GroupBox.Controls.Add(this.player1TimeNameLabel);
+            this.player1GroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.player1GroupBox.Location = new System.Drawing.Point(3, 3);
+            this.player1GroupBox.Name = "player1GroupBox";
+            this.player1GroupBox.Size = new System.Drawing.Size(200, 100);
+            this.player1GroupBox.TabIndex = 0;
+            this.player1GroupBox.TabStop = false;
+            this.player1GroupBox.Text = "Player 1";
             // 
             // player1TimeValueLabel
             // 
@@ -338,18 +341,29 @@
             this.player2TimeNameLabel.TabIndex = 0;
             this.player2TimeNameLabel.Text = "Used time:";
             // 
-            // panel1
+            // bottomButtonPanel
             // 
-            this.panel1.Location = new System.Drawing.Point(3, 115);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 100);
-            this.panel1.TabIndex = 1;
+            this.bottomButtonPanel.Location = new System.Drawing.Point(511, 0);
+            this.bottomButtonPanel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 6);
+            this.bottomButtonPanel.Name = "bottomButtonPanel";
+            this.bottomButtonPanel.Size = new System.Drawing.Size(0, 0);
+            this.bottomButtonPanel.TabIndex = 1;
+            // 
+            // loadFileDialog
+            // 
+            this.loadFileDialog.Filter = "Reversi game files (*.reversi)|*.reversi|All files (*.*)|*.*";
+            this.loadFileDialog.Title = "Loading reversi game.";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Title = "Saving reversi game.";
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 466);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(505, 158);
             this.Controls.Add(this.mainFlowLayoutPanel);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
@@ -364,8 +378,8 @@
             this.mainFlowLayoutPanel.ResumeLayout(false);
             this.mainFlowLayoutPanel.PerformLayout();
             this.topFlowLayoutPanelForAll.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.player1GroupBox.ResumeLayout(false);
+            this.player1GroupBox.PerformLayout();
             this.topFlowLayoutPanelForButtons.ResumeLayout(false);
             this.player2GroupBox.ResumeLayout(false);
             this.player2GroupBox.PerformLayout();
@@ -397,7 +411,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.FlowLayoutPanel mainFlowLayoutPanel;
         private System.Windows.Forms.FlowLayoutPanel topFlowLayoutPanelForAll;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox player1GroupBox;
         private System.Windows.Forms.Label player1TimeValueLabel;
         private System.Windows.Forms.Label player1TimeNameLabel;
         private System.Windows.Forms.FlowLayoutPanel topFlowLayoutPanelForButtons;
@@ -406,7 +420,9 @@
         private System.Windows.Forms.GroupBox player2GroupBox;
         private System.Windows.Forms.Label player2TimeValueLabel;
         private System.Windows.Forms.Label player2TimeNameLabel;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel bottomButtonPanel;
+        private System.Windows.Forms.OpenFileDialog loadFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 

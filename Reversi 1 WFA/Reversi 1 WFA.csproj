@@ -74,6 +74,12 @@
     <Compile Include="Persistence\ReversiDataException.cs" />
     <Compile Include="Persistence\ReversiFileDataAccess.cs" />
     <Compile Include="Persistence\ReversiGameDescriptiveData.cs" />
+    <Compile Include="View\AboutMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AboutMessageForm.Designer.cs">
+      <DependentUpon>AboutMessageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\AboutMessageForm.resx">
+      <DependentUpon>AboutMessageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Documentation\Feladatleírás.txt" />
+    <Content Include="Resource\p.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
