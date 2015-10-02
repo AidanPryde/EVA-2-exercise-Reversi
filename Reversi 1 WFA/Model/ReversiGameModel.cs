@@ -53,6 +53,10 @@ namespace Reversi.Model
         /// If it is false it is player 2's turn.
         /// </summary>
         private Boolean _isPlayer1TurnOn;
+        /// <summary>
+        /// Indicate if it is a passing turn.
+        /// </summary>
+        private Boolean _isPassingTurnOn;
 
         /// <summary>
         /// We save the player 1 points at index 0.
@@ -93,6 +97,10 @@ namespace Reversi.Model
         /// we save the user choosen table size for the next NewGame.
         /// </summary>
         private Int32 _tableSizeSetting;
+        /// <summary>
+        /// We save the table size, that we started to play on, so the view can know.
+        /// </summary>
+        private Int32 _activeTableSize;
 
         /// <summary>
         /// Helper delegate array for searching from one point on the table to a direction.
@@ -119,6 +127,17 @@ namespace Reversi.Model
             set
             {
                 _tableSizeSetting = value;
+            }
+        }
+
+        /// <summary>
+        /// The property that the view will use for getting the table size for the active game.
+        /// </summary>
+        public Int32 ActiveTableSize
+        {
+            get
+            {
+                return _activeTableSize;
             }
         }
 
@@ -187,7 +206,8 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            _data = new ReversiGameDescriptiveData(_tableSizeSetting);
+            _activeTableSize = _tableSizeSetting;
+            _data = new ReversiGameDescriptiveData(_activeTableSize);
 
             InitializeFields(false);
 
@@ -203,7 +223,8 @@ namespace Reversi.Model
             _timer.Enabled = false;
 
             _data = await _dataAccess.Load(path);
-            
+            _activeTableSize = _data.TableSize;
+
             InitializeFields(true);
 
             _timer.Enabled = true;
@@ -288,6 +309,7 @@ namespace Reversi.Model
             }
 
             _isPlayer1TurnOn = true;
+            _isPassingTurnOn = false;
 
             // The 12 * 2 size for the 12 starting possible put down coordinates.
             _possiblePutDownsCoordinatesCount = 24;
@@ -377,20 +399,18 @@ namespace Reversi.Model
             // Geather and send the table values to view.
             Int32[] updatedFieldsDatas = new Int32[_data.TableSize * _data.TableSize];
 
-            Int32 k = 0;
-            for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
+            for (Int32 x = 0; x < _data.TableSize; ++x)
             {
-                for (Int32 j = 0; j < _allDirections.GetLength(0); ++j)
+                for (Int32 y = 0; y < _data.TableSize; ++y)
                 {
-                    updatedFieldsDatas[k] = _table[i, j];
-                    ++k;
+                    updatedFieldsDatas[(x * _data.TableSize) + y] = _table[x, y];
                 }
             }
 
             _reversedPutDownsCoordinatesCount = 0;
             _reversedPutDownsCoordinates = new Int32[(_data.TableSize * 12) - 39];
 
-            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2], _isPlayer1TurnOn));
+            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2], _isPassingTurnOn));
             
             // We started at least one game.
             _isGameStarted = true;
@@ -477,8 +497,9 @@ namespace Reversi.Model
             }
 
             Boolean isOver = false;
+            _isPassingTurnOn = true;
 
-            // Change the aktív player Boolean, if the other player can make a put down. It is over, if none can make a put donwn.
+            // Change the aktív player and the passing turn Boolean, if the other player can make a put down. It is over, if none can make a put donwn.
             for (Int32 i = 0; i < _possiblePutDownsCoordinatesCount; i += 2)
             {
                 if (_isPlayer1TurnOn
@@ -486,6 +507,7 @@ namespace Reversi.Model
                     || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 3))
                 {
                     _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                    _isPassingTurnOn = false;
                     isOver = false;
                     break;
                 }
@@ -494,6 +516,7 @@ namespace Reversi.Model
                     || _table[_possiblePutDownsCoordinates[i], _possiblePutDownsCoordinates[i + 1]] == 6))
                 {
                     _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                    _isPassingTurnOn = false;
                     isOver = false;
                     break;
                 }
@@ -524,7 +547,7 @@ namespace Reversi.Model
                 _data.PutDownsCoordinatesCount += 2;
 
                 // Make the view update call.
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2], _isPlayer1TurnOn));
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasCount, updatedFieldsDatas, _points[0], _points[2], _isPassingTurnOn));
 
                 // Reset for the next put down.
                 _reversedPutDownsCoordinatesCount = 0;
@@ -716,10 +739,10 @@ namespace Reversi.Model
         {
             if (x < 0 || x >= _data.TableSize || y < 0 || y >= _data.TableSize)
             {
-                return _table[x, y];
+                return -2;
             }
 
-            return -2;
+            return _table[x, y];
         }
 
         /// <summary>
@@ -877,12 +900,13 @@ namespace Reversi.Model
             if(_isPlayer1TurnOn)
             {
                 ++(_data.Player1Time);
+                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player1Time));
             }
             else
             {
                 ++(_data.Player2Time);
+                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player2Time));
             }
-            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player2Time));
         }
 
         #endregion

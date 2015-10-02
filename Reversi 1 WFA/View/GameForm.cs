@@ -30,9 +30,18 @@ namespace Reversi.View
 
         private IReversiDataAccess _dataAccess;
         private ReversiGameModel _model;
+
+        private Boolean IsPlayer1TurnOn;
+
+        private AboutMessageForm _aboutMessageForm;
+
+        private Int32 _topRowMinimumWidth;
+        private Int32 _topRowMinimumHeight;
+        private Int32 _player1GroupBoxMarginLeftDefault;
+        private Int32 _bottomButtonPanelMarginLeftDefault;
+
         private Button[,] _buttonGrid;
         private Boolean _saved;
-        private AboutMessageForm aboutMessageForm;
 
         #endregion
 
@@ -49,54 +58,50 @@ namespace Reversi.View
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            // Define the border style of the form to a dialog box.
-            //FormBorderStyle = FormBorderStyle.FixedDialog;
+            _topRowMinimumWidth = _topFlowLayoutPanelForAll.Width + _topFlowLayoutPanelForAll.Margin.Left + _topFlowLayoutPanelForAll.Margin.Right;
+            _topRowMinimumHeight = _topFlowLayoutPanelForAll.Height + _topFlowLayoutPanelForAll.Margin.Top + _topFlowLayoutPanelForAll.Margin.Bottom;
+            _player1GroupBoxMarginLeftDefault = _player1GroupBox.Margin.Left;
+            _bottomButtonPanelMarginLeftDefault = _bottomButtonPanel.Margin.Left;
 
-            // Set the MaximizeBox to false to remove the maximize box.
-            //MaximizeBox = false;
-
-            // Set the MinimizeBox to false to remove the minimize box.
-            //MinimizeBox = false;
-
-            // Set the start position of the form to the center of the screen.
-            //StartPosition = FormStartPosition.CenterScreen;
+            this.Width = _topRowMinimumWidth + (2 * 8);
+            this.Height = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37;
 
             _dataAccess = new ReversiFileDataAccess(_supportedGameTableSizesArray);
+
             _model = new ReversiGameModel(_dataAccess, _tableSizeSettingDefault);
             _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(Model_SetGameEnded);
             _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(Model_UpdatePlayerTime);
             _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(Model_UpdateTable);
+
             _saved = true;
         }
 
         private void fileNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            setButtonGridUp();
-
             _model.NewGame();
 
-            fileSaveToolStripMenuItem.Enabled = true;
+            _fileSaveToolStripMenuItem.Enabled = true;
             _saved = false;
-            pauseButton.Enabled = true;
-            pauseButton.Text = "Pause";
+            _pauseButton.Enabled = true;
+            _pauseButton.Text = "Pause";
         }
 
         private async void fileLoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (loadFileDialog.ShowDialog() == DialogResult.OK)
+            if (_loadFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    await _model.LoadGame(loadFileDialog.FileName);
-                    fileSaveToolStripMenuItem.Enabled = true;
+                    await _model.LoadGame(_loadFileDialog.FileName);
+                    _fileSaveToolStripMenuItem.Enabled = true;
                     _saved = true;
-                    pauseButton.Enabled = true;
+                    _pauseButton.Enabled = true;
                 }
                 catch (ReversiDataException)
                 {
                     MessageBox.Show("Játék betöltése sikertelen!" + Environment.NewLine + "Hibás az elérési út, vagy a fájlformátum.", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    fileSaveToolStripMenuItem.Enabled = true;
+                    _fileSaveToolStripMenuItem.Enabled = true;
                     _saved = true;
                 }
             }
@@ -104,13 +109,13 @@ namespace Reversi.View
 
         private async void fileSaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (_saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    await _model.SaveGame(saveFileDialog.FileName);
+                    await _model.SaveGame(_saveFileDialog.FileName);
                     _saved = true;
-                    pauseButton.Enabled = true;
+                    _pauseButton.Enabled = true;
                 }
                 catch (ReversiDataException)
                 {
@@ -140,42 +145,42 @@ namespace Reversi.View
         {
             _model.TableSizeSetting = 10;
 
-            gameSizeSmallToolStripMenuItem.Enabled = false; //TODO: One is useless.
-            gameSizeSmallToolStripMenuItem.Checked = true;
+            _gameSizeSmallToolStripMenuItem.Enabled = false; //TODO: One is useless.
+            _gameSizeSmallToolStripMenuItem.Checked = true;
 
-            gameSizeMediumToolStripMenuItem.Enabled = true;
-            gameSizeMediumToolStripMenuItem.Checked = false;
+            _gameSizeMediumToolStripMenuItem.Enabled = true;
+            _gameSizeMediumToolStripMenuItem.Checked = false;
 
-            gameSizeLargeToolStripMenuItem.Enabled = true;
-            gameSizeLargeToolStripMenuItem.Checked = false;
+            _gameSizeLargeToolStripMenuItem.Enabled = true;
+            _gameSizeLargeToolStripMenuItem.Checked = false;
         }
 
         private void gameSizeMediumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.TableSizeSetting = 20;
 
-            gameSizeSmallToolStripMenuItem.Enabled = true; //TODO: One is useless.
-            gameSizeSmallToolStripMenuItem.Checked = false;
+            _gameSizeSmallToolStripMenuItem.Enabled = true; //TODO: One is useless.
+            _gameSizeSmallToolStripMenuItem.Checked = false;
 
-            gameSizeMediumToolStripMenuItem.Enabled = false;
-            gameSizeMediumToolStripMenuItem.Checked = true;
+            _gameSizeMediumToolStripMenuItem.Enabled = false;
+            _gameSizeMediumToolStripMenuItem.Checked = true;
 
-            gameSizeLargeToolStripMenuItem.Enabled = true;
-            gameSizeLargeToolStripMenuItem.Checked = false;
+            _gameSizeLargeToolStripMenuItem.Enabled = true;
+            _gameSizeLargeToolStripMenuItem.Checked = false;
         }
 
         private void gameSizeLargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.TableSizeSetting = 30;
 
-            gameSizeSmallToolStripMenuItem.Enabled = true; //TODO: One is useless.
-            gameSizeSmallToolStripMenuItem.Checked = false;
+            _gameSizeSmallToolStripMenuItem.Enabled = true; //TODO: One is useless.
+            _gameSizeSmallToolStripMenuItem.Checked = false;
 
-            gameSizeMediumToolStripMenuItem.Enabled = true;
-            gameSizeMediumToolStripMenuItem.Checked = false;
+            _gameSizeMediumToolStripMenuItem.Enabled = true;
+            _gameSizeMediumToolStripMenuItem.Checked = false;
 
-            gameSizeLargeToolStripMenuItem.Enabled = false;
-            gameSizeLargeToolStripMenuItem.Checked = true;
+            _gameSizeLargeToolStripMenuItem.Enabled = false;
+            _gameSizeLargeToolStripMenuItem.Checked = true;
         }
 
         private void helpRulesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -185,12 +190,12 @@ namespace Reversi.View
 
         private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (aboutMessageForm == null)
+            if (_aboutMessageForm == null)
             {
-                aboutMessageForm = new AboutMessageForm();
+                _aboutMessageForm = new AboutMessageForm();
             }
             
-            aboutMessageForm.ShowDialog();
+            _aboutMessageForm.ShowDialog();
         }
 
         private void passButton_Click(object sender, EventArgs e)
@@ -200,21 +205,26 @@ namespace Reversi.View
 
         private void pauseButton_Click(object sender, EventArgs e)
         {
-            if (pauseButton.Text == "Pause")
+            if (_pauseButton.Text == "Pause")
             {
                 _model.GamePause();
-                pauseButton.Text = "Unpause";
+                _pauseButton.Text = "Unpause";
             }
-            else if (pauseButton.Text == "Unpause")
+            else if (_pauseButton.Text == "Unpause")
             {
                 _model.GameUnpause();
-                pauseButton.Text = "Pause";
+                _pauseButton.Text = "Pause";
             }
         }
 
         private void gameButton_Clicked(object sender, EventArgs e)
         {
             _saved = false;
+            Button button = (sender as Button);
+            Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
+            Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
+
+            _model.PutDown(x, y);
         }
 
         #endregion
@@ -228,12 +238,82 @@ namespace Reversi.View
 
         private void Model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
         {
-
+            if (e.IsPlayer1TimeNeedUpdate)
+            {
+                _player1TimeValueLabel.Invoke((MethodInvoker)(() => _player1TimeValueLabel.Text = e.NewTime.ToString()));
+            }
+            else
+            {
+                _player2TimeValueLabel.Invoke((MethodInvoker)(() => _player2TimeValueLabel.Text = e.NewTime.ToString()));
+            }
         }
 
         private void Model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
         {
+            setButtonGridUp();
 
+            if (e.UpdatedFieldsCount == 0)
+            {
+                IsPlayer1TurnOn = e.IsPassingTurnOn;
+
+                for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
+                {
+                    for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
+                    {
+                        if (IsPlayer1TurnOn && e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y] == 6)
+                        {
+                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
+                            _buttonGrid[x, y].Enabled = true;
+                        }
+                        else if (!IsPlayer1TurnOn && e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y] == 3)
+                        {
+                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
+                            _buttonGrid[x, y].Enabled = true;
+                        }
+                        else
+                        {
+                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
+                            _buttonGrid[x, y].Enabled = false;
+                        }
+                        _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
+                    }
+                }
+
+                
+            }
+            else
+            {
+                if (e.IsPassingTurnOn)
+                {
+                    _passButton.Enabled = true;
+                }
+                else
+                {
+                    IsPlayer1TurnOn = !IsPlayer1TurnOn;
+                }
+
+                for (Int32 index = 0; index < e.UpdatedFieldsCount; index += 3)
+                {
+                    if (IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 6)
+                    {
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = true;
+                    }
+                    else if (!IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 3)
+                    {
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = true;
+                    }
+                    else
+                    {
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = false;
+                    }
+                }
+            }
+
+            //_player1TimeValueLabel.Text = e.Player1Points.ToString();
+            //_player2TimeValueLabel.Text = e.Player2Points.ToString();
         }
 
         #endregion
@@ -241,70 +321,56 @@ namespace Reversi.View
         #region Private method
         private void setButtonGridUp()
         {
-            if (_buttonGrid == null || _model.TableSizeSetting != _buttonGrid.GetLength(0))
+            if (_buttonGrid == null || _model.ActiveTableSize != _buttonGrid.GetLength(0))
             {
-                _buttonGrid = new Button[_model.TableSizeSetting, _model.TableSizeSetting];
-                bottomButtonPanel.Height = (_gameButtonSize + 2) * _model.TableSizeSetting;
-                bottomButtonPanel.Width = bottomButtonPanel.Height;
-                Int32 widthDifferencia = mainFlowLayoutPanel.Width - bottomButtonPanel.Width;
+                _bottomButtonPanel.Controls.Clear();
+                _buttonGrid = new Button[_model.ActiveTableSize, _model.ActiveTableSize]; //TODO: only create what we need.
+
+                _bottomButtonPanel.Height = ((_gameButtonSize - 1) * _model.ActiveTableSize) + 1;
+                _bottomButtonPanel.Width = _bottomButtonPanel.Height;
+
+                Height = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37 + _bottomButtonPanel.Height + (2 * 2) + 2;
+
+                Int32 widthDifferencia = _topRowMinimumWidth - (_bottomButtonPanel.Width + _bottomButtonPanelMarginLeftDefault + _bottomButtonPanel.Margin.Right);
+
                 if (widthDifferencia > 0)
                 {
+                    Width = _topRowMinimumWidth + (2 * 8);
 
+                    _bottomButtonPanel.Margin = new Padding(_bottomButtonPanelMarginLeftDefault + (widthDifferencia / 2), _bottomButtonPanel.Margin.Top, _bottomButtonPanel.Margin.Right, _bottomButtonPanel.Margin.Bottom);
+                    _player1GroupBox.Margin = new Padding(_player1GroupBoxMarginLeftDefault, _player1GroupBox.Margin.Top, _player1GroupBox.Margin.Right, _player1GroupBox.Margin.Bottom);
                 }
                 else if (widthDifferencia < 0)
                 {
+                    Width = _topRowMinimumWidth + (2 * 8) + (-widthDifferencia);
 
+                    _bottomButtonPanel.Margin = new Padding(_bottomButtonPanelMarginLeftDefault, _bottomButtonPanel.Margin.Top, _bottomButtonPanel.Margin.Right, _bottomButtonPanel.Margin.Bottom);
+                    _player1GroupBox.Margin = new Padding(_player1GroupBoxMarginLeftDefault + ((-widthDifferencia) / 2), _player1GroupBox.Margin.Top, _player1GroupBox.Margin.Right, _player1GroupBox.Margin.Bottom);
                 }
             }
 
-            _buttonGrid[0, 0] = new Button();
-            _buttonGrid[0, 0].Text = "aa";
-            //_buttonGrid[0, 0].Location = new Point(150 + x + 50, 30 + y * 50);
-            _buttonGrid[0, 0].Size = new Size(25, 25); // méret
-            _buttonGrid[0, 0].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betűtípus
-            _buttonGrid[0, 0].Enabled = false; // kikapcsolt állapot
-            _buttonGrid[0, 0].TabIndex = 100 + 0 * _model.TableSizeSetting + 0; // a gomb számát a TabIndex-ben tároljuk
-            _buttonGrid[0, 0].FlatStyle = FlatStyle.Flat; // lapított stípus
-            _buttonGrid[0, 0].MouseClick += new MouseEventHandler(gameButton_Clicked);
-            _buttonGrid[0, 0].Text = String.Empty;
-            _buttonGrid[0, 0].Enabled = false;
-            _buttonGrid[0, 0].BackColor = Color.White;
-            bottomButtonPanel.Controls.Add(_buttonGrid[0, 0]);
-
-            _buttonGrid[0, 1] = new Button();
-            _buttonGrid[0, 1].Text = "aa";
-            _buttonGrid[0, 1].Location = new Point(150 + 0 + 50, 30 + 1 * 50);
-            _buttonGrid[0, 1].Size = new Size(30, 30); // méret
-            _buttonGrid[0, 1].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betűtípus
-            _buttonGrid[0, 1].Enabled = false; // kikapcsolt állapot
-            _buttonGrid[0, 1].TabIndex = 100 + 0 * _model.TableSizeSetting + 1; // a gomb számát a TabIndex-ben tároljuk
-            _buttonGrid[0, 1].FlatStyle = FlatStyle.Flat; // lapított stípus
-            _buttonGrid[0, 1].MouseClick += new MouseEventHandler(gameButton_Clicked);
-            _buttonGrid[0, 1].Text = String.Empty;
-            _buttonGrid[0, 1].Enabled = false;
-            _buttonGrid[0, 1].BackColor = Color.White;
-            bottomButtonPanel.Controls.Add(_buttonGrid[0, 1]);
-
-            /*for (Int32 x = 0; x < _model.TableSizeSetting; ++x)
+            for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
             {
-                for (Int32 y = 0; y < _model.TableSizeSetting; ++y)
+                for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
                 {
                     _buttonGrid[x, y] = new Button();
-                    _buttonGrid[x, y].Text = "aa";
-                    //_buttonGrid[x, y].Location = new Point(150 + x + 50, 30 + y * 50);
-                    _buttonGrid[x, y].Size = new Size(50, 50); // méret
-                    _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold); // betűtípus
-                    _buttonGrid[x, y].Enabled = false; // kikapcsolt állapot
-                    _buttonGrid[x, y].TabIndex = 100 + x * _model.TableSizeSetting + y; // a gomb számát a TabIndex-ben tároljuk
-                    _buttonGrid[x, y].FlatStyle = FlatStyle.Flat; // lapított stípus
+                    _buttonGrid[x, y].Location = new Point(x + x * (_gameButtonSize - 2), y + y * (_gameButtonSize - 2));
+                    _buttonGrid[x, y].Size = new Size(_gameButtonSize, _gameButtonSize);
+                    _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Bold);
+                    _buttonGrid[x, y].Enabled = true;
+                    _buttonGrid[x, y].TabIndex = 1000 + (x * _model.ActiveTableSize) + y;
+                    _buttonGrid[x, y].FlatStyle = FlatStyle.Flat;
+                    _buttonGrid[x, y].FlatAppearance.BorderSize = 1;
                     _buttonGrid[x, y].MouseClick += new MouseEventHandler(gameButton_Clicked);
-                    _buttonGrid[x, y].Text = String.Empty;
-                    _buttonGrid[x, y].Enabled = false;
-                    _buttonGrid[x, y].BackColor = Color.White;
-                    bottomButtonPanel.Controls.Add(_buttonGrid[x, y]);
+                    _buttonGrid[x, y].BackColor = Color.Yellow;
+                    _buttonGrid[x, y].Margin = new Padding(0);
+                    _buttonGrid[x, y].Padding = new Padding(0);
+                    _buttonGrid[x, y].CausesValidation = false;
+                    _buttonGrid[x, y].TabStop = false;
+                    
+                    _bottomButtonPanel.Controls.Add(_buttonGrid[x, y]);
                 }
-            }*/
-
+            }
         }
 
         #endregion
