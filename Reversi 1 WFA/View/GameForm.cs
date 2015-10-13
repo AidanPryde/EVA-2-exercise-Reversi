@@ -221,8 +221,8 @@ namespace Reversi.View
         {
             _saved = false;
             Button button = (sender as Button);
-            Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
-            Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
+            Int32 x = (button.TabIndex - 1000) % _model.ActiveTableSize;
+            Int32 y = (button.TabIndex - 1000) / _model.ActiveTableSize;
 
             _model.PutDown(x, y);
         }
@@ -250,10 +250,10 @@ namespace Reversi.View
 
         private void Model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
         {
-            setButtonGridUp();
-
             if (e.UpdatedFieldsCount == 0)
             {
+                setButtonGridUp();
+
                 IsPlayer1TurnOn = e.IsPassingTurnOn;
 
                 for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
@@ -278,8 +278,6 @@ namespace Reversi.View
                         _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
                     }
                 }
-
-                
             }
             else
             {
@@ -296,18 +294,18 @@ namespace Reversi.View
                 {
                     if (IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 6)
                     {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = true;
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = true;
                     }
                     else if (!IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 3)
                     {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = true;
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = true;
                     }
                     else
                     {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index] + 1].Enabled = false;
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
+                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = false;
                     }
                 }
             }
