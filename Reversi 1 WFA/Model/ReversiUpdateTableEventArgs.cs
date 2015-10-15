@@ -78,11 +78,12 @@ namespace Reversi.Model
         /// Creating Reversi update table event argument instance.
         /// If the "updatedFieldsCount" parameter equels to 0,
         /// then we send the new values only, without the coordinates and the Boolean to tell which player's turn it is.
-        /// Otherwise we send the data as: X, Y, new data, X, Y, new data, ... . with a Bolean indicating if it is a passing turn.
+        /// Otherwise we send the data as: X, Y, data, X, Y, data, ... . with a Bolean indicating if it is a passing turn.
+        /// The sent datas are changed datas and datas for possible put downs for each players.
         /// Both case we send the player points.
         /// </summary>
-        /// <param name="updatedFieldsCount">The updated fields count.</param>
-        /// <param name="updatedFieldsDatas">The updated fields data.</param>
+        /// <param name="updatedFieldsCount">The updated fields and possible put downs fields count.</param>
+        /// <param name="updatedFieldsDatas">The updated fields and possible put downs fields data.</param>
         /// <param name="player1Points">The points of player 1 has.</param>
         /// <param name="player2Points">The points of player 2 has.</param>
         /// <param name="isPassingTurnOn">Indicate the type of the turn or one of the player which turn it is.</param>

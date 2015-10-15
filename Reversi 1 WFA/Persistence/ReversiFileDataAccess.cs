@@ -45,7 +45,7 @@ namespace Reversi.Persistence
                     Int32 tableSize = Int32.Parse(numbers[0]);
                     Int32 player1Time = Int32.Parse(numbers[1]);
                     Int32 player2Time = Int32.Parse(numbers[2]);
-                    Int32 putDownsCount = Int32.Parse(numbers[3]);
+                    Int32 putDownsSize = Int32.Parse(numbers[3]);
 
                     Boolean found = false;
                     for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0) && !found; ++i)
@@ -68,14 +68,14 @@ namespace Reversi.Persistence
                     }
 
                     // Creating the game descriptive data class.
-                    ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsCount);
+                    ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsSize);
 
                     // Read a line of the file, then split it bye one space.
                     line = await reader.ReadLineAsync();
                     numbers = line.Split(' ');
 
                     // Setup values of the putDown array.
-                    for (Int32 i = 0; i < putDownsCount; i += 2)
+                    for (Int32 i = 0; i < putDownsSize; i += 2)
                     {
                         data[i] = Int32.Parse(numbers[i]);
                     }
@@ -131,15 +131,15 @@ namespace Reversi.Persistence
                 using (StreamWriter writer = new StreamWriter(path)) // opening file
                 {
                     // Writing the fist line with the size if the table, with the players played times and with the coordinats count.
-                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsCoordinatesCount.ToString()); // kiírjuk a méreteket
+                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsSize.ToString()); // kiírjuk a méreteket
                     await writer.WriteLineAsync();
 
                     // Writing the second line with the coordinates.
-                    for (Int32 i = 0; i < data.PutDownsCoordinatesCount - 1; ++i)
+                    for (Int32 i = 0; i < data.PutDownsSize - 1; ++i)
                     {
                         await writer.WriteAsync(data[i].ToString() + " ");
                     }
-                    await writer.WriteAsync(data[data.PutDownsCoordinatesCount - 1].ToString());
+                    await writer.WriteAsync(data[data.PutDownsSize - 1].ToString());
                 }
             }
             catch (Exception e)

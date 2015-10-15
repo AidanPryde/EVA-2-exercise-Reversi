@@ -18,7 +18,7 @@ namespace Reversi.Persistence
         /// <summary>
         /// Helper variable for maintaining '_putDowns' array. The amount of coordinates keeped in the '_putDowns' array.
         /// </summary>
-        private Int32 _putDownsCount;
+        private Int32 _putDownsSize;
 
         /// <summary>
         /// Player 1 game time.
@@ -101,18 +101,18 @@ namespace Reversi.Persistence
         }
 
         /// <summary>
-        /// The query of a '_putDowns' array size.
+        /// The query of a '_putDowns' array size. That we manage ourself.
         /// </summary>
-        public Int32 PutDownsCoordinatesCount
+        public Int32 PutDownsSize
         {
             get
             {
-                return _putDownsCount;
+                return _putDownsSize;
             }
 
             set
             {
-                _putDownsCount = value;
+                _putDownsSize = value;
             }
         }
 
@@ -126,17 +126,17 @@ namespace Reversi.Persistence
         /// <param name="tableSize">The size of the square game table.</param>
         /// <param name="player1Time">The player 1 play time.</param>
         /// <param name="player2Time">The player 2 play time.</param>
-        /// <param name="putDownsCount">The put downs coordinates count.</param>
-        public ReversiGameDescriptiveData(Int32 tableSize, Int32 player1Time = 0, Int32 player2Time = 0, Int32 putDownsCount = 0)
+        /// <param name="putDownsSize">The put downs coordinates count.</param>
+        public ReversiGameDescriptiveData(Int32 tableSize, Int32 player1Time = 0, Int32 player2Time = 0, Int32 putDownsSize = 0)
         {
             _tableSize = tableSize;
 
-            _putDowns = new Int32[(_tableSize * 2) - 4];
+            _putDowns = new Int32[((_tableSize * _tableSize) - 4) * 2];
 
             _player1Time = player1Time;
             _player2Time = player2Time;
 
-            _putDownsCount = putDownsCount;
+            _putDownsSize = putDownsSize;
         }
 
         #endregion

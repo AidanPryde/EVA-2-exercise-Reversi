@@ -39,7 +39,7 @@ namespace Reversi.Model
 
         //TODO: Is it a state 4 possible?
         /// <summary>
-        /// The table itself. Its values can be -1, 0, 1, 2, 3, 4, 5, 6.
+        /// The table itself. Its values can be -1, 0, 1, 3, 4, 5, 6.
         /// The 0 means it is uncharted field. No put downs even near.
         /// The -1 means it is a player 1 put down field.
         /// The 1 means it is a player 2 put down field.
@@ -77,10 +77,6 @@ namespace Reversi.Model
         /// It is a helper variable, for maintain the '_possiblePutDowns' array.
         /// </summary>
         private Int32 _possiblePutDownsSize;
-        /// <summary>
-        /// Using it for updating the view.
-        /// </summary>
-        private Int32 _newPossiblePutDownsCountx3;
 
         /// <summary>
         /// We save the reversed put downs coordiantes in it.
@@ -304,7 +300,7 @@ namespace Reversi.Model
             if (_table == null || _data.TableSize != _table.GetLength(0))
             {
                 _table = new Int32[_data.TableSize, _data.TableSize];
-                _possiblePutDowns = new Int32[_data.TableSize * _data.TableSize * 2]; //TODO: It can be smaller. How much?
+                _possiblePutDowns = new Int32[_data.TableSize * _data.TableSize * 3]; //TODO: It can be smaller. How much?
             }
 
             for (Int32 x = 0; x < _data.TableSize; ++x)
@@ -341,7 +337,7 @@ namespace Reversi.Model
             _table[halfTableSize - 1, halfTableSize - 2] = 3;
             _possiblePutDowns[3] = halfTableSize - 1;
             _possiblePutDowns[4] = halfTableSize - 2;
-            _possiblePutDowns[5] = 3;
+            _possiblePutDowns[5] = 3; 
 
             _table[halfTableSize, halfTableSize - 2] = 6;
             _possiblePutDowns[6] = halfTableSize;
@@ -400,7 +396,7 @@ namespace Reversi.Model
             if (isLoadedGame)
             {
                 // We replay the game to see, if it is a valid one, and to update the model fields. 
-                for (Int32 i = 0; i < _data.PutDownsCoordinatesCount; i += 2)
+                for (Int32 i = 0; i < _data.PutDownsSize; i += 2)
                 {
                     // Corrupt loaded data.
                     if (!IsValidIndexes(_data[i], _data[i + 1]))
@@ -419,11 +415,13 @@ namespace Reversi.Model
             // Geather and send the table values to view.
             Int32[] updatedFieldsDatas = new Int32[_data.TableSize * _data.TableSize];
 
+            Int32 index = 0;
             for (Int32 x = 0; x < _data.TableSize; ++x)
             {
                 for (Int32 y = 0; y < _data.TableSize; ++y)
                 {
-                    updatedFieldsDatas[(x * _data.TableSize) + y] = _table[x, y];
+                    updatedFieldsDatas[index] = _table[x, y];
+                    ++index;
                 }
             }
 
@@ -445,7 +443,6 @@ namespace Reversi.Model
         /// <returns>Is the game over?</returns>
         private Boolean MakePutDown(Int32 x, Int32 y, Boolean isUpdateNeeded = true)
         {
-            Help2();
             // Updating the table put downs positions. 
             if (_isPlayer1TurnOn) // Player 1 put down.
             {
@@ -469,7 +466,7 @@ namespace Reversi.Model
                 // Do we try to make a valid put down? We only check it if loaded the game.
                 if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 3)
                 {
-                    _table[x, y] = 2; // The put down.
+                    _table[x, y] = -1; // The put down.
 
                     for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // We do the reverses.
                     {
@@ -481,7 +478,7 @@ namespace Reversi.Model
                     throw new ReversiDataException("Source 02", "message 02", ReversiDataExceptionType.FormatException);
                 }
             }
-            Help2();
+
             // Updating the table old possible put downs positions and remove the one that was played on.
             for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
             {
@@ -503,9 +500,7 @@ namespace Reversi.Model
                     SearchAndSetPossiblePutDown(_possiblePutDowns[i], _possiblePutDowns[i + 1], _allDirections[j]);
                 }
             }
-
-            _newPossiblePutDownsCountx3 = 0;
-            Help2();
+            
             // Updating the table new possible put down positions, and add them to the end of the array.
             for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
             {
@@ -516,15 +511,14 @@ namespace Reversi.Model
                     _allDirections[i](ref xNew, ref yNew);
                     _possiblePutDowns[_possiblePutDownsSize] = xNew;
                     _possiblePutDowns[_possiblePutDownsSize + 1] = yNew;
-                    _possiblePutDowns[_possiblePutDownsSize + 2] = _table[xNew, yNew];
+                    _possiblePutDowns[_possiblePutDownsSize + 2] = 0; // Before the put down it was 0.
                     _possiblePutDownsSize += 3;
-                    _newPossiblePutDownsCountx3 += 3;
                 }
             }
 
             Boolean isOver = false;
             _isPassingTurnOn = true;
-            Help2();
+
             // Change the aktív player and the passing turn Boolean, if the other player can make a put down. It is over, if none can make a put donwn.
             for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
             {
@@ -550,27 +544,36 @@ namespace Reversi.Model
 
             if (isUpdateNeeded) // We harvest the changed coordinates and values, from '_possiblePutDowns' and '_reversedPutDowns'.
             {
+                // We will send this.
                 Int32 updatedFieldsDatasSize = 0;
-                Int32 changedPossiblePutDownPositionsCountx3 = 0;
-                Int32 oldPassiblePutDownsCountx3 = _possiblePutDownsSize - _newPossiblePutDownsCountx3;
 
-                // Check if the value of the possible put downs changed.
-                for (Int32 i = 0; i < oldPassiblePutDownsCountx3; i += 3)
+                int help = 0;
+
+                // Check if the value of the possible put downs are not 5s or was not 5s.
+                // We do not want to send those 5s witch was 5s before.
+                // Here we just get the update hte size.
+                for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
                 {
-                    if (_possiblePutDowns[i + 2] != _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]])
+                    if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] != 5
+                        || _possiblePutDowns[i + 2] != 5)
                     {
-                        changedPossiblePutDownPositionsCountx3 += 3;
+                        updatedFieldsDatasSize += 3;
                     }
                 }
-
-                updatedFieldsDatasSize = changedPossiblePutDownPositionsCountx3 + _newPossiblePutDownsCountx3 + _reversedPutDownsSize + 3;
-
+                help = updatedFieldsDatasSize;
+                // The + 3 is the put down itself.
+                updatedFieldsDatasSize += _reversedPutDownsSize + 3;
+                // We will send this.
                 Int32[] updatedFieldsDatas = new Int32[updatedFieldsDatasSize];
 
+                // Check if the value of the possible put downs are not 5s or was not 5s.
+                // We do not want to send those 5s witch was 5s before.
+                // Here we pick up what we need.
                 Int32 index = 0;
-                for (Int32 i = 0; i < oldPassiblePutDownsCountx3; i += 3)
+                for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
                 {
-                    if (_possiblePutDowns[i + 2] != _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]])
+                    if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] != 5
+                        || _possiblePutDowns[i + 2] != 5)
                     {
                         _possiblePutDowns[i + 2] = _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]];
                         updatedFieldsDatas[index] = _possiblePutDowns[i];
@@ -580,31 +583,26 @@ namespace Reversi.Model
                     }
                 }
 
-                for (Int32 i = oldPassiblePutDownsCountx3; i < _possiblePutDownsSize; i += 3)
-                {
-                    updatedFieldsDatas[index] = _possiblePutDowns[i];
-                    updatedFieldsDatas[index + 1] = _possiblePutDowns[i + 1];
-                    updatedFieldsDatas[index + 2] = _possiblePutDowns[i + 2];
-                    index += 3;
-                }
-
+                int help2 = index;
+                // We pick up all the datas of the reversed put downs.
                 for (Int32 i = 0; i < _reversedPutDownsSize; i += 3)
                 {
-                    updatedFieldsDatas[index + i] = _reversedPutDowns[i];
-                    updatedFieldsDatas[index + i + 1] = _reversedPutDowns[i + 1];
-                    updatedFieldsDatas[index + i + 2] = _reversedPutDowns[i + 2];
+                    updatedFieldsDatas[index] = _reversedPutDowns[i];
+                    updatedFieldsDatas[index + 1] = _reversedPutDowns[i + 1];
+                    updatedFieldsDatas[index + 2] = _reversedPutDowns[i + 2];
                     index += 3;
                 }
-
+                //Help();
+                // We pick up the data of the put down itself.
                 updatedFieldsDatas[index] = x;
                 updatedFieldsDatas[index + 1] = y;
                 updatedFieldsDatas[index + 2] = _table[x, y];
 
                 // Save the put down.
-                _data[_data.PutDownsCoordinatesCount] = x;
-                _data[_data.PutDownsCoordinatesCount + 1] = y;
-                _data.PutDownsCoordinatesCount += 2;
-                Help2();
+                _data[_data.PutDownsSize] = x;
+                _data[_data.PutDownsSize + 1] = y;
+                _data.PutDownsSize += 2;
+
                 // Make the view update call.
                 OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[0], _points[2], _isPassingTurnOn));
 
@@ -883,7 +881,7 @@ namespace Reversi.Model
         private void ToLeftDown(ref Int32 x, ref Int32 y)
         {
             ++x;
-            --y;
+            --y;                        
         }
 
         /// <summary>
@@ -904,7 +902,7 @@ namespace Reversi.Model
         private void ToLeftUp(ref Int32 x, ref Int32 y)
         {
             --x;
-            --y;
+            --y;                        
         }
 
         #endregion
@@ -971,17 +969,17 @@ namespace Reversi.Model
         #endregion
 
 
-        private void Help()
+        private void Help() // WTF?
         {
             String str = "";
             for (Int32 r = 0; r < _data.TableSize; ++r)
             {
                 for (Int32 h = 0; h < _data.TableSize; ++h)
                 {
-                    if (_table[r, h] != -1)
-                        str += " " + _table[r, h].ToString() + " ";
+                    if (_table[h, r] != -1)
+                        str += " " + _table[h, r].ToString() + " ";
                     else
-                        str += _table[r, h].ToString() + " ";
+                        str += _table[h, r].ToString() + " ";
                 }
                 str += "\n";
             }
@@ -1008,7 +1006,7 @@ namespace Reversi.Model
             {
                 for (Int32 h = 0; h < _data.TableSize; ++h)
                 {
-                    str += " " + alma[r, h].ToString() + " ";
+                    str += " " + alma[h, r].ToString() + " ";
                 }
                 str += "\n";
             }

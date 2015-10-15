@@ -221,8 +221,8 @@ namespace Reversi.View
         {
             _saved = false;
             Button button = (sender as Button);
-            Int32 x = (button.TabIndex - 1000) % _model.ActiveTableSize;
-            Int32 y = (button.TabIndex - 1000) / _model.ActiveTableSize;
+            Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
+            Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
 
             _model.PutDown(x, y);
         }
@@ -256,26 +256,14 @@ namespace Reversi.View
 
                 IsPlayer1TurnOn = e.IsPassingTurnOn;
 
+                Int32 index = 0;
                 for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
                 {
                     for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
                     {
-                        if (IsPlayer1TurnOn && e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y] == 6)
-                        {
-                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
-                            _buttonGrid[x, y].Enabled = true;
-                        }
-                        else if (!IsPlayer1TurnOn && e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y] == 3)
-                        {
-                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
-                            _buttonGrid[x, y].Enabled = true;
-                        }
-                        else
-                        {
-                            _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
-                            _buttonGrid[x, y].Enabled = false;
-                        }
-                        _buttonGrid[x, y].Text = e.UpdatedFieldsDatas[(x * _model.ActiveTableSize) + y].ToString();
+                        updateButtonGrid(x, y, e.UpdatedFieldsDatas[index]);
+                        _buttonGrid[x, y].Text = x.ToString() + " " + y.ToString(); // Help
+                        ++index;
                     }
                 }
             }
@@ -290,23 +278,9 @@ namespace Reversi.View
                     IsPlayer1TurnOn = !IsPlayer1TurnOn;
                 }
 
-                for (Int32 index = 0; index < e.UpdatedFieldsCount; index += 3)
+                for (Int32 i = 0; i < e.UpdatedFieldsCount; i += 3)
                 {
-                    if (IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 6)
-                    {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = true;
-                    }
-                    else if (!IsPlayer1TurnOn && e.UpdatedFieldsDatas[index + 2] == 3)
-                    {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = true;
-                    }
-                    else
-                    {
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Text = e.UpdatedFieldsDatas[index + 2].ToString();
-                        _buttonGrid[e.UpdatedFieldsDatas[index], e.UpdatedFieldsDatas[index + 1]].Enabled = false;
-                    }
+                    updateButtonGrid(e.UpdatedFieldsDatas[i], e.UpdatedFieldsDatas[i + 1], e.UpdatedFieldsDatas[i + 2]);
                 }
             }
 
@@ -345,29 +319,83 @@ namespace Reversi.View
                     _bottomButtonPanel.Margin = new Padding(_bottomButtonPanelMarginLeftDefault, _bottomButtonPanel.Margin.Top, _bottomButtonPanel.Margin.Right, _bottomButtonPanel.Margin.Bottom);
                     _player1GroupBox.Margin = new Padding(_player1GroupBoxMarginLeftDefault + ((-widthDifferencia) / 2), _player1GroupBox.Margin.Top, _player1GroupBox.Margin.Right, _player1GroupBox.Margin.Bottom);
                 }
+            
+                for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
+                {
+                    for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
+                    {
+                        _buttonGrid[x, y] = new Button();
+                        _buttonGrid[x, y].Location = new Point(x + x * (_gameButtonSize - 2), y + y * (_gameButtonSize - 2));
+                        _buttonGrid[x, y].Size = new Size(_gameButtonSize, _gameButtonSize);
+                        _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 5, FontStyle.Bold);
+                        _buttonGrid[x, y].Enabled = true;
+                        _buttonGrid[x, y].TabIndex = 1000 + (x * _model.ActiveTableSize) + y;
+                        _buttonGrid[x, y].FlatStyle = FlatStyle.Flat;
+                        _buttonGrid[x, y].FlatAppearance.BorderSize = 1;
+                        _buttonGrid[x, y].MouseClick += new MouseEventHandler(gameButton_Clicked);
+                        _buttonGrid[x, y].BackColor = Color.White;
+                        _buttonGrid[x, y].Margin = new Padding(0);
+                        _buttonGrid[x, y].Padding = new Padding(0);
+                        _buttonGrid[x, y].CausesValidation = false;
+                        _buttonGrid[x, y].TabStop = false;
+
+                        _bottomButtonPanel.Controls.Add(_buttonGrid[x, y]);
+                    }
+                }
+            }
+        }
+
+        private void updateButtonGrid(Int32 x, Int32 y, Int32 value)
+        {
+            if (IsPlayer1TurnOn && value == 6)
+            {
+                _buttonGrid[x, y].Text = value.ToString();
+                _buttonGrid[x, y].Enabled = true;
+            }
+            else if (!IsPlayer1TurnOn && value == 3)
+            {
+                _buttonGrid[x, y].Text = value.ToString();
+                _buttonGrid[x, y].Enabled = true;
+            }
+            else if (value == 4)
+            {
+                _buttonGrid[x, y].Text = value.ToString();
+                _buttonGrid[x, y].Enabled = true;
+            }
+            else
+            {
+                _buttonGrid[x, y].Text = value.ToString();
+                _buttonGrid[x, y].Enabled = false;
             }
 
-            for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
+            switch (value)
             {
-                for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
-                {
-                    _buttonGrid[x, y] = new Button();
-                    _buttonGrid[x, y].Location = new Point(x + x * (_gameButtonSize - 2), y + y * (_gameButtonSize - 2));
-                    _buttonGrid[x, y].Size = new Size(_gameButtonSize, _gameButtonSize);
-                    _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Bold);
-                    _buttonGrid[x, y].Enabled = true;
-                    _buttonGrid[x, y].TabIndex = 1000 + (x * _model.ActiveTableSize) + y;
-                    _buttonGrid[x, y].FlatStyle = FlatStyle.Flat;
-                    _buttonGrid[x, y].FlatAppearance.BorderSize = 1;
-                    _buttonGrid[x, y].MouseClick += new MouseEventHandler(gameButton_Clicked);
-                    _buttonGrid[x, y].BackColor = Color.Yellow;
-                    _buttonGrid[x, y].Margin = new Padding(0);
-                    _buttonGrid[x, y].Padding = new Padding(0);
-                    _buttonGrid[x, y].CausesValidation = false;
-                    _buttonGrid[x, y].TabStop = false;
-                    
-                    _bottomButtonPanel.Controls.Add(_buttonGrid[x, y]);
-                }
+                case -1:
+                    _buttonGrid[x, y].BackColor = Color.Red;
+                    break;
+
+                case 1:
+                    _buttonGrid[x, y].BackColor = Color.Blue;
+                    break;
+
+                case 3:
+                    _buttonGrid[x, y].BackColor = Color.BlueViolet;
+                    break;
+
+                case 6:
+                    _buttonGrid[x, y].BackColor = Color.OrangeRed;
+                    break;
+
+                case 4:
+                    _buttonGrid[x, y].BackColor = Color.Green;
+                    break;
+
+                case 5:
+                    _buttonGrid[x, y].BackColor = Color.White;
+                    break;
+
+                default:
+                    break;
             }
         }
 
