@@ -480,20 +480,19 @@ namespace Reversi.Model
             }
 
             // Updating the table old possible put downs positions and remove the one that was played on.
+            _possiblePutDownsSize -= 3;
             for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
             {
+                // We found the one we will not need anymore.
                 if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 1
                     || _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == -1)
                 {
-                    _possiblePutDowns[i] = _possiblePutDowns[_possiblePutDownsSize - 3];
-                    _possiblePutDowns[i + 1] = _possiblePutDowns[_possiblePutDownsSize - 2];
-                    _possiblePutDowns[i + 2] = _possiblePutDowns[_possiblePutDownsSize - 1];
-                    _possiblePutDownsSize -= 3;
+                    _possiblePutDowns[i] = _possiblePutDowns[_possiblePutDownsSize];
+                    _possiblePutDowns[i + 1] = _possiblePutDowns[_possiblePutDownsSize + 1];
+                    _possiblePutDowns[i + 2] = _possiblePutDowns[_possiblePutDownsSize + 2];
                 }
-                else
-                {
-                    _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] = 5;
-                }
+
+                _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] = 5; // We reset them.
 
                 for (Int32 j = 0; j < _allDirections.GetLength(0); ++j)
                 {
@@ -637,7 +636,7 @@ namespace Reversi.Model
             direction(ref xFrom, ref yFrom);
 
             // Only interested if the searched position have the inverz value of the original position.
-            if (GetSearchValue(ref xFrom, ref yFrom) == valueOriginal * -1)
+            if (GetSearchValue(ref xFrom, ref yFrom) == (valueOriginal * -1))
             {
                 // Step to the direction.
                 direction(ref xFrom, ref yFrom);
@@ -745,6 +744,10 @@ namespace Reversi.Model
                         // If it was 5 (neither can put here), it will be 6 (player 1 possible put down).
                         // If it was 3 (player 2 possible put down), it will be 4 (both can put down).
                         ++(_table[xOriginal, yOriginal]);
+                        if (_table[xOriginal, yOriginal] != -1 && _table[xOriginal, yOriginal] != 1 && _table[xOriginal, yOriginal] != 3 && _table[xOriginal, yOriginal] != 6 && _table[xOriginal, yOriginal] != 4 && _table[xOriginal, yOriginal] != 5 && _table[xOriginal, yOriginal] != 0)
+                        {
+                            MessageBox.Show("", "");
+                        }
                         return;
                     }
                     else if (valueSearch == 1) // It still can be a possible put down.
