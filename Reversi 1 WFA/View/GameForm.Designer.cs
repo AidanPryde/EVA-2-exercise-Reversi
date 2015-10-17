@@ -98,19 +98,19 @@
             // _fileNewToolStripMenuItem
             // 
             this._fileNewToolStripMenuItem.Name = "_fileNewToolStripMenuItem";
-            this._fileNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._fileNewToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this._fileNewToolStripMenuItem.Text = "New";
             this._fileNewToolStripMenuItem.Click += new System.EventHandler(this.fileNewToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(97, 6);
             // 
             // _fileLoadToolStripMenuItem
             // 
             this._fileLoadToolStripMenuItem.Name = "_fileLoadToolStripMenuItem";
-            this._fileLoadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._fileLoadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this._fileLoadToolStripMenuItem.Text = "Load";
             this._fileLoadToolStripMenuItem.Click += new System.EventHandler(this.fileLoadToolStripMenuItem_Click);
             // 
@@ -118,19 +118,19 @@
             // 
             this._fileSaveToolStripMenuItem.Enabled = false;
             this._fileSaveToolStripMenuItem.Name = "_fileSaveToolStripMenuItem";
-            this._fileSaveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._fileSaveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this._fileSaveToolStripMenuItem.Text = "Save";
             this._fileSaveToolStripMenuItem.Click += new System.EventHandler(this.fileSaveToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(97, 6);
             // 
             // _fileExitToolStripMenuItem
             // 
             this._fileExitToolStripMenuItem.Name = "_fileExitToolStripMenuItem";
-            this._fileExitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._fileExitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this._fileExitToolStripMenuItem.Text = "Exit";
             this._fileExitToolStripMenuItem.Click += new System.EventHandler(this.fileExitToolStripMenuItem_Click);
             // 
@@ -149,7 +149,7 @@
             this._gameSizeMediumToolStripMenuItem,
             this._gameSizeLargeToolStripMenuItem});
             this.gameSizeToolStripMenuItem.Name = "gameSizeToolStripMenuItem";
-            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.gameSizeToolStripMenuItem.Text = "Size";
             // 
             // _gameSizeSmallToolStripMenuItem
@@ -222,7 +222,7 @@
             this._toolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this._toolStripStatusLabel.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
             this._toolStripStatusLabel.Name = "_toolStripStatusLabel";
-            this._toolStripStatusLabel.Size = new System.Drawing.Size(478, 18);
+            this._toolStripStatusLabel.Size = new System.Drawing.Size(509, 18);
             this._toolStripStatusLabel.Spring = true;
             this._toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -372,6 +372,7 @@
             // 
             // _saveFileDialog
             // 
+            this._saveFileDialog.Filter = "Reversi game files (*.reversi)|*.reversi";
             this._saveFileDialog.Title = "Saving reversi game.";
             // 
             // GameForm

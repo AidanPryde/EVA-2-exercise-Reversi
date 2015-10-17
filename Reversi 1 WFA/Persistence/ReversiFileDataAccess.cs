@@ -75,7 +75,7 @@ namespace Reversi.Persistence
                     numbers = line.Split(' ');
 
                     // Setup values of the putDown array.
-                    for (Int32 i = 0; i < putDownsSize; i += 2)
+                    for (Int32 i = 0; i < putDownsSize; ++i)
                     {
                         data[i] = Int32.Parse(numbers[i]);
                     }

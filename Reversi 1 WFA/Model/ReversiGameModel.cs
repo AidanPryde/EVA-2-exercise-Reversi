@@ -390,7 +390,7 @@ namespace Reversi.Model
                 }
             }
 
-            _isPlayer1TurnOn = false; // In the MakePutDown() we switch it first, then make the put down.
+            _isPlayer1TurnOn = true; // In the MakePutDown() we switch it first, then make the put down.
             _isPassingTurnOn = false;
 
             // The 12 * 2 size for the 12 starting possible put down coordinates, pluss 12 for the values.
@@ -470,13 +470,16 @@ namespace Reversi.Model
             // The staring points of the players, and the remaining empty positions.
             _points = new Int32[3] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };
 
+            _reversedPutDownsSize = 0;
+            _reversedPutDowns = new Int32[(_data.TableSize * 12) - 39];
+
             // We loaded the game.
             if (isLoadedGame)
             {
                 // We replay the game to see, if it is a valid one, and to update the model fields. 
                 for (Int32 i = 0; i < _data.PutDownsSize; i += 2)
                 {
-                    // Corrupt loaded data.
+                    // Corrupt loaded data or -1 -1 passing.
                     if (!IsValidIndexes(_data[i], _data[i + 1]))
                     {
                         if (_data[i] == -1 && _data[i + 1] == -1)
@@ -503,6 +506,9 @@ namespace Reversi.Model
                         throw new ReversiDataException("123asd", "123asd", ReversiDataExceptionType.FormatException);
                     }
                 }
+
+                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(true, _data.Player1Time));
+                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(false, _data.Player2Time));
             }
 
             // Geather and send the table values to view.
@@ -517,9 +523,6 @@ namespace Reversi.Model
                     ++index;
                 }
             }
-
-            _reversedPutDownsSize = 0;
-            _reversedPutDowns = new Int32[(_data.TableSize * 12) - 39];
 
             OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
             
@@ -542,7 +545,7 @@ namespace Reversi.Model
                 // Do we try to make a valid put down? We only check it if loaded the game.
                 if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 6) 
                 {
-                    _table[x, y] = 1; // The put down.
+                    _table[x, y] = -1; // The put down.
                     ++(_points[2]);
                     --(_points[1]);
 
@@ -561,7 +564,7 @@ namespace Reversi.Model
                 // Do we try to make a valid put down? We only check it if loaded the game.
                 if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 3)
                 {
-                    _table[x, y] = -1; // The put down.
+                    _table[x, y] = 1; // The put down.
                     ++(_points[0]);
                     --(_points[1]);
 
