@@ -1,5 +1,7 @@
-﻿using Reversi.Model;
+﻿
+using Reversi.Model;
 using Reversi.Persistence;
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -22,7 +24,10 @@ namespace Reversi.View
         ///The default table size. It is readonly.
         /// </summary>
         private readonly Int32 _tableSizeSettingDefault = 10;
-        private readonly Int32 _gameButtonSize = 25;
+        /// <summary>
+        ///The default button size. It is readonly.
+        /// </summary>
+        private readonly Int32 _gameButtonSize = 30;
 
         #endregion
 
@@ -31,22 +36,39 @@ namespace Reversi.View
         private IReversiDataAccess _dataAccess;
         private ReversiGameModel _model;
 
+        /// <summary>
+        /// To know which players turn is on.
+        /// </summary>
         private Boolean IsPlayer1TurnOn;
 
+        /// <summary>
+        /// The about window type.
+        /// </summary>
         private AboutMessageForm _aboutMessageForm;
 
+        // For resizing the window to be symetric with different button sizes.
         private Int32 _topRowMinimumWidth;
         private Int32 _topRowMinimumHeight;
         private Int32 _player1GroupBoxMarginLeftDefault;
         private Int32 _bottomButtonPanelMarginLeftDefault;
 
+        /// <summary>
+        ///  The array we saved the active buttons.
+        /// </summary>
         private Button[,] _buttonGrid;
+
+        /// <summary>
+        /// Helper to know when we can exit, without asked.
+        /// </summary>
         private Boolean _saved;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Generated stuff. Do not change.
+        /// </summary>
         public GameForm()
         {
             InitializeComponent();
@@ -56,28 +78,44 @@ namespace Reversi.View
 
         #region Form event Handlers
 
+        /// <summary>
+        /// It is invoked, when the system build up the components of the window and the window itself.
+        /// </summary>
+        /// <param name="sender">This object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void GameForm_Load(object sender, EventArgs e)
         {
+            // Resizing to be symetric.
             _topRowMinimumWidth = _topFlowLayoutPanelForAll.Width + _topFlowLayoutPanelForAll.Margin.Left + _topFlowLayoutPanelForAll.Margin.Right;
             _topRowMinimumHeight = _topFlowLayoutPanelForAll.Height + _topFlowLayoutPanelForAll.Margin.Top + _topFlowLayoutPanelForAll.Margin.Bottom;
             _player1GroupBoxMarginLeftDefault = _player1GroupBox.Margin.Left;
             _bottomButtonPanelMarginLeftDefault = _bottomButtonPanel.Margin.Left;
 
-            this.Width = _topRowMinimumWidth + (2 * 8);
-            this.Height = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37;
+            Width = _topRowMinimumWidth + (2 * 8);
+            Height = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37;
 
+            // Init the data access type with the array, that contain the default table sizes.
             _dataAccess = new ReversiFileDataAccess(_supportedGameTableSizesArray);
 
+            // Init model and connect the events.
             _model = new ReversiGameModel(_dataAccess, _tableSizeSettingDefault);
-            _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(Model_SetGameEnded);
-            _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(Model_UpdatePlayerTime);
-            _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(Model_UpdateTable);
+            _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(model_SetGameEnded);
+            _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(model_UpdatePlayerTime);
+            _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(model_UpdateTable);
 
+            // We let the user exit, without asking anything at this point.
             _saved = true;
         }
 
+        /// <summary>
+        /// The new game menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _fileNewToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void fileNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+            // Init new game. With the preset table size or the default.
             _model.NewGame();
 
             _fileSaveToolStripMenuItem.Enabled = true;
@@ -86,6 +124,11 @@ namespace Reversi.View
             _pauseButton.Text = "Pause";
         }
 
+        /// <summary>
+        /// The load game menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _fileLoadToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private async void fileLoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_loadFileDialog.ShowDialog() == DialogResult.OK)
@@ -107,6 +150,11 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// The save game menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _fileSaveToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private async void fileSaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -124,6 +172,11 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// The exit game menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _fileExitToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void fileExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.Pause();
@@ -141,6 +194,11 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// The set small size menu item clicked event handler. 10.
+        /// </summary>
+        /// <param name="sender">The _gameSizeSmallToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void gameSizeSmallToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.TableSizeSetting = 10;
@@ -155,6 +213,11 @@ namespace Reversi.View
             _gameSizeLargeToolStripMenuItem.Checked = false;
         }
 
+        /// <summary>
+        /// The set medium size menu item clicked event handler. 20.
+        /// </summary>
+        /// <param name="sender">The _gameSizeMediumToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void gameSizeMediumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.TableSizeSetting = 20;
@@ -169,6 +232,11 @@ namespace Reversi.View
             _gameSizeLargeToolStripMenuItem.Checked = false;
         }
 
+        /// <summary>
+        /// The set large size menu item clicked event handler. 30.
+        /// </summary>
+        /// <param name="sender">The _gameSizeLargeToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void gameSizeLargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _model.TableSizeSetting = 30;
@@ -183,11 +251,21 @@ namespace Reversi.View
             _gameSizeLargeToolStripMenuItem.Checked = true;
         }
 
+        /// <summary>
+        /// The rules menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _helpRulesToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void helpRulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(this, " Always the white starts the game. If he can he chooses a put down location, only if he can not he passes. Then the black do the same then the white again, and so on ... . \n You have to straddle the enemy put downs to make a put down and to make them yours. You can do it in all directions. The game ends if no one can make a put down. The player with the more put downs win.", "Reversi game", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
+        /// <summary>
+        /// The about menu item clicked event handler.
+        /// </summary>
+        /// <param name="sender">The _helpAboutToolStripMenuItem object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_aboutMessageForm == null)
@@ -198,6 +276,11 @@ namespace Reversi.View
             _aboutMessageForm.ShowDialog();
         }
 
+        /// <summary>
+        /// The pass button click event handler.
+        /// </summary>
+        /// <param name="sender">The _passButton object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void passButton_Click(object sender, EventArgs e)
         {
             try
@@ -215,6 +298,11 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// The pause button click event handler.
+        /// </summary>
+        /// <param name="sender">The _pauseButton object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void pauseButton_Click(object sender, EventArgs e)
         {
             try
@@ -239,12 +327,18 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// All of the game button click event handler.
+        /// </summary>
+        /// <param name="sender">One of the game button.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void gameButton_Clicked(object sender, EventArgs e)
         {
             _saved = false;
             Button button = (sender as Button);
             Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
             Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
+
             try
             { 
                 _model.PutDown(x, y);
@@ -262,7 +356,12 @@ namespace Reversi.View
 
         #region Model event handlers
 
-        private void Model_SetGameEnded(Object sender, ReversiSetGameEndedEventArgs e)
+        /// <summary>
+        /// The model told us the game is over.
+        /// </summary>
+        /// <param name="sender">The _model object, we do not use it as a param.</param>
+        /// <param name="e">We get the points of the players.</param>
+        private void model_SetGameEnded(Object sender, ReversiSetGameEndedEventArgs e)
         {
             _pauseButton.Enabled = false;
             _saved = true;
@@ -270,19 +369,31 @@ namespace Reversi.View
             MessageBox.Show("Game Ended", "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".");
         }
 
-        private void Model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
+        /// <summary>
+        /// The model told us to update one of the player play time.
+        /// </summary>
+        /// <param name="sender">The _model object, we do not use it as a param.</param>
+        /// <param name="e">Contain the indicator bool that tell us which player time needs to updated and the new time.</param>
+        private void model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
         {
             if (e.IsPlayer1TimeNeedUpdate)
             {
+                // Because it was runing on different thread.
                 _player1TimeValueLabel.Invoke((MethodInvoker)(() => _player1TimeValueLabel.Text = e.NewTime.ToString()));
             }
             else
             {
+                // Because it was runing on different thread.
                 _player2TimeValueLabel.Invoke((MethodInvoker)(() => _player2TimeValueLabel.Text = e.NewTime.ToString()));
             }
         }
 
-        private void Model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
+        /// <summary>
+        /// The model told us to update the table.
+        /// </summary>
+        /// <param name="sender">The _model object, we do not use it as a param.</param>
+        /// <param name="e">Read about it at the ReversiUpdateTableEventArgs consturctor.</param>
+        private void model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
         {
             if (e.UpdatedFieldsCount == 0)
             {
@@ -296,7 +407,6 @@ namespace Reversi.View
                     for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
                     {
                         updateButtonGrid(x, y, e.UpdatedFieldsDatas[index]);
-                        _buttonGrid[x, y].Text = x.ToString() + " " + y.ToString(); // Help
                         ++index;
                     }
                 }
@@ -315,14 +425,15 @@ namespace Reversi.View
                     updateButtonGrid(e.UpdatedFieldsDatas[i], e.UpdatedFieldsDatas[i + 1], e.UpdatedFieldsDatas[i + 2]);
                 }
             }
-
-            //_player1TimeValueLabel.Text = e.Player1Points.ToString();
-            //_player2TimeValueLabel.Text = e.Player2Points.ToString();
         }
 
         #endregion
 
         #region Private method
+
+        /// <summary>
+        /// Generate the game buttons if necessary and save them in the _buttonGrid array.
+        /// </summary>
         private void setButtonGridUp()
         {
             if (_buttonGrid == null || _model.ActiveTableSize != _buttonGrid.GetLength(0))
@@ -377,6 +488,13 @@ namespace Reversi.View
             }
         }
 
+        /// <summary>
+        /// We update a button indicated by the X and Y coordinates with the help of the value.
+        /// See more at ReversiGameModel _table field.
+        /// </summary>
+        /// <param name="x">First coordinate of the button.</param>
+        /// <param name="y">Second coordinate of the button.</param>
+        /// <param name="value">The value sent by the model.</param>
         private void updateButtonGrid(Int32 x, Int32 y, Int32 value)
         {
             if (IsPlayer1TurnOn && value == 6)
@@ -427,6 +545,7 @@ namespace Reversi.View
                     break;
 
                 default:
+                    _buttonGrid[x, y].BackColor = Color.White; // If it is 0.
                     break;
             }
         }

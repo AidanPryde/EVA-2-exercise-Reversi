@@ -5,8 +5,6 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
-using System.Windows.Forms;
-
 namespace Reversi.Model
 {
     /// <summary>
@@ -317,7 +315,7 @@ namespace Reversi.Model
                     }
                 }
 
-                // Save the put down.
+                // Save the pass.
                 _data[_data.PutDownsSize] = -1;
                 _data[_data.PutDownsSize + 1] = -1;
                 _data.PutDownsSize += 2;
@@ -856,10 +854,6 @@ namespace Reversi.Model
                         // If it was 5 (neither can put here), it will be 6 (player 1 possible put down).
                         // If it was 3 (player 2 possible put down), it will be 4 (both can put down).
                         ++(_table[xOriginal, yOriginal]);
-                        if (_table[xOriginal, yOriginal] != -1 && _table[xOriginal, yOriginal] != 1 && _table[xOriginal, yOriginal] != 3 && _table[xOriginal, yOriginal] != 6 && _table[xOriginal, yOriginal] != 4 && _table[xOriginal, yOriginal] != 5 && _table[xOriginal, yOriginal] != 0)
-                        {
-                            MessageBox.Show("", "");
-                        }
                         return;
                     }
                     else if (valueSearch == 1) // It still can be a possible put down.
@@ -1083,49 +1077,5 @@ namespace Reversi.Model
 
         #endregion
 
-
-        private void Help() // WTF?
-        {
-            String str = "";
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    if (_table[h, r] != -1)
-                        str += " " + _table[h, r].ToString() + " ";
-                    else
-                        str += _table[h, r].ToString() + " ";
-                }
-                str += "\n";
-            }
-            MessageBox.Show(str, "HELP");
-        }
-
-        private void Help2()
-        {
-            Int32[,] alma = new Int32[_data.TableSize, _data.TableSize];
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    alma[r, h] = 0;
-                }
-            }
-
-            for (Int32 r = 0; r < _possiblePutDownsSize; r += 3)
-            {
-                alma[_possiblePutDowns[r], _possiblePutDowns[r + 1]] = _possiblePutDowns[r + 2];
-            }
-            String str = "";
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    str += " " + alma[h, r].ToString() + " ";
-                }
-                str += "\n";
-            }
-            MessageBox.Show(str, "HELP2");
-        }
     }
 }

@@ -3,18 +3,31 @@ using System.Windows.Forms;
 
 namespace Reversi.View
 {
+    /// <summary>
+    /// The about message window type.
+    /// </summary>
     public partial class AboutMessageForm : Form
     {
+
+        #region Constructor
+
+        /// <summary>
+        /// Generated stuff. Do not change.
+        /// </summary>
         public AboutMessageForm()
         {
             InitializeComponent();
         }
 
-        private void okButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        #endregion
 
+        #region Form event Handlers
+
+        /// <summary>
+        /// It is invoked, when the system build up the components of the window and the window itself.
+        /// </summary>
+        /// <param name="sender">This object, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
         private void AboutMessageForm_Load(object sender, EventArgs e)
         {
             // Define the border style of the form to a dialog box.
@@ -32,5 +45,18 @@ namespace Reversi.View
             // TODO: Set up a relative link?
             pictureBox.ImageLocation = "C:\\Users\\Márton\\Documents\\Visual Studio 2015\\Projects\\EVA 2 exercise Reversi\\Reversi 1 WFA\\Resource\\p.png";
         }
+
+        /// <summary>
+        /// The ok button click event handler.
+        /// </summary>
+        /// <param name="sender">This _okButton, we do not use it as a param.</param>
+        /// <param name="e">Auto param, we do not use it.</param>
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
+
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutMessageForm));
-            this.okButton = new System.Windows.Forms.Button();
+            this._okButton = new System.Windows.Forms.Button();
             this.richTextBox = new System.Windows.Forms.RichTextBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -37,15 +37,15 @@
             this.flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // okButton
+            // _okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(473, 261);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 0;
-            this.okButton.Text = "Ok";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this._okButton.Location = new System.Drawing.Point(473, 261);
+            this._okButton.Name = "_okButton";
+            this._okButton.Size = new System.Drawing.Size(75, 23);
+            this._okButton.TabIndex = 0;
+            this._okButton.Text = "Ok";
+            this._okButton.UseVisualStyleBackColor = true;
+            this._okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // richTextBox
             // 
@@ -85,7 +85,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(558, 296);
             this.Controls.Add(this.flowLayoutPanel);
-            this.Controls.Add(this.okButton);
+            this.Controls.Add(this._okButton);
             this.Name = "AboutMessageForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About";
@@ -98,7 +98,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button _okButton;
         private System.Windows.Forms.RichTextBox richTextBox;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
