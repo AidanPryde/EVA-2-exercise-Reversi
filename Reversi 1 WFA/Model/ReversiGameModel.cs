@@ -63,9 +63,9 @@ namespace Reversi.Model
         private Boolean _isPassingTurnOn;
 
         /// <summary>
-        /// We save the player 1 points at index 0.
+        /// We save the player 2 points at index 0.
         /// We save the remaining put down positions at index 1.
-        /// We save the player 2 points at index 2.
+        /// We save the player 1 points at index 2.
         /// </summary>
         private Int32[] _points;
 
@@ -92,7 +92,7 @@ namespace Reversi.Model
         /// </summary>
         private System.Timers.Timer _timer;
         /// <summary>
-        /// A bool for know that if at least one time a NewGame or the Load functions were called.
+        /// A bool for know that if a game is active.
         /// So we know that we had called InicializeFields.
         /// </summary>
         private Boolean _isGameStarted;
@@ -259,30 +259,108 @@ namespace Reversi.Model
                 if (MakePutDown(x, y))
                 {
                     _timer.Enabled = false;
-                    OnSetGameEnded(new ReversiSetGameEndedEventArgs(_points[0], _points[2]));
+                    _isGameStarted = false;
+                    OnSetGameEnded(new ReversiSetGameEndedEventArgs(_points[2], _points[0]));
                 }
+            }
+            else
+            {
+                throw new ReversiGameException();
+            }
+        }
+
+        /// <summary>
+        /// One of the player is passing.
+        /// </summary>
+        public void Pass()
+        {
+            if (_isGameStarted && _isPassingTurnOn)
+            {
+                // Little helper to know what to search for.
+                Int32 checkFor = 3;
+                if (_isPlayer1TurnOn)
+                {
+                    checkFor = 6;
+                }
+
+                _isPlayer1TurnOn = !_isPlayer1TurnOn;
+
+                // We will send this.
+                Int32 updatedFieldsDatasSize = 0;
+
+                // Check if the value of the possible put downs are 3s, 6s or 4s.
+                // We want to send those only.
+                // Here we just get to update the size that we will send.
+                for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
+                {
+                    if (_possiblePutDowns[i + 2] == checkFor)
+                    {
+                        updatedFieldsDatasSize += 3;
+                    }
+                }
+
+                // We will send this.
+                Int32[] updatedFieldsDatas = new Int32[updatedFieldsDatasSize];
+
+                // Check if the value of the possible put downs are 3s, 6s or 4s.
+                // We want to send those only.
+                // Here we pick up what we need.
+                Int32 index = 0;
+                for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
+                {
+                    if (_possiblePutDowns[i + 2] == checkFor)
+                    {
+                        updatedFieldsDatas[index] = _possiblePutDowns[i];
+                        updatedFieldsDatas[index + 1] = _possiblePutDowns[i + 1];
+                        updatedFieldsDatas[index + 2] = _possiblePutDowns[i + 2];
+                        index += 3;
+                    }
+                }
+
+                // Save the put down.
+                _data[_data.PutDownsSize] = -1;
+                _data[_data.PutDownsSize + 1] = -1;
+                _data.PutDownsSize += 2;
+
+                // The other player can make a put down otherwise it would had been over already.
+                _isPassingTurnOn = false;
+
+                // Make the view update call.
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
+            }
+            else
+            {
+                throw new ReversiGameException(); 
             }
         }
 
         /// <summary>
         /// Stop the game. The view uses it.
         /// </summary>
-        public void GamePause()
+        public void Pause()
         {
             if (_isGameStarted)
             {
                 _timer.Enabled = false;
+            }
+            else
+            {
+                throw new ReversiGameException();
             }
         }
 
         /// <summary>
         /// We start the game again. The view uses it.
         /// </summary>
-        public void GameUnpause()
+        public void Unpause()
         {
             if (_isGameStarted)
             {
                 _timer.Enabled = true;
+            }
+            else
+            {
+                throw new ReversiGameException();
             }
         }
 
@@ -312,7 +390,7 @@ namespace Reversi.Model
                 }
             }
 
-            _isPlayer1TurnOn = true;
+            _isPlayer1TurnOn = false; // In the MakePutDown() we switch it first, then make the put down.
             _isPassingTurnOn = false;
 
             // The 12 * 2 size for the 12 starting possible put down coordinates, pluss 12 for the values.
@@ -401,7 +479,22 @@ namespace Reversi.Model
                     // Corrupt loaded data.
                     if (!IsValidIndexes(_data[i], _data[i + 1]))
                     {
-                        throw new ReversiDataException("asd10", "as122d", ReversiDataExceptionType.FormatException);
+                        if (_data[i] == -1 && _data[i + 1] == -1)
+                        {
+                            if (_isPassingTurnOn)
+                            {
+                                Pass();
+                            }
+                            else
+                            {
+                                throw new ReversiDataException("asd12220", "as133322d", ReversiDataExceptionType.FormatException);
+                            }
+                           
+                        }
+                        else
+                        {
+                            throw new ReversiDataException("asd10", "as122d", ReversiDataExceptionType.FormatException);
+                        }
                     }
 
                     // Make the put down.
@@ -428,9 +521,9 @@ namespace Reversi.Model
             _reversedPutDownsSize = 0;
             _reversedPutDowns = new Int32[(_data.TableSize * 12) - 39];
 
-            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[0], _points[2], _isPassingTurnOn));
+            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
             
-            // We started at least one game.
+            // We started a game.
             _isGameStarted = true;
         }
 
@@ -450,6 +543,8 @@ namespace Reversi.Model
                 if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 6) 
                 {
                     _table[x, y] = 1; // The put down.
+                    ++(_points[2]);
+                    --(_points[1]);
 
                     for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // We do the reverses.
                     {
@@ -467,6 +562,8 @@ namespace Reversi.Model
                 if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 3)
                 {
                     _table[x, y] = -1; // The put down.
+                    ++(_points[0]);
+                    --(_points[1]);
 
                     for (Int32 i = 0; i < _allDirections.GetLength(0); ++i) // We do the reverses.
                     {
@@ -515,28 +612,37 @@ namespace Reversi.Model
                 }
             }
 
-            Boolean isOver = false;
+            Boolean isOver = true;
             _isPassingTurnOn = true;
 
             // Change the aktív player and the passing turn Boolean, if the other player can make a put down. It is over, if none can make a put donwn.
             for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
             {
-                if (_isPlayer1TurnOn
-                    && (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 4
-                    || _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 3))
+                if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 3)
                 {
-                    _isPlayer1TurnOn = !_isPlayer1TurnOn;
-                    _isPassingTurnOn = false;
                     isOver = false;
-                    break;
+                    if (!_isPlayer1TurnOn)
+                    {
+                        _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                        _isPassingTurnOn = false;
+                        break;
+                    }
                 }
-                else if (!_isPlayer1TurnOn
-                    && (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 4
-                    || _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 6))
+                else if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 6)
                 {
+                    isOver = false;
+                    if (_isPlayer1TurnOn)
+                    {
+                        _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                        _isPassingTurnOn = false;
+                        break;
+                    }
+                }
+                else if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 4)
+                {
+                    isOver = false;
                     _isPlayer1TurnOn = !_isPlayer1TurnOn;
                     _isPassingTurnOn = false;
-                    isOver = false;
                     break;
                 }
             }
@@ -546,11 +652,9 @@ namespace Reversi.Model
                 // We will send this.
                 Int32 updatedFieldsDatasSize = 0;
 
-                int help = 0;
-
                 // Check if the value of the possible put downs are not 5s or was not 5s.
                 // We do not want to send those 5s witch was 5s before.
-                // Here we just get the update hte size.
+                // Here we just get to update the size that we will send.
                 for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
                 {
                     if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] != 5
@@ -559,7 +663,7 @@ namespace Reversi.Model
                         updatedFieldsDatasSize += 3;
                     }
                 }
-                help = updatedFieldsDatasSize;
+
                 // The + 3 is the put down itself.
                 updatedFieldsDatasSize += _reversedPutDownsSize + 3;
                 // We will send this.
@@ -582,7 +686,6 @@ namespace Reversi.Model
                     }
                 }
 
-                int help2 = index;
                 // We pick up all the datas of the reversed put downs.
                 for (Int32 i = 0; i < _reversedPutDownsSize; i += 3)
                 {
@@ -591,7 +694,7 @@ namespace Reversi.Model
                     updatedFieldsDatas[index + 2] = _reversedPutDowns[i + 2];
                     index += 3;
                 }
-                //Help();
+
                 // We pick up the data of the put down itself.
                 updatedFieldsDatas[index] = x;
                 updatedFieldsDatas[index + 1] = y;
@@ -602,8 +705,14 @@ namespace Reversi.Model
                 _data[_data.PutDownsSize + 1] = y;
                 _data.PutDownsSize += 2;
 
+                // If it is over we just update as the next player could make a put down.
+                if (isOver)
+                {
+                    _isPassingTurnOn = false;
+                }
+
                 // Make the view update call.
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[0], _points[2], _isPassingTurnOn));
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
 
                 // Reset for the next put down.
                 _reversedPutDownsSize = 0;
@@ -658,8 +767,8 @@ namespace Reversi.Model
                             _reversedPutDowns[_reversedPutDownsSize + 2] = valueOriginal;
                             _reversedPutDownsSize += 3;
 
-                            ++(_points[valueOriginal + 1]);
-                            --(_points[(valueOriginal * -1) + 1]);
+                            _points[0] += valueOriginal;
+                            _points[2] -= valueOriginal;
                             --_points[1];
                             reversedDirection(ref xFrom, ref yFrom);
                         }

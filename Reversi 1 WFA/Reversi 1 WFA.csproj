@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ReversiGameException.cs" />
     <Compile Include="Model\ReversiUpdatePlayerTimeEventArgs.cs" />
     <Compile Include="Model\ReversiSetGameEndedEventArgs.cs" />
     <Compile Include="Model\ReversiGameModel.cs" />

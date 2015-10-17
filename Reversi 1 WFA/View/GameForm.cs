@@ -126,7 +126,7 @@ namespace Reversi.View
 
         private void fileExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _model.GamePause();
+            _model.Pause();
 
             if (!_saved)
             {
@@ -200,20 +200,42 @@ namespace Reversi.View
 
         private void passButton_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                _passButton.Enabled = false;
+                _model.Pass();
+                _saved = false;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ReversiGameException)
+                {
+
+                }
+            }
         }
 
         private void pauseButton_Click(object sender, EventArgs e)
         {
-            if (_pauseButton.Text == "Pause")
+            try
             {
-                _model.GamePause();
-                _pauseButton.Text = "Unpause";
+                if (_pauseButton.Text == "Pause")
+                {
+                    _pauseButton.Text = "Unpause";
+                    _model.Pause();
+                }
+                else if (_pauseButton.Text == "Unpause")
+                {
+                    _pauseButton.Text = "Pause";
+                    _model.Unpause();
+                }
             }
-            else if (_pauseButton.Text == "Unpause")
+            catch (Exception ex)
             {
-                _model.GameUnpause();
-                _pauseButton.Text = "Pause";
+                if (ex is ReversiGameException)
+                {
+
+                }
             }
         }
 
@@ -223,8 +245,17 @@ namespace Reversi.View
             Button button = (sender as Button);
             Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
             Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
+            try
+            { 
+                _model.PutDown(x, y);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ReversiGameException)
+                {
 
-            _model.PutDown(x, y);
+                }
+            }
         }
 
         #endregion
@@ -233,7 +264,10 @@ namespace Reversi.View
 
         private void Model_SetGameEnded(Object sender, ReversiSetGameEndedEventArgs e)
         {
-
+            _pauseButton.Enabled = false;
+            _saved = true;
+            _fileSaveToolStripMenuItem.Enabled = false;
+            MessageBox.Show("Game Ended", "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".");
         }
 
         private void Model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
@@ -254,7 +288,7 @@ namespace Reversi.View
             {
                 setButtonGridUp();
 
-                IsPlayer1TurnOn = e.IsPassingTurnOn;
+                IsPlayer1TurnOn = true;
 
                 Int32 index = 0;
                 for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
@@ -273,10 +307,8 @@ namespace Reversi.View
                 {
                     _passButton.Enabled = true;
                 }
-                else
-                {
-                    IsPlayer1TurnOn = !IsPlayer1TurnOn;
-                }
+
+                IsPlayer1TurnOn = !IsPlayer1TurnOn;
 
                 for (Int32 i = 0; i < e.UpdatedFieldsCount; i += 3)
                 {
