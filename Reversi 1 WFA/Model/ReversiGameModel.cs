@@ -257,7 +257,7 @@ namespace Reversi.Model
             {
                 _data = await _dataAccess.Load(path);
             }
-            
+
             _activeTableSize = _data.TableSize;
 
             InitializeFields(true);
@@ -273,7 +273,7 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            if (_dataAccess != null)
+            if (_dataAccess != null && _isGameStarted)
             {
                 await _dataAccess.Save(path, _data);
             }
@@ -489,7 +489,7 @@ namespace Reversi.Model
             _points = new Int32[3] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };
 
             _reversedPutDownsSize = 0;
-            _reversedPutDowns = new Int32[(_data.TableSize * 12) -39]; //TODO: Can it be smaller?
+            _reversedPutDowns = new Int32[_data.TableSize * _data.TableSize * 3]; //TODO: Can it be smaller?
 
             // We loaded the game.
             if (isLoadedGame)
@@ -532,9 +532,6 @@ namespace Reversi.Model
                 {
                     _possiblePutDowns[i + 2] = _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]];
                 }
-
-                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(true, _data.Player1Time));
-                OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(false, _data.Player2Time));
             }
 
             // Geather and send the table values to view.
@@ -550,10 +547,12 @@ namespace Reversi.Model
                 }
             }
 
-           OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
-
             // We started a game.
             _isGameStarted = true;
+
+            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
+            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(true, _data.Player1Time));
+            OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(false, _data.Player2Time));
         }
  
         /// <summary>
@@ -569,7 +568,7 @@ namespace Reversi.Model
             if (_isPlayer1TurnOn) // Player 1 put down.
             {
                 // Do we try to make a valid put down? We only check it if loaded the game.
-                if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 6) 
+                if (_table[x, y] == 4 || _table[x, y] == 6) 
                 {
                     _table[x, y] = -1; // The put down.
                     ++(_points[2]);
@@ -588,7 +587,7 @@ namespace Reversi.Model
             else // Player 2 put down.
             {
                 // Do we try to make a valid put down? We only check it if loaded the game.
-                if (isUpdateNeeded || _table[x, y] == 4 || _table[x, y] == 3)
+                if (_table[x, y] == 4 || _table[x, y] == 3)
                 {
                     _table[x, y] = 1; // The put down.
                     ++(_points[0]);
@@ -739,6 +738,9 @@ namespace Reversi.Model
                 {
                     _isPassingTurnOn = false;
                 }
+
+                // Reset for the next put down.
+                _reversedPutDownsSize = 0;
 
                 // Make the view update call.
                 OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
