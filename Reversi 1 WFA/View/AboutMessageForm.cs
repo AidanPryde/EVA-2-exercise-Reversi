@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Reversi.View
 {
@@ -42,8 +43,9 @@ namespace Reversi.View
             // Set the start position of the form to the center of the screen.
             StartPosition = FormStartPosition.CenterScreen;
 
-            // TODO: Set up a relative link?
-            pictureBox.ImageLocation = "C:\\Users\\Márton\\Documents\\Visual Studio 2015\\Projects\\EVA 2 exercise Reversi\\Reversi 1 WFA\\Resource\\p.png";
+            // Set up the little image icon. 
+            Bitmap image = new Bitmap(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reversi.Resources.p.png"));
+            pictureBox.Image = image;
         }
 
         /// <summary>

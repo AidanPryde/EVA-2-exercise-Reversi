@@ -9,6 +9,11 @@ namespace Reversi.Persistence
     /// </summary>
     public interface IReversiDataAccess
     {
+        Int32[] SupportedGameTableSizesArray
+        {
+            get;
+        }
+
         /// <summary>
         /// Loading file.
         /// </summary>

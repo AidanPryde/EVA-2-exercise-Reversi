@@ -3,8 +3,6 @@ using System;
 
 namespace Reversi.Persistence
 {
-    public enum ReversiDataExceptionType { UnknownException, StreamReaderException, ReadLineAsyncException, FormatException }
-
     /// <summary>
     /// The type of the Reversi data access exception.
     /// </summary>
@@ -14,7 +12,6 @@ namespace Reversi.Persistence
         #region Fields
 
         private String _message;
-        ReversiDataExceptionType _exceptionTyep;
 
         #endregion
 
@@ -35,27 +32,10 @@ namespace Reversi.Persistence
         /// <summary>
         /// Create Reversi data access exception instance.
         /// </summary>
-        public ReversiDataException(String source, String message, ReversiDataExceptionType exceptionTyep)
+        public ReversiDataException(String source, String message)
         {
             this.Source = source;
             _message = message;
-            _exceptionTyep = exceptionTyep;
-            if (exceptionTyep == ReversiDataExceptionType.FormatException)
-            {
-
-            }
-            else if (exceptionTyep == ReversiDataExceptionType.StreamReaderException)
-            {
-
-            }
-            else if (exceptionTyep == ReversiDataExceptionType.ReadLineAsyncException)
-            {
-
-            }
-            else
-            {
-
-            }
         }
 
         #endregion

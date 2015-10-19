@@ -12,15 +12,36 @@ namespace Reversi.Persistence
     public class ReversiFileDataAccess : IReversiDataAccess
     {
 
-        #region Fields 
+        #region Fields
+
         private readonly Int32[] _supportedGameTableSizesArray;
+
+        #endregion
+
+        #region Properties
+
+        public Int32[] SupportedGameTableSizesArray
+        {
+            get
+            {
+                return _supportedGameTableSizesArray;
+            }
+        }
+
         #endregion
 
         #region Constructors
 
-        public ReversiFileDataAccess(Int32[] supportedGameTableSizesArray)
+        public ReversiFileDataAccess(Int32[] supportedGameTableSizesArray = null)
         {
-            _supportedGameTableSizesArray = supportedGameTableSizesArray;
+            if (supportedGameTableSizesArray == null)
+            {
+                _supportedGameTableSizesArray = new Int32[] { 10 };
+            }
+            else
+            {
+                _supportedGameTableSizesArray = supportedGameTableSizesArray;
+            }
         }
 
         #endregion
@@ -34,89 +55,67 @@ namespace Reversi.Persistence
         /// <returns>All the data to recover the game state. The game table size, the put downs and the players game times.</returns>
         public async Task<ReversiGameDescriptiveData> Load(String path)
         {
-            try
+            using (StreamReader reader = new StreamReader(path)) // opening file
             {
-                using (StreamReader reader = new StreamReader(path)) // opening file
+                // Read the first line of the file, then split it bye one space.
+                String line = await reader.ReadLineAsync();
+                char[] separatingChars = { ' ' };
+                String[] numbers = line.Split(separatingChars, StringSplitOptions.RemoveEmptyEntries);
+
+                // Setup fields with the processed data. The ordering is set by the file format.
+                // Throw IndexOutOfRangeException if some data missing or FormatException if there are spaces.
+                Int32 tableSize = Int32.Parse(numbers[0]);
+                Int32 player1Time = Int32.Parse(numbers[1]);
+                Int32 player2Time = Int32.Parse(numbers[2]);
+                Int32 putDownsSize = Int32.Parse(numbers[3]);
+
+                Boolean found = false;
+                for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0) && !found; ++i)
                 {
-                    // Read the first line of the file, then split it bye one space.
-                    String line = await reader.ReadLineAsync();
-                    String[] numbers = line.Split(' ');
-
-                    // Setup fields with the processed data. The ordering is set by the file format.
-                    Int32 tableSize = Int32.Parse(numbers[0]);
-                    Int32 player1Time = Int32.Parse(numbers[1]);
-                    Int32 player2Time = Int32.Parse(numbers[2]);
-                    Int32 putDownsSize = Int32.Parse(numbers[3]);
-
-                    Boolean found = false;
-                    for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0) && !found; ++i)
+                    if (tableSize == _supportedGameTableSizesArray[0])
                     {
-                        if (tableSize == _supportedGameTableSizesArray[0])
-                        {
-                            found = true;
-                        }
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    String supportedGameTableSizesString = "";
+                    for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
+                    {
+                        supportedGameTableSizesString += _supportedGameTableSizesArray[i].ToString() + ", ";
                     }
 
-                    if (!found)
-                    {
-                        String supportedGameTableSizesString = "";
-                        for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
-                        {
-                            supportedGameTableSizesString += _supportedGameTableSizesArray[i].ToString() + " ";
-                        }
-                    
-                        throw new ReversiDataException("?222?", "1221", ReversiDataExceptionType.FormatException);
-                    }
+                    throw new ReversiDataException("Error while trying to load file: " + path + ".", "The read table size ( " + tableSize.ToString() + " ) is not supported ( " + supportedGameTableSizesString + ").");
+                }
 
-                    // Creating the game descriptive data class.
-                    ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsSize);
+                if (player1Time < 0 || player2Time < 0)
+                {
+                    throw new ReversiDataException("Error while trying to load file: " + path + ".", "The read player 1 time ( " + player1Time.ToString() + " ) or/and player 2 time ( " + player2Time.ToString() + " ) was/were negative.");
+                }
 
-                    // Read a line of the file, then split it bye one space.
+                if (putDownsSize % 2 == 1 || (tableSize * tableSize * 4) < putDownsSize)
+                {
+                    throw new ReversiDataException("Error while trying to load file: " + path + ".", "The read put down size ( " + putDownsSize.ToString() + " ) was odd or bigger then the passible with the given table size ( " + tableSize.ToString() + " )");
+                }
+
+                // Creating the game descriptive data class.
+                ReversiGameDescriptiveData data = new ReversiGameDescriptiveData(tableSize, player1Time, player2Time, putDownsSize);
+
+                // Read a line of the file, then split it bye one space.
+                if (putDownsSize > 0)
+                {
                     line = await reader.ReadLineAsync();
-                    numbers = line.Split(' ');
+                    numbers = line.Split(separatingChars, StringSplitOptions.RemoveEmptyEntries);
 
                     // Setup values of the putDown array.
                     for (Int32 i = 0; i < putDownsSize; ++i)
                     {
                         data[i] = Int32.Parse(numbers[i]);
                     }
-
-                    return data;
-                }
-            }
-            catch (Exception e)
-            {
-                if (!(e is ReversiDataException))
-                {
-                    // To send the type of the exception to 'ReversiDataException'.
-                    ReversiDataExceptionType exceptionType = ReversiDataExceptionType.UnknownException;
-
-                    //TODO: ArgumentNullException can throne by Prase() and by StreamReader(String). We have to find out which one throwed it.
-                    // The 'Parse()' function exceptions.
-                    if (e is ArgumentNullException || e is FormatException || e is OverflowException)
-                    {
-                        exceptionType = ReversiDataExceptionType.FormatException;
-                        throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                    }
-
-                    // The 'ReadLineAsync()' function exceptions.
-                    if (e is ArgumentOutOfRangeException || e is ObjectDisposedException || e is InvalidOperationException)
-                    {
-                        exceptionType = ReversiDataExceptionType.StreamReaderException;
-                        throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                    }
-
-                    // The StreamReader(String) constructior exception.
-                    if (e is ArgumentException || e is ArgumentNullException || e is FileNotFoundException || e is DirectoryNotFoundException || e is IOException)
-                    {
-                        exceptionType = ReversiDataExceptionType.StreamReaderException;
-                        throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                    }
-
-                    throw new ReversiDataException(e.Source, e.Message, exceptionType);
                 }
 
-                throw e;
+                return data;
             }
         }
 
@@ -127,50 +126,23 @@ namespace Reversi.Persistence
         /// <param name="data">All the data to recover the game state. The game table size, the put downs and the players game times.</param>
         public async Task Save(String path, ReversiGameDescriptiveData data)
         {
-            try
+            using (StreamWriter writer = new StreamWriter(path)) // opening file
             {
-                using (StreamWriter writer = new StreamWriter(path)) // opening file
-                {
-                    // Writing the fist line with the size if the table, with the players played times and with the coordinats count.
-                    writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsSize.ToString()); // kiírjuk a méreteket
-                    await writer.WriteLineAsync();
+                // Writing the fist line with the size if the table, with the players played times and with the coordinats count.
+                writer.Write(data.TableSize.ToString() + " " + data.Player1Time.ToString() + " " + data.Player2Time.ToString() + " " + data.PutDownsSize.ToString());
+                await writer.WriteLineAsync();
 
-                    // Writing the second line with the coordinates.
-                    for (Int32 i = 0; i < data.PutDownsSize - 1; ++i)
-                    {
-                        await writer.WriteAsync(data[i].ToString() + " ");
-                    }
+                // Writing the second line with the coordinates.
+                for (Int32 i = 0; i < data.PutDownsSize - 1; ++i)
+                {
+                    await writer.WriteAsync(data[i].ToString() + " ");
+                }
+
+                if (data.PutDownsSize != 0)
+                {
                     await writer.WriteAsync(data[data.PutDownsSize - 1].ToString());
                 }
-            }
-            catch (Exception e)
-            {
-                // To send the type of the exception to 'ReversiDataException'.
-                ReversiDataExceptionType exceptionType = ReversiDataExceptionType.UnknownException;
-                //TODO: ArgumentNullException can throne by Prase() and by StreamReader(String). We have to find out which one throwed it.
-                // The 'Parse()' function exceptions.
-                if (e is ArgumentNullException || e is FormatException || e is OverflowException)
-                {
-                    exceptionType = ReversiDataExceptionType.FormatException;
-                    throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                }
-
-                // The 'ReadLineAsync()' function exceptions.
-                if (e is ArgumentOutOfRangeException || e is ObjectDisposedException || e is InvalidOperationException)
-                {
-                    exceptionType = ReversiDataExceptionType.StreamReaderException;
-                    throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                }
-
-                // The StreamReader(String) constructior exception.
-                if (e is ArgumentException || e is ArgumentNullException || e is FileNotFoundException || e is DirectoryNotFoundException
-                    || e is IOException || e is UnauthorizedAccessException || e is SecurityException)
-                {
-                    exceptionType = ReversiDataExceptionType.StreamReaderException;
-                    throw new ReversiDataException(e.Source, e.Message, exceptionType);
-                }
-
-                throw new ReversiDataException(e.Source, e.Message, exceptionType);
+                    
             }
         }
 

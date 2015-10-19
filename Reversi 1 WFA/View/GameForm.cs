@@ -19,11 +19,11 @@ namespace Reversi.View
         /// <summary>
         /// Array of the allowed table sizes. It is readonly.
         /// </summary>
-        public readonly Int32[] _supportedGameTableSizesArray = new int[] { 10, 20, 30 };
+        private readonly Int32[] _supportedGameTableSizesArray = new Int32[] { 10, 20, 30 };
         /// <summary>
         ///The default table size. It is readonly.
         /// </summary>
-        private readonly Int32 _tableSizeSettingDefault = 10;
+        private readonly Int32 _tableSizeDefaultSetting = 10;
         /// <summary>
         ///The default button size. It is readonly.
         /// </summary>
@@ -97,8 +97,17 @@ namespace Reversi.View
             // Init the data access type with the array, that contain the default table sizes.
             _dataAccess = new ReversiFileDataAccess(_supportedGameTableSizesArray);
 
-            // Init model and connect the events.
-            _model = new ReversiGameModel(_dataAccess, _tableSizeSettingDefault);
+            try
+            {
+                // Init model
+                _model = new ReversiGameModel(_dataAccess, _tableSizeDefaultSetting);
+            }
+            catch (ReversiModelException)
+            {
+                MessageBox.Show("Unsupportable table size given at model initialization. Table size fixed on 10.", "Model initialization problem.");
+            }
+
+            // Connect the events.
             _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(model_SetGameEnded);
             _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(model_UpdatePlayerTime);
             _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(model_UpdateTable);
@@ -140,9 +149,9 @@ namespace Reversi.View
                     _saved = true;
                     _pauseButton.Enabled = true;
                 }
-                catch (ReversiDataException)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Játék betöltése sikertelen!" + Environment.NewLine + "Hibás az elérési út, vagy a fájlformátum.", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Source, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     _fileSaveToolStripMenuItem.Enabled = true;
                     _saved = true;
@@ -165,9 +174,9 @@ namespace Reversi.View
                     _saved = true;
                     _pauseButton.Enabled = true;
                 }
-                catch (ReversiDataException)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Játék mentése sikertelen!" + Environment.NewLine + "Hibás az elérési út, vagy a könyvtár nem írható.", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Source, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -258,7 +267,7 @@ namespace Reversi.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void helpRulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, " Always the white starts the game. If he can he chooses a put down location, only if he can not he passes. Then the black do the same then the white again, and so on ... . \n You have to straddle the enemy put downs to make a put down and to make them yours. You can do it in all directions. The game ends if no one can make a put down. The player with the more put downs win.", "Reversi game", MessageBoxButtons.OK, MessageBoxIcon.None);
+            MessageBox.Show(this, " Always the white starts the game. If he can he chooses a put down location, only if he can not he passes. Then the black do the same then the white again, and so on ... ." + Environment.NewLine + "You have to straddle the enemy put downs to make a put down and to make them yours. You can do it in all directions. The game ends if no one can make a put down. The player with the more put downs win.", "Reversi game", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
         /// <summary>
@@ -283,19 +292,9 @@ namespace Reversi.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void passButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                _passButton.Enabled = false;
-                _model.Pass();
-                _saved = false;
-            }
-            catch (Exception ex)
-            {
-                if (ex is ReversiGameException)
-                {
-
-                }
-            }
+            _passButton.Enabled = false;
+            _model.Pass();
+            _saved = false;
         }
 
         /// <summary>
@@ -305,25 +304,15 @@ namespace Reversi.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void pauseButton_Click(object sender, EventArgs e)
         {
-            try
+            if (_pauseButton.Text == "Pause")
             {
-                if (_pauseButton.Text == "Pause")
-                {
-                    _pauseButton.Text = "Unpause";
-                    _model.Pause();
-                }
-                else if (_pauseButton.Text == "Unpause")
-                {
-                    _pauseButton.Text = "Pause";
-                    _model.Unpause();
-                }
+                _pauseButton.Text = "Unpause";
+                _model.Pause();
             }
-            catch (Exception ex)
+            else if (_pauseButton.Text == "Unpause")
             {
-                if (ex is ReversiGameException)
-                {
-
-                }
+                _pauseButton.Text = "Pause";
+                _model.Unpause();
             }
         }
 
@@ -339,17 +328,7 @@ namespace Reversi.View
             Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
             Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
 
-            try
-            { 
-                _model.PutDown(x, y);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ReversiGameException)
-                {
-
-                }
-            }
+            _model.PutDown(x, y);
         }
 
         #endregion
@@ -366,7 +345,18 @@ namespace Reversi.View
             _pauseButton.Enabled = false;
             _saved = true;
             _fileSaveToolStripMenuItem.Enabled = false;
-            MessageBox.Show("Game Ended", "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".");
+            if (e.Player1Points > e.Player2Points)
+            {
+                MessageBox.Show("Player 1 won." + Environment.NewLine + "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".", "Game Ended");
+            }
+            else if (e.Player1Points < e.Player2Points)
+            {
+                MessageBox.Show("Player 2 won." + Environment.NewLine + "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".", "Game Ended");
+            }
+            else
+            {
+                MessageBox.Show("It is a tie." + Environment.NewLine + "Player 1 points: " + e.Player1Points.ToString() + ", player 2 points: " + e.Player2Points.ToString() + ".", "Game Ended");
+            }
         }
 
         /// <summary>
@@ -395,11 +385,13 @@ namespace Reversi.View
         /// <param name="e">Read about it at the ReversiUpdateTableEventArgs consturctor.</param>
         private void model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
         {
+
+            IsPlayer1TurnOn = e.IsPlayer1TurnOn;
+            _passButton.Enabled = e.IsPassingTurnOn;
+
             if (e.UpdatedFieldsCount == 0)
             {
                 setButtonGridUp();
-
-                IsPlayer1TurnOn = true;
 
                 Int32 index = 0;
                 for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
@@ -409,17 +401,10 @@ namespace Reversi.View
                         updateButtonGrid(x, y, e.UpdatedFieldsDatas[index]);
                         ++index;
                     }
-                }
+                } 
             }
             else
             {
-                if (e.IsPassingTurnOn)
-                {
-                    _passButton.Enabled = true;
-                }
-
-                IsPlayer1TurnOn = !IsPlayer1TurnOn;
-
                 for (Int32 i = 0; i < e.UpdatedFieldsCount; i += 3)
                 {
                     updateButtonGrid(e.UpdatedFieldsDatas[i], e.UpdatedFieldsDatas[i + 1], e.UpdatedFieldsDatas[i + 2]);
@@ -438,8 +423,6 @@ namespace Reversi.View
         {
             if (_buttonGrid == null || _model.ActiveTableSize != _buttonGrid.GetLength(0))
             {
-                _bottomButtonPanel.Controls.Clear();
-                _buttonGrid = new Button[_model.ActiveTableSize, _model.ActiveTableSize]; //TODO: only create what we need.
 
                 _bottomButtonPanel.Height = ((_gameButtonSize - 1) * _model.ActiveTableSize) + 1;
                 _bottomButtonPanel.Width = _bottomButtonPanel.Height;
@@ -462,7 +445,10 @@ namespace Reversi.View
                     _bottomButtonPanel.Margin = new Padding(_bottomButtonPanelMarginLeftDefault, _bottomButtonPanel.Margin.Top, _bottomButtonPanel.Margin.Right, _bottomButtonPanel.Margin.Bottom);
                     _player1GroupBox.Margin = new Padding(_player1GroupBoxMarginLeftDefault + ((-widthDifferencia) / 2), _player1GroupBox.Margin.Top, _player1GroupBox.Margin.Right, _player1GroupBox.Margin.Bottom);
                 }
-            
+
+                _bottomButtonPanel.Controls.Clear();
+                _buttonGrid = new Button[_model.ActiveTableSize, _model.ActiveTableSize]; //TODO: only create what we need.
+
                 for (Int32 x = 0; x < _model.ActiveTableSize; ++x)
                 {
                     for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
@@ -524,6 +510,10 @@ namespace Reversi.View
                     _buttonGrid[x, y].BackColor = Color.Red;
                     break;
 
+                case 0:
+                    _buttonGrid[x, y].BackColor = Color.White; // If it is 0.
+                    break;
+
                 case 1:
                     _buttonGrid[x, y].BackColor = Color.Blue;
                     break;
@@ -545,8 +535,7 @@ namespace Reversi.View
                     break;
 
                 default:
-                    _buttonGrid[x, y].BackColor = Color.White; // If it is 0.
-                    break;
+                    throw new Exception("ERROR");
             }
         }
 

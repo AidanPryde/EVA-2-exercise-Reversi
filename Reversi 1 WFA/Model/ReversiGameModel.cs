@@ -5,6 +5,8 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
+using System.Windows.Forms;
+
 namespace Reversi.Model
 {
     /// <summary>
@@ -35,7 +37,6 @@ namespace Reversi.Model
         /// </summary>
         private ReversiGameDescriptiveData _data;
 
-        //TODO: Is it a state 4 possible?
         /// <summary>
         /// The table itself. Its values can be -1, 0, 1, 3, 4, 5, 6.
         /// The 0 means it is uncharted field. No put downs even near.
@@ -103,6 +104,10 @@ namespace Reversi.Model
         /// We save the table size, that we started to play on, so the view can know.
         /// </summary>
         private Int32 _activeTableSize;
+        /// <summary>
+        /// Array of the allowed table sizes.
+        /// </summary>
+        private Int32[] _supportedGameTableSizesArray;
 
         /// <summary>
         /// Helper delegate array for searching from one point on the table to a direction.
@@ -126,9 +131,16 @@ namespace Reversi.Model
             {
                 return _tableSizeSetting;
             }
+
             set
             {
-                _tableSizeSetting = value;
+                for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0); ++i)
+                {
+                    if (value == _supportedGameTableSizesArray[i])
+                    {
+                        _tableSizeSetting = value;
+                    }
+                }
             }
         }
 
@@ -182,12 +194,29 @@ namespace Reversi.Model
         /// </summary>
         /// <param name="dataAccess">The data access.</param>
         /// <param name="defaultGameTableSizes">The default game size.</param>
-        public ReversiGameModel(IReversiDataAccess dataAccess, Int32 defaultGameTableSizes)
+        public ReversiGameModel(IReversiDataAccess dataAccess = null, Int32 defaultGameTableSizes = 10)
         {
             _tableSizeSettingDefault = defaultGameTableSizes;
 
-            _dataAccess = dataAccess;
+            if (dataAccess != null)
+            {
+                _dataAccess = dataAccess;
+                _supportedGameTableSizesArray = _dataAccess.SupportedGameTableSizesArray;
+                for (Int32 i = 0; i < _dataAccess.SupportedGameTableSizesArray.GetLength(0); ++i)
+                {
+                    if (_dataAccess.SupportedGameTableSizesArray[i] % 2 != 0 || _dataAccess.SupportedGameTableSizesArray[i] < 4)
+                    {
+                        throw new ReversiModelException();
+                    }
+                }
+            }
+            else
+            {
+                _supportedGameTableSizesArray = new Int32[] { 10 };
+            }
+
             _tableSizeSetting = _tableSizeSettingDefault;
+            _activeTableSize = 0;
             _isGameStarted = false;
 
             _timer = new System.Timers.Timer(1000.0); // It will invoke every 1 second.
@@ -224,7 +253,11 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            _data = await _dataAccess.Load(path);
+            if (_dataAccess != null)
+            {
+                _data = await _dataAccess.Load(path);
+            }
+            
             _activeTableSize = _data.TableSize;
 
             InitializeFields(true);
@@ -240,7 +273,10 @@ namespace Reversi.Model
         {
             _timer.Enabled = false;
 
-            await _dataAccess.Save(path, _data);
+            if (_dataAccess != null)
+            {
+                await _dataAccess.Save(path, _data);
+            }
 
             _timer.Enabled = true;
         }
@@ -261,10 +297,6 @@ namespace Reversi.Model
                     OnSetGameEnded(new ReversiSetGameEndedEventArgs(_points[2], _points[0]));
                 }
             }
-            else
-            {
-                throw new ReversiGameException();
-            }
         }
 
         /// <summary>
@@ -272,16 +304,16 @@ namespace Reversi.Model
         /// </summary>
         public void Pass()
         {
-            if (_isGameStarted && _isPassingTurnOn)
+            if (_isGameStarted && _isPassingTurnOn && _timer.Enabled)
             {
+                _isPlayer1TurnOn = !_isPlayer1TurnOn;
+
                 // Little helper to know what to search for.
                 Int32 checkFor = 3;
                 if (_isPlayer1TurnOn)
                 {
                     checkFor = 6;
                 }
-
-                _isPlayer1TurnOn = !_isPlayer1TurnOn;
 
                 // We will send this.
                 Int32 updatedFieldsDatasSize = 0;
@@ -324,11 +356,7 @@ namespace Reversi.Model
                 _isPassingTurnOn = false;
 
                 // Make the view update call.
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
-            }
-            else
-            {
-                throw new ReversiGameException(); 
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn ,_isPassingTurnOn));
             }
         }
 
@@ -341,10 +369,6 @@ namespace Reversi.Model
             {
                 _timer.Enabled = false;
             }
-            else
-            {
-                throw new ReversiGameException();
-            }
         }
 
         /// <summary>
@@ -355,10 +379,6 @@ namespace Reversi.Model
             if (_isGameStarted)
             {
                 _timer.Enabled = true;
-            }
-            else
-            {
-                throw new ReversiGameException();
             }
         }
 
@@ -469,7 +489,7 @@ namespace Reversi.Model
             _points = new Int32[3] { 2, (_data.TableSize * _data.TableSize) - 4, 2 };
 
             _reversedPutDownsSize = 0;
-            _reversedPutDowns = new Int32[(_data.TableSize * 12) - 39];
+            _reversedPutDowns = new Int32[(_data.TableSize * 12) -39]; //TODO: Can it be smaller?
 
             // We loaded the game.
             if (isLoadedGame)
@@ -477,32 +497,40 @@ namespace Reversi.Model
                 // We replay the game to see, if it is a valid one, and to update the model fields. 
                 for (Int32 i = 0; i < _data.PutDownsSize; i += 2)
                 {
-                    // Corrupt loaded data or -1 -1 passing.
-                    if (!IsValidIndexes(_data[i], _data[i + 1]))
+                    // If it is -1 -1 passing.
+                    if (_data[i] == -1 && _data[i + 1] == -1)
                     {
-                        if (_data[i] == -1 && _data[i + 1] == -1)
-                        {
-                            if (_isPassingTurnOn)
-                            {
-                                Pass();
-                            }
-                            else
-                            {
-                                throw new ReversiDataException("asd12220", "as133322d", ReversiDataExceptionType.FormatException);
-                            }
-                           
+                        if(_isPassingTurnOn)
+                        { 
+                            Pass();
                         }
                         else
                         {
-                            throw new ReversiDataException("asd10", "as122d", ReversiDataExceptionType.FormatException);
+                            throw new ReversiDataException("Error while validating loaded file data.", "We should not have read pass ( -1, -1 at " + i.ToString() + ", " + (i + 1).ToString() + " ).");
                         }
                     }
-
-                    // Make the put down.
-                    if (MakePutDown(_data[i], _data[i + 1], false))
+                    else if (IsValidIndexes(_data[i], _data[i + 1]) && !_isPassingTurnOn)
                     {
-                        throw new ReversiDataException("123asd", "123asd", ReversiDataExceptionType.FormatException);
+                        // Make the put down.
+                        if (MakePutDown(_data[i], _data[i + 1], false))
+                        {
+                            throw new ReversiDataException("Error while validating loaded file data.", "We read a finished game.");
+                        }
                     }
+                    else if (_isPassingTurnOn)
+                    {
+                        throw new ReversiDataException("Error while validating loaded file data.", "We should have read pass ( -1, -1 at " + i.ToString() + ", " + (i + 1).ToString() + " ).");
+                    }
+                    else
+                    {
+                        throw new ReversiDataException("Error while validating loaded file data.", "We read invalid data ( " + _data[i].ToString() + ", " + _data[i + 1].ToString() + " at " + i.ToString() + ", " + (i + 1).ToString() + " ).");
+                    }
+                }
+
+                // We set them for the next put down, that will be invoke un update.
+                for (Int32 i = 0; i < _possiblePutDownsSize; i += 3)
+                {
+                    _possiblePutDowns[i + 2] = _table[_possiblePutDowns[i], _possiblePutDowns[i + 1]];
                 }
 
                 OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(true, _data.Player1Time));
@@ -522,12 +550,12 @@ namespace Reversi.Model
                 }
             }
 
-            OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
-            
+           OnUpdateTable(new ReversiUpdateTableEventArgs(0, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
+
             // We started a game.
             _isGameStarted = true;
         }
-
+ 
         /// <summary>
         /// The actual code for make a put down on the table.
         /// </summary>
@@ -554,7 +582,7 @@ namespace Reversi.Model
                 }
                 else
                 {
-                    throw new ReversiDataException("Source 01", "message 01", ReversiDataExceptionType.FormatException);
+                    throw new ReversiDataException("Error while validating loaded file data.", "We should have read a valid put down, instad we read something else ( " + x.ToString() + ", " + y.ToString() + " ).");
                 }
             }
             else // Player 2 put down.
@@ -573,7 +601,7 @@ namespace Reversi.Model
                 }
                 else
                 {
-                    throw new ReversiDataException("Source 02", "message 02", ReversiDataExceptionType.FormatException);
+                    throw new ReversiDataException("Error while validating loaded file data.", "We should have read a valid put down, instad we read something else ( " + x.ToString() + ", " + y.ToString() + " ).");
                 }
             }
 
@@ -597,7 +625,7 @@ namespace Reversi.Model
                     SearchAndSetPossiblePutDown(_possiblePutDowns[i], _possiblePutDowns[i + 1], _allDirections[j]);
                 }
             }
-            
+
             // Updating the table new possible put down positions, and add them to the end of the array.
             for (Int32 i = 0; i < _allDirections.GetLength(0); ++i)
             {
@@ -606,6 +634,7 @@ namespace Reversi.Model
                     Int32 xNew = x;
                     Int32 yNew = y;
                     _allDirections[i](ref xNew, ref yNew);
+
                     _possiblePutDowns[_possiblePutDownsSize] = xNew;
                     _possiblePutDowns[_possiblePutDownsSize + 1] = yNew;
                     _possiblePutDowns[_possiblePutDownsSize + 2] = 0; // Before the put down it was 0.
@@ -622,9 +651,8 @@ namespace Reversi.Model
                 if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 3)
                 {
                     isOver = false;
-                    if (!_isPlayer1TurnOn)
+                    if (_isPlayer1TurnOn)
                     {
-                        _isPlayer1TurnOn = !_isPlayer1TurnOn;
                         _isPassingTurnOn = false;
                         break;
                     }
@@ -632,21 +660,21 @@ namespace Reversi.Model
                 else if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 6)
                 {
                     isOver = false;
-                    if (_isPlayer1TurnOn)
+                    if (!_isPlayer1TurnOn)
                     {
-                        _isPlayer1TurnOn = !_isPlayer1TurnOn;
                         _isPassingTurnOn = false;
                         break;
                     }
                 }
                 else if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 4)
                 {
-                    isOver = false;
-                    _isPlayer1TurnOn = !_isPlayer1TurnOn;
+                    isOver = false;   
                     _isPassingTurnOn = false;
                     break;
                 }
             }
+
+            _isPlayer1TurnOn = !_isPlayer1TurnOn;
 
             if (isUpdateNeeded) // We harvest the changed coordinates and values, from '_possiblePutDowns' and '_reversedPutDowns'.
             {
@@ -713,11 +741,11 @@ namespace Reversi.Model
                 }
 
                 // Make the view update call.
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPassingTurnOn));
-
-                // Reset for the next put down.
-                _reversedPutDownsSize = 0;
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
             }
+
+            // Reset for the next put down.
+            _reversedPutDownsSize = 0;
 
             // Is the game over?
             if (isOver) 
@@ -763,6 +791,7 @@ namespace Reversi.Model
                         while (GetSearchValue(ref xFrom, ref yFrom) == valueOriginal * -1)
                         {
                             _table[xFrom, yFrom] = valueOriginal;
+
                             _reversedPutDowns[_reversedPutDownsSize] = xFrom;
                             _reversedPutDowns[_reversedPutDownsSize + 1] = yFrom;
                             _reversedPutDowns[_reversedPutDownsSize + 2] = valueOriginal;
@@ -879,6 +908,7 @@ namespace Reversi.Model
         {
             // Make a step.
             direction(ref xFrom, ref yFrom);
+
             if (GetSearchValue(ref xFrom, ref yFrom) == 0) // Found a new possible put down position.
             {
                 _table[xFrom, yFrom] = 5; // So far it is niether player's possible put down position.
@@ -1073,6 +1103,66 @@ namespace Reversi.Model
                 ++(_data.Player2Time);
                 OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player2Time));
             }
+        }
+
+        private void Help()
+        {
+            String str = "";
+            Int32[,] alma = new Int32[_data.TableSize, _data.TableSize];
+
+            for (Int32 r = 0; r < _data.TableSize; ++r)
+            {
+                for (Int32 h = 0; h < _data.TableSize; ++h)
+                {
+                    alma[h, r] = 0;
+                }
+            }
+
+            for (Int32 r = 0; r < _possiblePutDownsSize; r += 3)
+            {
+                alma[_possiblePutDowns[r], _possiblePutDowns[r + 1]] = _possiblePutDowns[r + 2];
+            }
+
+            for (Int32 r = 0; r < _data.TableSize; ++r)
+            {
+                for (Int32 h = 0; h < _data.TableSize; ++h)
+                {
+                    str += "  " + alma[h, r] .ToString() + "  ";
+                }
+                str += Environment.NewLine;
+            }
+
+            MessageBox.Show(str, "HELP");
+
+        }
+
+        private void Help2()
+        {
+            String str = "";
+            Int32[,] alma = new Int32[_data.TableSize, _data.TableSize];
+
+            for (Int32 r = 0; r < _data.TableSize; ++r)
+            {
+                for (Int32 h = 0; h < _data.TableSize; ++h)
+                {
+                    alma[r, h] = _table[r, h];
+                }
+            }
+
+            for (Int32 r = 0; r < _data.TableSize; ++r)
+            {
+                for (Int32 h = 0; h < _data.TableSize; ++h)
+                {
+                    if (alma[h, r] == -1)
+                        str += " " + alma[h, r].ToString() + " ";
+                    else
+                        str += "  " + alma[h, r].ToString() + "  ";
+                }
+                str += Environment.NewLine;
+            }
+
+            MessageBox.Show(str, "HELP");
+
         }
 
         #endregion
