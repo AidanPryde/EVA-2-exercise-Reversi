@@ -31,6 +31,8 @@ namespace ReversiTest
         private Int32 _currentPassingCount;
         private Int32 _maximumPassingCount;
 
+        private ReversiUpdateTableEventArgs _lastUpdateArg;
+
         [TestMethod]
         [ExpectedException(typeof(ReversiModelException))]
         public void ReversiGameModelNewGameInitializeOddTest()
@@ -60,6 +62,7 @@ namespace ReversiTest
 
             _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(model_UpdateTable);
             _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(model_SetGameEnded);
+            _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(model_UpdatePlayerTime);
 
         }
 
@@ -393,15 +396,15 @@ namespace ReversiTest
             _model.NewGame();
         }
 
-        private void updateStepsArray(ReversiUpdateTableEventArgs e)
+        private void updateStepsArray()
         {
-            if (e.UpdatedFieldsCount != 0)
+            if (_lastUpdateArg.UpdatedFieldsCount != 0)
             {
                 ++(_remainingSteps[0, 0]);
 
                 if (_remainingSteps[_remainingSteps[0, 0], 0] == 0)
                 {
-                    if (e.IsPassingTurnOn)
+                    if (_lastUpdateArg.IsPassingTurnOn)
                     {
                         _remainingSteps[_remainingSteps[0, 0], 0] += 2;
                         _remainingSteps[_remainingSteps[0, 0], _remainingSteps[_remainingSteps[0, 0], 0] - 1] = -1;
@@ -410,9 +413,9 @@ namespace ReversiTest
 
                         int possbilePutDownsSize = 0;
                         int reversedPutDownsSize = 0;
-                        for (Int32 i = 0; i < e.UpdatedFieldsCount; i += 3)
+                        for (Int32 i = 0; i < _lastUpdateArg.UpdatedFieldsCount; i += 3)
                         {
-                            if (e.UpdatedFieldsDatas[i + 2] != 1 && e.UpdatedFieldsDatas[i + 2] != -1)
+                            if (_lastUpdateArg.UpdatedFieldsDatas[i + 2] != 1 && _lastUpdateArg.UpdatedFieldsDatas[i + 2] != -1)
                             {
                                 possbilePutDownsSize += 3;
                             }
@@ -444,24 +447,24 @@ namespace ReversiTest
                     else
                     {
                         Int32 checkFor = 3;
-                        if (e.IsPlayer1TurnOn)
+                        if (_lastUpdateArg.IsPlayer1TurnOn)
                         {
                             checkFor = 6;
                         }
 
                         int possbilePutDownsSize = 0;
                         int reversedPutDownsSize = 0;
-                        for (Int32 i = 0; i < e.UpdatedFieldsCount; i += 3)
+                        for (Int32 i = 0; i < _lastUpdateArg.UpdatedFieldsCount; i += 3)
                         {
-                            if (e.UpdatedFieldsDatas[i + 2] != 1 && e.UpdatedFieldsDatas[i + 2] != -1)
+                            if (_lastUpdateArg.UpdatedFieldsDatas[i + 2] != 1 && _lastUpdateArg.UpdatedFieldsDatas[i + 2] != -1)
                             {
                                 possbilePutDownsSize += 3;
 
-                                if (e.UpdatedFieldsDatas[i + 2] == checkFor || e.UpdatedFieldsDatas[i + 2] == 4)
+                                if (_lastUpdateArg.UpdatedFieldsDatas[i + 2] == checkFor || _lastUpdateArg.UpdatedFieldsDatas[i + 2] == 4)
                                 {
                                     _remainingSteps[_remainingSteps[0, 0], 0] += 2;
-                                    _remainingSteps[_remainingSteps[0, 0], _remainingSteps[_remainingSteps[0, 0], 0] - 1] = e.UpdatedFieldsDatas[i];
-                                    _remainingSteps[_remainingSteps[0, 0], _remainingSteps[_remainingSteps[0, 0], 0]] = e.UpdatedFieldsDatas[i + 1];
+                                    _remainingSteps[_remainingSteps[0, 0], _remainingSteps[_remainingSteps[0, 0], 0] - 1] = _lastUpdateArg.UpdatedFieldsDatas[i];
+                                    _remainingSteps[_remainingSteps[0, 0], _remainingSteps[_remainingSteps[0, 0], 0]] = _lastUpdateArg.UpdatedFieldsDatas[i + 1];
                                 }
                             }
                             else
@@ -566,14 +569,10 @@ namespace ReversiTest
         {
             _eventUpdateTable = true;
 
-            if(e == null)
-            {
-                int f = 0;
-            }
-
             if (!_simpleEvents)
             {
-                updateStepsArray(e);
+                _lastUpdateArg = e;
+                updateStepsArray();
             }
         }
 
@@ -588,7 +587,7 @@ namespace ReversiTest
             
         }
 
-        private void model_UpdatePlayerTime(Object sender, ReversiSetGameEndedEventArgs e)
+        private void model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
         {
             _eventUpdatePlayerTime = true;
         }
