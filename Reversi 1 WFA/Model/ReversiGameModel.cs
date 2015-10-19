@@ -240,9 +240,9 @@ namespace Reversi.Model
             _activeTableSize = _tableSizeSetting;
             _data = new ReversiGameDescriptiveData(_activeTableSize);
 
-            _timer.Enabled = true;
-
             InitializeFields(false);
+
+            _timer.Enabled = true;
         }
 
         /// <summary>
