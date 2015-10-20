@@ -120,6 +120,8 @@
     <EmbeddedResource Include="View\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Documentation\Dokumentáció.docx" />
+    <None Include="Documentation\Dokumentáció.pdf" />
     <None Include="Documentation\GameForm diagram.cd" />
     <None Include="Documentation\ReversiGameDescriptiveData class diagram.cd" />
     <None Include="Documentation\ReversiGameModel class diagram.cd" />
