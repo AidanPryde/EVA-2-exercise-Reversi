@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<useCaseModelRoot xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/dsltools/LogicalClassDesigner" xmlns:dm10="http://schemas.microsoft.com/dsltools/SimpleShapesModel" dslVersion="1.0.0.0" Id="7e9f9ef6-9b05-4896-bda6-7eee6f8667ad" name="Felhasználói esetek diagramja" linkedPackageId="a22b94f4-7170-4c4b-a5f6-eab6d82aefa9" xmlns="http://schemas.microsoft.com/dsltools/UseCaseModel">
+  <profileInstances>
+    <packageHasProfileInstances Id="1fee06b4-456c-4c60-a281-11c905605d50">
+      <profileInstance Id="91a5df53-de1a-4013-a0d2-2dc00fc3afe9" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="3b104d34-1784-445c-b46c-4cf2f5ccbe4b">
+      <profileInstance Id="29d89ce3-3420-41f9-8774-d1b848282c91" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <useCaseModelRootHasTypes>
+      <actor Id="8191052e-24e4-46bd-a0a6-688c084de374" name="Bármelyik játékos" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="a70b02a1-6264-4216-b604-bd70ff2c1683" />
+        <targetEnds>
+          <association Id="68b2ede2-750d-4490-a41c-4d70b387458a" isDerived="false" sourceEndRoleName="Player 1" targetEndRoleName="Mentés" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="854c16ba-396d-4e0b-a150-2be0f79184c1" LastKnownName="Mentés" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b141a32b-d12c-47fa-a220-6275a4cb8d00" name="Player 1" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="78ea9737-80fe-4686-ba48-ff0e6074360e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="765c36de-f19d-4580-b81d-c6554d9b872b" name="Mentés" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="6f02b540-1ac7-4354-815f-49d2e6402c5e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="143df08a-2b49-42e2-b19f-0ebc7a7a2122" />
+          </association>
+          <association Id="e84c9660-b14e-4d56-a391-68dcfc2e542c" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Kilépés" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="f7253d65-6a30-4a3a-afb6-9489cc2bfbc9" LastKnownName="Kilépés" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="90e2e862-e7e5-40b9-a6a6-f3ee64e26518" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="af7597da-8088-432e-a226-603472707108" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="d32bfa2d-5d92-4964-be7c-7b8f6f77f855" name="Kilépés" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="7067ecd0-12b6-4b96-ac24-991de68de6c4" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="4d0c3a83-4214-4a15-8ff4-f9ee0a8cfb0e" />
+          </association>
+          <association Id="778a70bb-1dea-45bf-a30e-55889d99f098" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Betöltés" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="f8c5bfd2-7169-4743-b10e-28cde5ecf65a" LastKnownName="Betöltés" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="6507d6ae-125a-4090-85b3-83c7d3044d85" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="aff02f42-3c5a-4030-bf94-d3bdb5a565cc" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="e1c84bbb-0391-46a8-b9e9-e61fe21f09e1" name="Betöltés" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="2bac711b-db14-4782-bc50-9483a0f44c14" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="e45a89f2-079e-4369-8443-f59bea23b736" />
+          </association>
+          <association Id="1efe9f3d-f1a3-40f9-b53a-7df11aefe0f9" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Új játék" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="13242497-acf8-496d-ad87-ff1d8ed7777f" LastKnownName="Új játék" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="cb011a6f-6c07-42c9-b151-780f01002e59" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="f0fd71ca-8bfe-4cda-b663-71bc5b475a5e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c0d8679e-72da-46bb-9caf-cf662bd1a8ad" name="Új játék" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="7e218aab-c930-4781-b279-d03f8de84d2f" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="fdbc9f66-2c2a-4bdb-b57c-054fc0169178" />
+          </association>
+          <association Id="24f47f7c-8c9f-48f7-bdcf-4a8b858fcbde" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Táblaméret állítása" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="e7036835-e1cb-40a7-9e16-5a1be65474b0" LastKnownName="Táblaméret állítása" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="1b184e71-06f5-4145-b84a-2b1d6e393504" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="c922b51a-7557-4b59-9148-3fcac93136cb" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="bed7cc0e-4933-4493-95f8-6f6e0ebe1849" name="Táblaméret állítása" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="ef44eed6-6203-4664-ab16-249ef7cbda9c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d00a49f9-40d7-4872-b9c2-05c83463a9cf" />
+          </association>
+          <association Id="4390ff84-a19a-4507-8cb3-0f59d2bf5850" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Szabályok" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="83168f84-7eb1-4422-bed6-7a49bbbebc21" LastKnownName="Szabályok" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="bf90b26e-b986-43cd-a21a-f1799385866b" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="5945f83e-c23a-4c78-ab08-d3e3ec6076d8" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b99fc876-d86c-4f3e-a886-9c4bf0d451a3" name="Szabályok" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="a4751b85-95f7-4685-80ce-78d92e7dc955" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="a53eb072-5d71-4059-97ae-d667f68306df" />
+          </association>
+          <association Id="25e8672f-bf9a-488f-a70a-466272c54b10" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Információ" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="60009b7b-4488-47a3-a22a-748eae3928d5" LastKnownName="Információ" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="deecfc92-1dd0-46f5-ae5a-f9f30c5845c7" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="cb7e231c-e9f0-4c72-b26d-c8a8b449c5fd" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="efdc4de0-c6ac-4841-ac89-cea4a4b067f1" name="Információ" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="87e879f8-47ab-4f82-b8d6-7f099c7a4c72" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="6f5d1215-99b2-4fa5-948c-e1d83e48250a" />
+          </association>
+          <association Id="4e31e509-48ff-4163-93d2-a1604a2923fc" isDerived="false" sourceEndRoleName="Bármelyik játékos" targetEndRoleName="Szüneteltetés" isLeaf="false" isAbstract="false">
+            <useCaseMoniker Id="66bec8db-3661-488d-88a8-50480003497a" LastKnownName="Szüneteltetés" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="bf0e944e-80c1-4ed2-918b-4351e4d7f6fd" name="Bármelyik játékos" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="85c8d0ad-991d-4c27-9bbd-dfdf63aa29ac" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7e49347b-3c69-4097-918b-654360b5bb45" name="Szüneteltetés" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="ab6bc999-b4c7-486b-82a0-bbe155a79a4b" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="a8df2b28-03c9-49d2-9752-e1ec028b9944" />
+          </association>
+        </targetEnds>
+      </actor>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="f7253d65-6a30-4a3a-afb6-9489cc2bfbc9" name="Kilépés" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="2629dc29-1eab-4fc7-841b-8b0423e3ad0c" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="854c16ba-396d-4e0b-a150-2be0f79184c1" name="Mentés" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="b72ef029-f794-41b3-968f-4de2eba75a3c" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="f8c5bfd2-7169-4743-b10e-28cde5ecf65a" name="Betöltés" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="4e813f41-480c-4ade-ad04-8ee01f3f703d" />
+        <suppliersInternal>
+          <dependency Id="a9594e21-0f61-475f-9749-adba0f5ea8cb">
+            <useCaseMoniker Id="fae50f13-52ee-4674-bfef-ebf27d422d5a" LastKnownName="Lépés" />
+            <elementDefinition Id="c2f19f66-ba8a-4a8c-a10d-a1c51c538468" />
+          </dependency>
+          <dependency Id="4be564b3-1b61-4c1d-a117-a7ba17848a37">
+            <useCaseMoniker Id="f80749b2-b320-4e47-ba70-774260ec2f89" LastKnownName="Passz" />
+            <elementDefinition Id="d76c102e-5a8d-4cec-af0d-536c4bee4429" />
+          </dependency>
+          <dependency Id="e78a5e67-3c79-4495-832b-b03f0195b039">
+            <useCaseMoniker Id="8f00fd99-1408-4c68-ba27-28282c255868" LastKnownName="Idő múlása" />
+            <elementDefinition Id="5c97d6c9-25d8-47a2-94d1-04d37edeb135" />
+          </dependency>
+        </suppliersInternal>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="13242497-acf8-496d-ad87-ff1d8ed7777f" name="Új játék" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="ebd62e5e-8f0b-4c4d-8f08-526ebb34efb8" />
+        <suppliersInternal>
+          <dependency Id="4254d3cc-f461-424c-abaa-a960ac4d1eb9">
+            <useCaseMoniker Id="fae50f13-52ee-4674-bfef-ebf27d422d5a" LastKnownName="Lépés" />
+            <elementDefinition Id="bbba91a2-45ff-41af-b9e2-6780565af1c5" />
+          </dependency>
+          <dependency Id="8e3fdd6f-0e36-48b8-b11b-71bd1a797110">
+            <useCaseMoniker Id="f80749b2-b320-4e47-ba70-774260ec2f89" LastKnownName="Passz" />
+            <elementDefinition Id="4fd2ceea-7f0e-40d6-9671-e9fd55d098cf" />
+          </dependency>
+          <dependency Id="5e545398-b2bb-4055-9e58-e5b41a5b8250">
+            <useCaseMoniker Id="8f00fd99-1408-4c68-ba27-28282c255868" LastKnownName="Idő múlása" />
+            <elementDefinition Id="f7eb63d8-031e-4ad5-b588-d3e2455dd752" />
+          </dependency>
+        </suppliersInternal>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="e7036835-e1cb-40a7-9e16-5a1be65474b0" name="Táblaméret állítása" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="19a86988-61d1-4102-ac97-172beb39576c" />
+        <additions>
+          <include Id="aff39a71-8e05-49a5-be63-15c487b34c3e">
+            <useCaseMoniker Id="038b0365-c73b-4b05-8f28-826725028a2d" LastKnownName="Nagy" />
+            <elementDefinition Id="412bd87e-6e1c-46e6-9df9-890f27ac9619" />
+          </include>
+          <include Id="a466e2c8-0c5f-4785-8405-c2e4e2cedc2a">
+            <useCaseMoniker Id="d71a5c1a-cf9a-406f-a519-bef2050c6fa8" LastKnownName="Közepes" />
+            <elementDefinition Id="f4e4fe4a-644d-4763-92b8-19d7dd190965" />
+          </include>
+          <include Id="4a9257dd-f752-446e-9397-f29cc2fee7f0">
+            <useCaseMoniker Id="e7a514fa-6374-4cea-8b8b-e589bec0496a" LastKnownName="Kicsi" />
+            <elementDefinition Id="d8f2cf9a-9866-4540-bc32-f09449ae37a3" />
+          </include>
+        </additions>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="e7a514fa-6374-4cea-8b8b-e589bec0496a" name="Kicsi" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="a3c94334-76fa-45b0-a6f5-07d99861d0ac" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="d71a5c1a-cf9a-406f-a519-bef2050c6fa8" name="Közepes" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="0405e963-69b7-4ee3-af74-1e65c9447079" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="038b0365-c73b-4b05-8f28-826725028a2d" name="Nagy" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="75460cd2-5cfb-4e9b-bd2a-3165a4db5a44" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="83168f84-7eb1-4422-bed6-7a49bbbebc21" name="Szabályok" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="5f425443-70a8-46e8-a131-2c62fd08ee20" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="60009b7b-4488-47a3-a22a-748eae3928d5" name="Információ" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="6fe40d0c-4491-4a2e-b9c4-f71d2275a8df" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="f80749b2-b320-4e47-ba70-774260ec2f89" name="Passz" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="a1677295-5b60-4c95-a5e4-fd028012eea3" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="66bec8db-3661-488d-88a8-50480003497a" name="Szüneteltetés" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="4e0a7a1b-bfd9-40ca-968e-55aa4f660ac1" />
+        <suppliersInternal>
+          <dependency Id="1d4ba6a1-3a28-446b-8e0d-102df85bf952">
+            <useCaseMoniker Id="8f00fd99-1408-4c68-ba27-28282c255868" LastKnownName="Idő múlása" />
+            <elementDefinition Id="859b6038-dc39-4b02-aee6-a8e14111ce10" />
+          </dependency>
+        </suppliersInternal>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="fae50f13-52ee-4674-bfef-ebf27d422d5a" name="Lépés" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="b84d5dc1-f3a3-4395-bfe6-f617881ec610" />
+        <suppliersInternal>
+          <dependency Id="347d36c9-6ba1-4d2b-bf1c-13aa08c38e2f">
+            <useCaseMoniker Id="0a9742f0-cffb-4f3a-ad96-1523500b1a65" LastKnownName="Játék vége" />
+            <elementDefinition Id="3e5eda54-c14d-47b3-b8d4-a22198c14c6f" />
+          </dependency>
+        </suppliersInternal>
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="8f00fd99-1408-4c68-ba27-28282c255868" name="Idő múlása" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="6078d2e0-5b6f-4822-90a3-7eaf0f4d424a" />
+      </useCase>
+    </useCaseModelRootHasTypes>
+    <useCaseModelRootHasTypes>
+      <useCase Id="0a9742f0-cffb-4f3a-ad96-1523500b1a65" name="Játék vége" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="60fc0687-a0cb-4536-98d0-394160e8e543" />
+        <suppliersInternal>
+          <dependency Id="3189739c-0878-496e-9967-f8893105f46b">
+            <useCaseMoniker Id="8f00fd99-1408-4c68-ba27-28282c255868" LastKnownName="Idő múlása" />
+            <elementDefinition Id="2177f3b0-0391-4039-b097-f8fe0325c3a2" />
+          </dependency>
+        </suppliersInternal>
+      </useCase>
+    </useCaseModelRootHasTypes>
+  </packagedElements>
+  <package Id="a22b94f4-7170-4c4b-a5f6-eab6d82aefa9" name="ModelingReversiProject">
+    <elementDefinition Id="24c77daa-853d-417f-8501-2ab34d24af38" />
+  </package>
+</useCaseModelRoot>

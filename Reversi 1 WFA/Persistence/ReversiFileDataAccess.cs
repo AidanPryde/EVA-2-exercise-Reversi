@@ -72,7 +72,7 @@ namespace Reversi.Persistence
                 Boolean found = false;
                 for (Int32 i = 0; i < _supportedGameTableSizesArray.GetLength(0) && !found; ++i)
                 {
-                    if (tableSize == _supportedGameTableSizesArray[0])
+                    if (tableSize == _supportedGameTableSizesArray[i])
                     {
                         found = true;
                     }

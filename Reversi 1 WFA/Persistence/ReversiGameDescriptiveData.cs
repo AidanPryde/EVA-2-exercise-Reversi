@@ -132,7 +132,7 @@ namespace Reversi.Persistence
         {
             _tableSize = tableSize;
 
-            _putDowns = new Int32[((_tableSize * _tableSize) - 4) * 2 * 2]; // the *2 is there, because of possible passings.
+            _putDowns = new Int32[((_tableSize * _tableSize) - 4) * 2 * 2]; //TODO: Can it be smaller? The *2 is there, because of possible passings.
 
             _player1Time = player1Time;
             _player2Time = player2Time;

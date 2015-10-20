@@ -104,7 +104,8 @@ namespace Reversi.View
             }
             catch (ReversiModelException)
             {
-                MessageBox.Show("Unsupportable table size given at model initialization. Table size fixed on 10.", "Model initialization problem.");
+                MessageBox.Show("Unsupportable table size given to model.", "Model initialization problem.");
+                Close();
             }
 
             // Connect the events.
@@ -385,6 +386,7 @@ namespace Reversi.View
         /// <param name="e">Read about it at the ReversiUpdateTableEventArgs consturctor.</param>
         private void model_UpdateTable(Object sender, ReversiUpdateTableEventArgs e)
         {
+            _toolStripStatusLabel.Text = "Player 1: " + e.Player1Points.ToString() + " -- Player 2: " + e.Player2Points.ToString();
 
             IsPlayer1TurnOn = e.IsPlayer1TurnOn;
             _passButton.Enabled = e.IsPassingTurnOn;
@@ -453,16 +455,15 @@ namespace Reversi.View
                 {
                     for (Int32 y = 0; y < _model.ActiveTableSize; ++y)
                     {
+                        //TODO: Make circle buttons inside the grid.
                         _buttonGrid[x, y] = new Button();
                         _buttonGrid[x, y].Location = new Point(x + x * (_gameButtonSize - 2), y + y * (_gameButtonSize - 2));
                         _buttonGrid[x, y].Size = new Size(_gameButtonSize, _gameButtonSize);
-                        _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 5, FontStyle.Bold);
-                        _buttonGrid[x, y].Enabled = true;
+                        _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
                         _buttonGrid[x, y].TabIndex = 1000 + (x * _model.ActiveTableSize) + y;
-                        _buttonGrid[x, y].FlatStyle = FlatStyle.Flat;
-                        _buttonGrid[x, y].FlatAppearance.BorderSize = 1;
+                        _buttonGrid[x, y].FlatStyle = FlatStyle.Popup;
+                        _buttonGrid[x, y].BackColor = Color.YellowGreen;
                         _buttonGrid[x, y].MouseClick += new MouseEventHandler(gameButton_Clicked);
-                        _buttonGrid[x, y].BackColor = Color.White;
                         _buttonGrid[x, y].Margin = new Padding(0);
                         _buttonGrid[x, y].Padding = new Padding(0);
                         _buttonGrid[x, y].CausesValidation = false;
@@ -483,59 +484,83 @@ namespace Reversi.View
         /// <param name="value">The value sent by the model.</param>
         private void updateButtonGrid(Int32 x, Int32 y, Int32 value)
         {
-            if (IsPlayer1TurnOn && value == 6)
-            {
-                _buttonGrid[x, y].Text = value.ToString();
-                _buttonGrid[x, y].Enabled = true;
-            }
-            else if (!IsPlayer1TurnOn && value == 3)
-            {
-                _buttonGrid[x, y].Text = value.ToString();
-                _buttonGrid[x, y].Enabled = true;
-            }
-            else if (value == 4)
-            {
-                _buttonGrid[x, y].Text = value.ToString();
-                _buttonGrid[x, y].Enabled = true;
-            }
-            else
-            {
-                _buttonGrid[x, y].Text = value.ToString();
-                _buttonGrid[x, y].Enabled = false;
-            }
-
             switch (value)
             {
                 case -1:
-                    _buttonGrid[x, y].BackColor = Color.Red;
+                    _buttonGrid[x, y].Text = "";
+                    _buttonGrid[x, y].BackColor = Color.White;
+                    _buttonGrid[x, y].Enabled = false;
                     break;
 
                 case 0:
-                    _buttonGrid[x, y].BackColor = Color.White; // If it is 0.
+                    _buttonGrid[x, y].Text = "";
+                    _buttonGrid[x, y].BackColor = Color.YellowGreen;
+                    _buttonGrid[x, y].FlatAppearance.BorderColor = Color.YellowGreen;
+                    _buttonGrid[x, y].Enabled = false;
                     break;
 
                 case 1:
-                    _buttonGrid[x, y].BackColor = Color.Blue;
+                    _buttonGrid[x, y].Text = "";
+                    _buttonGrid[x, y].BackColor = Color.Black;
+                    _buttonGrid[x, y].Enabled = false;
                     break;
 
                 case 3:
-                    _buttonGrid[x, y].BackColor = Color.BlueViolet;
+                    //_buttonGrid[x, y].Text = value.ToString();
+                    if (!IsPlayer1TurnOn)
+                    {
+                        _buttonGrid[x, y].Text = "o";
+                        _buttonGrid[x, y].ForeColor = Color.Black;
+                        _buttonGrid[x, y].Enabled = true;
+                    }
+                    else
+                    {
+                        _buttonGrid[x, y].Text = "";
+                        _buttonGrid[x, y].BackColor = Color.YellowGreen;
+                        _buttonGrid[x, y].Enabled = false;
+                    }
                     break;
 
                 case 6:
-                    _buttonGrid[x, y].BackColor = Color.OrangeRed;
+                    //_buttonGrid[x, y].Text = value.ToString();
+                    if (IsPlayer1TurnOn)
+                    {
+                        _buttonGrid[x, y].Text = "o";
+                        _buttonGrid[x, y].ForeColor = Color.White;
+                        _buttonGrid[x, y].Enabled = true;
+                    }
+                    else
+                    {
+                        _buttonGrid[x, y].Text = "";
+                        _buttonGrid[x, y].BackColor = Color.YellowGreen;
+                        _buttonGrid[x, y].Enabled = false;
+                    }
                     break;
 
                 case 4:
-                    _buttonGrid[x, y].BackColor = Color.Green;
+                    //_buttonGrid[x, y].Text = value.ToString();
+                    _buttonGrid[x, y].Text = "o";
+                    if (IsPlayer1TurnOn)
+                    {
+                        _buttonGrid[x, y].ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        _buttonGrid[x, y].ForeColor = Color.Black;
+                    }
+                    //_buttonGrid[x, y].ForeColor = Color.Gray;
+                    _buttonGrid[x, y].Enabled = true;
                     break;
 
                 case 5:
-                    _buttonGrid[x, y].BackColor = Color.White;
+                    _buttonGrid[x, y].Text = "";
+
+                    _buttonGrid[x, y].BackColor = Color.YellowGreen;
+                    _buttonGrid[x, y].Enabled = false;
                     break;
 
                 default:
-                    throw new Exception("ERROR");
+                    throw new Exception("Model gave us a number, that we was not ready for, while updating the table view.");
             }
         }
 

@@ -5,8 +5,6 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
-using System.Windows.Forms;
-
 namespace Reversi.Model
 {
     /// <summary>
@@ -213,6 +211,7 @@ namespace Reversi.Model
             else
             {
                 _supportedGameTableSizesArray = new Int32[] { 10 };
+                defaultGameTableSizes = 10;
             }
 
             _tableSizeSetting = _tableSizeSettingDefault;
@@ -356,7 +355,7 @@ namespace Reversi.Model
                 _isPassingTurnOn = false;
 
                 // Make the view update call.
-                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn ,_isPassingTurnOn));
+                OnUpdateTable(new ReversiUpdateTableEventArgs(updatedFieldsDatasSize, updatedFieldsDatas, _points[2], _points[0], _isPlayer1TurnOn, _isPassingTurnOn));
             }
         }
 
@@ -433,7 +432,7 @@ namespace Reversi.Model
             _table[halfTableSize - 1, halfTableSize - 2] = 3;
             _possiblePutDowns[3] = halfTableSize - 1;
             _possiblePutDowns[4] = halfTableSize - 2;
-            _possiblePutDowns[5] = 3; 
+            _possiblePutDowns[5] = 3;
 
             _table[halfTableSize, halfTableSize - 2] = 6;
             _possiblePutDowns[6] = halfTableSize;
@@ -500,8 +499,8 @@ namespace Reversi.Model
                     // If it is -1 -1 passing.
                     if (_data[i] == -1 && _data[i + 1] == -1)
                     {
-                        if(_isPassingTurnOn)
-                        { 
+                        if (_isPassingTurnOn)
+                        {
                             Pass();
                         }
                         else
@@ -554,7 +553,7 @@ namespace Reversi.Model
             OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(true, _data.Player1Time));
             OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(false, _data.Player2Time));
         }
- 
+
         /// <summary>
         /// The actual code for make a put down on the table.
         /// </summary>
@@ -568,7 +567,7 @@ namespace Reversi.Model
             if (_isPlayer1TurnOn) // Player 1 put down.
             {
                 // Do we try to make a valid put down? We only check it if loaded the game.
-                if (_table[x, y] == 4 || _table[x, y] == 6) 
+                if (_table[x, y] == 4 || _table[x, y] == 6)
                 {
                     _table[x, y] = -1; // The put down.
                     ++(_points[2]);
@@ -667,7 +666,7 @@ namespace Reversi.Model
                 }
                 else if (_table[_possiblePutDowns[i], _possiblePutDowns[i + 1]] == 4)
                 {
-                    isOver = false;   
+                    isOver = false;
                     _isPassingTurnOn = false;
                     break;
                 }
@@ -750,7 +749,7 @@ namespace Reversi.Model
             _reversedPutDownsSize = 0;
 
             // Is the game over?
-            if (isOver) 
+            if (isOver)
             {
                 return true;
             }
@@ -1022,7 +1021,7 @@ namespace Reversi.Model
         private void ToLeftDown(ref Int32 x, ref Int32 y)
         {
             ++x;
-            --y;                        
+            --y;
         }
 
         /// <summary>
@@ -1043,7 +1042,7 @@ namespace Reversi.Model
         private void ToLeftUp(ref Int32 x, ref Int32 y)
         {
             --x;
-            --y;                        
+            --y;
         }
 
         #endregion
@@ -1095,7 +1094,7 @@ namespace Reversi.Model
         /// <param name="e">The caller object. This class: ReversiGameModel.</param>
         private void Timer_Elapsed(Object sender, ElapsedEventArgs e)
         {
-            if(_isPlayer1TurnOn)
+            if (_isPlayer1TurnOn)
             {
                 ++(_data.Player1Time);
                 OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player1Time));
@@ -1105,66 +1104,6 @@ namespace Reversi.Model
                 ++(_data.Player2Time);
                 OnUpdatePlayerTime(new ReversiUpdatePlayerTimeEventArgs(_isPlayer1TurnOn, _data.Player2Time));
             }
-        }
-
-        private void Help()
-        {
-            String str = "";
-            Int32[,] alma = new Int32[_data.TableSize, _data.TableSize];
-
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    alma[h, r] = 0;
-                }
-            }
-
-            for (Int32 r = 0; r < _possiblePutDownsSize; r += 3)
-            {
-                alma[_possiblePutDowns[r], _possiblePutDowns[r + 1]] = _possiblePutDowns[r + 2];
-            }
-
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    str += "  " + alma[h, r] .ToString() + "  ";
-                }
-                str += Environment.NewLine;
-            }
-
-            MessageBox.Show(str, "HELP");
-
-        }
-
-        private void Help2()
-        {
-            String str = "";
-            Int32[,] alma = new Int32[_data.TableSize, _data.TableSize];
-
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    alma[r, h] = _table[r, h];
-                }
-            }
-
-            for (Int32 r = 0; r < _data.TableSize; ++r)
-            {
-                for (Int32 h = 0; h < _data.TableSize; ++h)
-                {
-                    if (alma[h, r] == -1)
-                        str += " " + alma[h, r].ToString() + " ";
-                    else
-                        str += "  " + alma[h, r].ToString() + "  ";
-                }
-                str += Environment.NewLine;
-            }
-
-            MessageBox.Show(str, "HELP");
-
         }
 
         #endregion
