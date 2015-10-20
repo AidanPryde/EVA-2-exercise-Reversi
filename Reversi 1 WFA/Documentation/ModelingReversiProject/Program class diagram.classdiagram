@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" xmlns:dm9="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm10="http://schemas.microsoft.com/dsltools/UseCaseModel" xmlns:dm11="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" dslVersion="1.0.0.0" Id="ce3f547c-fcd8-47aa-a255-58386bfe4a63" name="Az alkalmazás osztálydiagramja" linkedPackageId="4e625996-aef2-48c5-86dd-aaa65bb14acf" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <description>interface</description>
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="010aba58-5430-4822-b865-f415f4a9bd85" name="Model::ReversiGameModel" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="8b1a9ba3-c9a2-4444-bbe3-6956d0e54651" />
+        <targetEnds>
+          <association Id="ada64e76-14e8-4c73-93af-a944e34cdb11" isDerived="false" sourceEndRoleName="" targetEndRoleName="_dataAccess" isLeaf="false" isAbstract="false">
+            <interfaceMoniker Id="3dd32d26-c3a5-4945-b84a-b64019c6ae08" LastKnownName="Persistence::IReversiDataAccess" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b5b1a911-a811-4244-8c09-06a426bcdcd2" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="9ba043c9-de40-4f7e-8eb5-5f7d86e36a97" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7528e0cc-c44d-43fd-8b67-2b9f054748be" name="_dataAccess" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="8120f72a-7ff0-47c6-a1bf-58920a8d2c9e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="b2beced9-547c-48ff-90af-39e154c2f3c7" />
+          </association>
+          <association Id="3efeb219-3a77-48c7-bb84-74ec8ee00c3b" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="e06baeea-25c5-4674-883b-8a9c75656e24" LastKnownName="Model::ReversiSetGameEndedEventArgs" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="194fa7fe-4a56-4409-9f54-19e4a81da733" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="c03a38b9-9107-433a-a8de-32a7c409c09b" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="604cd5f1-a26f-4db1-957a-ddf8c55270b5" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="c009340b-cee3-4cb5-bfe0-44994eacfb2f" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="eb8c60f6-ab9b-4085-bf5e-5b8de181ec83" />
+          </association>
+          <association Id="eca5b2b8-4cf6-4173-a1ae-68c6a8fbb257" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="35ac1b25-ec8e-4613-9e8c-380537c0d088" LastKnownName="Model::ReversiUpdatePlayerTimeEventArgs" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="69d8bad3-2281-47fa-8b4d-d51744440de6" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="51e2cbd9-67dc-4017-a888-297f479955fa" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="56112aeb-ffc7-457d-985e-a5a332f16510" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="10eb6db8-f019-4b69-9e0b-d712d8e4da3a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="6fb70309-530f-4d34-961e-e68d630deff3" />
+          </association>
+          <association Id="b16b0597-bbb1-42ba-a3ce-d3b2da469639" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="f977763c-41ce-4b58-b984-800c870d8a23" LastKnownName="Model::ReversiUpdateTableEventArgs" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="e51577d1-0a9d-48ff-a382-77aaea8679bb" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="d0301a03-7238-4021-8262-09f812ba318e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="18184bce-d61a-433a-8083-1e444fe0e56f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="7ea3da37-4f58-4ae7-9a40-50994c051e9e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="c24e65fa-c706-4f37-94a0-24b2568a4a21" />
+          </association>
+          <association Id="93eb0417-8d20-4b08-8e18-9751c005e7c6" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="2310ce59-b31b-4ae8-94bc-3092af90aa6b" LastKnownName="Model::ReversiModelException" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="678f725c-f81d-4025-8684-8172e95a3c62" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="20e302b6-c34d-4ed5-be33-4875b3041cac" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b706cfcb-5c3e-470d-83c3-6eec45edc388" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="fe66a675-76f7-49c5-bc5f-74923610da19" name="Lower" value="0">
+                      <elementDefinition Id="ed8f1776-2ccc-48b5-a5bb-abd5e3495581" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="0c3382dd-fbb5-4471-95cb-30e2719fcda0" name="Upper" value="1">
+                      <elementDefinition Id="bf25141c-22b6-4bc8-b513-7555cf4714aa" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="75a1aafa-1efe-4e7b-8b60-7262156b9070" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="7bce43be-f095-4018-9854-0ad62a8b4baf" />
+          </association>
+          <association Id="75afa9b1-cb25-4afb-bcb1-f0a9f099ecfc" isDerived="false" sourceEndRoleName="" targetEndRoleName="_data" isLeaf="false" isAbstract="false">
+            <classMoniker Id="b843390c-ea8b-40c8-b6d0-adbc7b8e231a" LastKnownName="ReversiGameDescriptiveData" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="beead344-1eb2-47f5-86cf-55fdc91b2f38" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="fe734098-82dc-4212-a7c1-48874cfcd453" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="4e953a76-19ac-4309-b6e5-e878edf696b1" name="_data" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="df79be11-8045-4d47-ab92-280ce2774810" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="ede50f6d-9843-454d-b718-363121656e4c" />
+          </association>
+          <association Id="2ba4e7d3-822d-4734-bdac-cbea0bdcc758" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="a627505b-7a76-4e95-8891-ca98fc3cb063" LastKnownName="ReversiDataException" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="475f535b-3784-4323-90c3-122cc12d7e80" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="ecf2faf5-5fc3-4870-a747-738a8596c50d" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="d610cca5-6379-4e13-8599-e9f2e96ff8bb" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="ae975503-bbe0-43f7-809d-e2206568c4c7" name="Lower" value="0">
+                      <elementDefinition Id="f7302d6d-72be-427f-bd51-2e64a688674f" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="e4025ca4-20a6-4974-af43-82885456f7cd" name="Upper" value="1">
+                      <elementDefinition Id="b489c98f-69ae-4381-803b-d2e8f753775b" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="22061cc9-1487-4f8c-bcb4-745831ea0a8c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="9a385f93-fa54-4bce-a35c-49ed61da2fc3" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="2310ce59-b31b-4ae8-94bc-3092af90aa6b" name="Model::ReversiModelException" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="09a493aa-cc2b-40dd-a435-a1ca47bf88e1" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="e06baeea-25c5-4674-883b-8a9c75656e24" name="Model::ReversiSetGameEndedEventArgs" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="80ec24f6-3733-4a5d-933c-9334ae765c66" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="35ac1b25-ec8e-4613-9e8c-380537c0d088" name="Model::ReversiUpdatePlayerTimeEventArgs" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="a638fa2d-17df-4f64-9897-df0628369baf" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="f977763c-41ce-4b58-b984-800c870d8a23" name="Model::ReversiUpdateTableEventArgs" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="9aa5a830-c819-49d5-8177-5e765e7121c3" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="a627505b-7a76-4e95-8891-ca98fc3cb063" name="ReversiDataException" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="7bd037ad-41ce-4ca7-814d-e56014b810bd" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="3a5f68de-dbf0-40fd-8e3f-6d82e0a4b5e3" name="ReversiFileDataAccess" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="60797733-df70-42ae-8321-c8f671257b85" />
+        <suppliersInternal>
+          <interfaceRealization Id="df3d9328-2e10-478f-ad9f-eccd7c13d030">
+            <interfaceMoniker Id="3dd32d26-c3a5-4945-b84a-b64019c6ae08" LastKnownName="Persistence::IReversiDataAccess" />
+            <elementDefinition Id="ce0f2ad3-deb5-4d1a-b584-a9cf99fc033a" />
+          </interfaceRealization>
+        </suppliersInternal>
+        <targetEnds>
+          <association Id="8b256758-a08b-42ca-bd56-b8e408222292" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="a627505b-7a76-4e95-8891-ca98fc3cb063" LastKnownName="ReversiDataException" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="f825bd39-6ddf-442f-ba4f-122bb7acdbeb" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="cc174c39-8498-45da-b9fa-96cb97566080" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="4d5d9477-a1df-4351-9cb6-1803f43e142a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="bacff0be-2492-4cac-a729-3ff7b314dc66" name="Lower" value="0">
+                      <elementDefinition Id="8a39a4f9-736d-42fc-ba99-6bf414102f02" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="c997134e-f682-4341-8a02-87720af983c5" name="Upper" value="1">
+                      <elementDefinition Id="1eabc36a-5b88-44c8-bf63-dd88eb1c5d09" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="2eb9286a-f6c7-478a-845e-10ef33f688b0" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="04a48160-726f-4b8f-9e3b-228e2cc8208a" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="b843390c-ea8b-40c8-b6d0-adbc7b8e231a" name="ReversiGameDescriptiveData" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="1a62097d-a909-44c5-aea0-545664726971" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="f1a15e8a-b45f-467b-a029-b3025c734742" name="AboutMesageForm" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="52f25ebd-9f3e-4160-a604-83c9b3ffd74e" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="9cfca8e2-a5d2-42ae-b5d1-bfb260bb23f5" name="GameForm" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="d6911fae-a6ef-4d61-84a3-cba90a6ba0bf" />
+        <targetEnds>
+          <association Id="6ea42ebc-ee74-460c-a8f1-b603bd094747" isDerived="false" sourceEndRoleName="" targetEndRoleName="_dataAccess" isLeaf="false" isAbstract="false">
+            <interfaceMoniker Id="3dd32d26-c3a5-4945-b84a-b64019c6ae08" LastKnownName="Persistence::IReversiDataAccess" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="a654cd2e-f25d-48a8-87d3-b87990f1eb3d" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="89ee1c05-2ee1-45d1-afbf-cf823c001a5c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="1180f1a1-598c-42d7-af18-0f9d1dd9dedc" name="_dataAccess" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="50183d16-3066-46ef-a395-5b912361ed6d" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="1c4e1e18-803b-449e-afd3-3599ae6c6b2b" />
+          </association>
+          <association Id="5a4f6de7-4182-4e37-bc4f-6739b8f9a713" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="f1a15e8a-b45f-467b-a029-b3025c734742" LastKnownName="AboutMesageForm" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="f85c85c5-3f81-491f-9805-5e7520f2ed8f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="c4e7328f-f326-4fea-9c43-311a176e146e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="eef5599d-3a9c-42c7-ad84-ed16a042549d" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="996aed61-7743-4d8b-a976-4662f0e47e53" name="Lower" value="0">
+                      <elementDefinition Id="ba3af369-f36e-4e12-8801-370edc391bf6" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="b28a18c9-830a-484a-8489-13fa9b9a3c2b" name="Upper" value="1">
+                      <elementDefinition Id="525c4537-fce2-4588-8149-78bc5f749fcc" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="ea11f58b-945b-4e09-9eb3-a3d6e220d664" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="571625dd-fab2-4ce5-8608-411aabb408f6" />
+          </association>
+          <association Id="8eb295e4-6f49-4517-82db-7a9911e49d18" isDerived="false" sourceEndRoleName="" targetEndRoleName="_model" isLeaf="false" isAbstract="false">
+            <classMoniker Id="010aba58-5430-4822-b865-f415f4a9bd85" LastKnownName="Model::ReversiGameModel" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7e0c7d8a-a46d-489c-a859-56a3d8ce1ed3" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="ef7e0b1e-9460-4f09-b524-99735098e46c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="843a986c-79eb-4a7c-b154-24aef3ff1f16" name="_model" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5d552648-788f-4d16-8df1-4e59def7140a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="1cc2d6d5-a39e-4da0-9ed5-1491716c7e18" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="6d5b83bc-47d1-4de7-9c6c-296970b08ec8" name="Program" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="66db0aa4-9f43-46c2-916d-af72ccc2d820" />
+        <targetEnds>
+          <association Id="960a1a23-1ef9-4728-84af-fd21afc46322" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="9cfca8e2-a5d2-42ae-b5d1-bfb260bb23f5" LastKnownName="GameForm" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b511c56d-8a04-4917-9339-2333a9501774" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="25d721ea-a7e7-4635-8afc-bc532af14e2c" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="a7a52356-5719-483b-9bca-1910669b5ab6" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="a2c30b99-ecc2-4ef7-8543-2b48440e7727" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="fc67aba3-0edb-4319-b7fa-c20e1c64d861" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <Interface Id="3dd32d26-c3a5-4945-b84a-b64019c6ae08" name="Persistence::IReversiDataAccess" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="7931d3e8-4762-4b7a-8d2f-45a4fa8637fb" />
+        <targetEnds>
+          <association Id="791d6376-072c-44c8-851f-7962ea6e41d3" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="b843390c-ea8b-40c8-b6d0-adbc7b8e231a" LastKnownName="ReversiGameDescriptiveData" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="009c9360-37d4-417d-976f-7cc89cddea42" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="0ffde67d-2b32-4993-ae19-d56ab0e4060e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="0e23bb0e-4193-4f45-b8b3-673eb779b02f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="3adbbd35-6619-4994-a554-86382219cee2" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="64607f5d-9a69-4473-b139-8ea2dfcb0b71" />
+          </association>
+        </targetEnds>
+      </Interface>
+    </logicalClassDesignerModelHasTypes>
+  </packagedElements>
+  <package Id="4e625996-aef2-48c5-86dd-aaa65bb14acf" name="ModelingReversiProject">
+    <elementDefinition Id="24c77daa-853d-417f-8501-2ab34d24af38" />
+    <profileInstances>
+      <packageHasProfileInstances Id="52b30a60-dcd0-4e67-b053-458a40f41215">
+        <profileInstance Id="2cb09637-a20a-41e2-af15-a552bf46093b" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="b618b4f9-4ef9-4aa8-a95d-7ae8f5d98730">
+        <profileInstance Id="e00d9784-878f-4468-b1bd-359cc72aee18" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</logicalClassDesignerModel>

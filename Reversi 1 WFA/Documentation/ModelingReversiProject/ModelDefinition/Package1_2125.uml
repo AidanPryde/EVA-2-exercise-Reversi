@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm9="http://schemas.microsoft.com/dsltools/UseCaseModel" xmlns:dm10="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm11="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="bfde9933-4845-46de-aa47-c3428329d871"
+  name="View" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <importedPackagesInternal>
+    <packageImport
+      Id="b45201d4-3a25-4659-979d-1dff52cfb2d8"
+      visibility="Public">
+      <packageMoniker
+        Id="4be045d4-ea1c-4be4-a671-b7b8efc978fc"
+        LastKnownName="Model"
+        LastKnownLocation="Package2_2125.uml" />
+    </packageImport>
+    <packageImport
+      Id="1d27eeaa-33d7-486b-945e-3f69110d17fc"
+      visibility="Public">
+      <packageMoniker
+        Id="8d6d3e1f-398e-4168-a2ea-611440a510f1"
+        LastKnownName="Persistence"
+        LastKnownLocation="Package3_2125.uml" />
+    </packageImport>
+  </importedPackagesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="d6911fae-a6ef-4d61-84a3-cba90a6ba0bf"
+        name="GameForm"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="f277e8a1-e14f-486a-9546-1e87281d31b5"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName="_model"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="8b1a9ba3-c9a2-4444-bbe3-6956d0e54651"
+              LastKnownName="Model::ReversiGameModel"
+              LastKnownLocation="ModelingReversiProject.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="3da10e47-c6e7-4f16-95da-27de8599d43d"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="4c0156bc-41b7-457c-b3ef-e686ff9fc522"
+                  name="_model"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="8396baf5-0f49-44cf-b9b4-d289abd116f3"
+            isDerived="false"
+            sourceEndRoleName="View : GameForm"
+            targetEndRoleName="Persistence : IReversiDataAccess"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="a40e9e1b-601a-455d-afcb-97ae09d8cbe4"
+              LastKnownLocation="ModelingReversiProject.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="32906cd7-ee1e-4d06-ad43-a5f01bde3226"
+                  name="View : GameForm"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="a8366e9b-0e01-48c6-bb4c-80566a97f2ae"
+                  name="Persistence : IReversiDataAccess"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="1c4e1e18-803b-449e-afd3-3599ae6c6b2b"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName="_dataAccess"
+            isLeaf="false"
+            isAbstract="false">
+            <interfaceMoniker
+              Id="7931d3e8-4762-4b7a-8d2f-45a4fa8637fb"
+              LastKnownName="Persistence::IReversiDataAccess"
+              LastKnownLocation="ModelingReversiProject.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="89ee1c05-2ee1-45d1-afbf-cf823c001a5c"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="50183d16-3066-46ef-a395-5b912361ed6d"
+                  name="_dataAccess"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="6f3811af-0015-445c-9579-c14d57475342"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="52f25ebd-9f3e-4160-a604-83c9b3ffd74e"
+              LastKnownName="AboutMesageForm"
+              LastKnownLocation="Package1_2125.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e019a030-9a54-4a5d-8c59-8d7a29e7e8b3"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e7a98862-2330-44ad-844a-3ab4d1633818"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false">
+                  <lowerValueInternal>
+                    <literalString
+                      Id="793d405f-ad5b-416c-abaa-6ff032e09b10"
+                      name="Lower"
+                      value="0" />
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString
+                      Id="cef197dd-8e2f-4778-9a61-146d454c5471"
+                      name="Upper"
+                      value="1" />
+                  </upperValueInternal>
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="571625dd-fab2-4ce5-8608-411aabb408f6"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="52f25ebd-9f3e-4160-a604-83c9b3ffd74e"
+              LastKnownName="AboutMesageForm"
+              LastKnownLocation="Package1_2125.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="c4e7328f-f326-4fea-9c43-311a176e146e"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="ea11f58b-945b-4e09-9eb3-a3d6e220d664"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false">
+                  <lowerValueInternal>
+                    <literalString
+                      Id="ba3af369-f36e-4e12-8801-370edc391bf6"
+                      name="Lower"
+                      value="0" />
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString
+                      Id="525c4537-fce2-4588-8149-78bc5f749fcc"
+                      name="Upper"
+                      value="1" />
+                  </upperValueInternal>
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="1cc2d6d5-a39e-4da0-9ed5-1491716c7e18"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName="_model"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="8b1a9ba3-c9a2-4444-bbe3-6956d0e54651"
+              LastKnownName="Model::ReversiGameModel"
+              LastKnownLocation="ModelingReversiProject.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="ef7e0b1e-9460-4f09-b524-99735098e46c"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5d552648-788f-4d16-8df1-4e59def7140a"
+                  name="_model"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="52f25ebd-9f3e-4160-a604-83c9b3ffd74e"
+        name="AboutMesageForm"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="5e907362-5c60-4df3-9d2f-291383766ef7"
+        name="GameForm"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="d7efe26a-87b3-4600-bff2-f25f3530afa3"
+        name="AboutMessageForm"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

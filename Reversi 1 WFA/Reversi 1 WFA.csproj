@@ -120,7 +120,9 @@
     <EmbeddedResource Include="View\GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Az alakalmazás osztálydiagramja.cd" />
+    <None Include="Documentation\GameForm diagram.cd" />
+    <None Include="Documentation\ReversiGameDescriptiveData class diagram.cd" />
+    <None Include="Documentation\ReversiGameModel class diagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

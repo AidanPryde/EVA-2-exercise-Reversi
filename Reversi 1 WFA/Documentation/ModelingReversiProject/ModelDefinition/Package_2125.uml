@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm9="http://schemas.microsoft.com/dsltools/UseCaseModel" xmlns:dm10="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm11="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="4d35816c-495f-44f1-9650-ca4630d94e0d"
+  name="Program" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <importedPackagesInternal>
+    <packageImport
+      Id="df81d59a-8819-4615-8061-520ab72a8cb2"
+      visibility="Public">
+      <packageMoniker
+        Id="bfde9933-4845-46de-aa47-c3428329d871"
+        LastKnownName="View"
+        LastKnownLocation="Package1_2125.uml" />
+    </packageImport>
+  </importedPackagesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="4be045d4-ea1c-4be4-a671-b7b8efc978fc"
+        LastKnownName="Model"
+        LastKnownLocation="Package2_2125.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

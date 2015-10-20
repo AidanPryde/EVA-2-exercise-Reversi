@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/SimpleShapesModel" xmlns:dm9="http://schemas.microsoft.com/dsltools/UseCaseModel" xmlns:dm10="http://schemas.microsoft.com/VisualStudio/TeamArchitect/ComponentDesigner" xmlns:dm11="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="4be045d4-ea1c-4be4-a671-b7b8efc978fc"
+  name="Model" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <importedPackagesInternal>
+    <packageImport
+      Id="4b1a6560-c1dc-423f-a994-ecb175967d14"
+      visibility="Public">
+      <packageMoniker
+        Id="8d6d3e1f-398e-4168-a2ea-611440a510f1"
+        LastKnownName="Persistence"
+        LastKnownLocation="Package3_2125.uml" />
+    </packageImport>
+  </importedPackagesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="f179667d-8294-43c7-8b75-2afdc7df8217"
+        name="ReversiGameModel"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="12e234f7-68c6-45ce-9d79-681b1b5d0521"
+        name="ReversiModelException"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="e9b7f4d0-e914-4a8a-a8c0-b5cea9bcf158"
+        name="ReversiSetGameEndedEventArgs"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="6c84bf15-a494-45da-b82e-9b7d4716f561"
+        name="ReversiUpdatePlayerTimeEventArgs"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="64e4c2b3-99bb-4843-a3a0-09a13101edb0"
+        name="ReversiUpdateTableEventArgs"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

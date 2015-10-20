@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Reversi.View.GameForm">
+    <Position X="0.5" Y="0.5" Width="3" />
+    <Members>
+      <Field Name="_bottomButtonPanel" Hidden="true" />
+      <Field Name="_fileExitToolStripMenuItem" Hidden="true" />
+      <Field Name="_fileLoadToolStripMenuItem" Hidden="true" />
+      <Field Name="_fileNewToolStripMenuItem" Hidden="true" />
+      <Field Name="_fileSaveToolStripMenuItem" Hidden="true" />
+      <Field Name="_gameSizeLargeToolStripMenuItem" Hidden="true" />
+      <Field Name="_gameSizeMediumToolStripMenuItem" Hidden="true" />
+      <Field Name="_gameSizeSmallToolStripMenuItem" Hidden="true" />
+      <Field Name="_helpAboutToolStripMenuItem" Hidden="true" />
+      <Field Name="_helpRulesToolStripMenuItem" Hidden="true" />
+      <Field Name="_mainFlowLayoutPanel" Hidden="true" />
+      <Field Name="_menuStrip" Hidden="true" />
+      <Field Name="_player1GroupBox" Hidden="true" />
+      <Field Name="_player1GroupBoxMarginLeftDefault" Hidden="true" />
+      <Field Name="_player2GroupBox" Hidden="true" />
+      <Field Name="_screenHeight" Hidden="true" />
+      <Field Name="_statusStrip" Hidden="true" />
+      <Field Name="_topFlowLayoutPanelForAll" Hidden="true" />
+      <Field Name="_topFlowLayoutPanelForButtons" Hidden="true" />
+      <Field Name="_topRowMinimumHeight" Hidden="true" />
+      <Field Name="_topRowMinimumWidth" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Field Name="fileToolStripMenuItem" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="player1TimeNameLabel" Hidden="true" />
+      <Field Name="player2TimeNameLabel" Hidden="true" />
+      <Field Name="toolStripSeparator1" Hidden="true" />
+      <Field Name="toolStripSeparator2" Hidden="true" />
+      <Field Name="toolStripSeparator4" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BwCAACsRQCAEqBCAIkjogAiCRGJkEwYhygYwBhgERAY=</HashCode>
+      <FileName>View\GameForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

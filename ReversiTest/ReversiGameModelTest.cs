@@ -1,5 +1,4 @@
 ﻿using System;
-//using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reversi.Model;
 using Reversi.Persistence;

@@ -149,7 +149,7 @@
             this._gameSizeMediumToolStripMenuItem,
             this._gameSizeLargeToolStripMenuItem});
             this.gameSizeToolStripMenuItem.Name = "gameSizeToolStripMenuItem";
-            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.gameSizeToolStripMenuItem.Text = "Size";
             // 
             // _gameSizeSmallToolStripMenuItem
@@ -189,19 +189,19 @@
             // _helpRulesToolStripMenuItem
             // 
             this._helpRulesToolStripMenuItem.Name = "_helpRulesToolStripMenuItem";
-            this._helpRulesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._helpRulesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this._helpRulesToolStripMenuItem.Text = "Rules";
             this._helpRulesToolStripMenuItem.Click += new System.EventHandler(this.helpRulesToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(144, 6);
             // 
             // _helpAboutToolStripMenuItem
             // 
             this._helpAboutToolStripMenuItem.Name = "_helpAboutToolStripMenuItem";
-            this._helpAboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._helpAboutToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this._helpAboutToolStripMenuItem.Text = "About Reversi";
             this._helpAboutToolStripMenuItem.Click += new System.EventHandler(this.helpAboutToolStripMenuItem_Click);
             // 
@@ -384,6 +384,7 @@
             this.Controls.Add(this._menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this._menuStrip;
+            this.MaximizeBox = false;
             this.Name = "GameForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

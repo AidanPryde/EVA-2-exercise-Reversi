@@ -21,13 +21,17 @@ namespace Reversi.View
         /// </summary>
         private readonly Int32[] _supportedGameTableSizesArray = new Int32[] { 10, 20, 30 };
         /// <summary>
-        ///The default table size. It is readonly.
+        /// The default table size. It is readonly.
         /// </summary>
         private readonly Int32 _tableSizeDefaultSetting = 10;
         /// <summary>
-        ///The default button size. It is readonly.
+        /// The default button size. It is readonly.
         /// </summary>
         private readonly Int32 _gameButtonSize = 30;
+        /// <summary>
+        /// The primary screen height.
+        /// </summary>
+        private readonly Int32 _screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
         #endregion
 
@@ -425,11 +429,29 @@ namespace Reversi.View
         {
             if (_buttonGrid == null || _model.ActiveTableSize != _buttonGrid.GetLength(0))
             {
+                // The deffault game button size. We may have to make them smaller.
+                Int32 usedGameButtonSize = _gameButtonSize;
 
-                _bottomButtonPanel.Height = ((_gameButtonSize - 1) * _model.ActiveTableSize) + 1;
+                _bottomButtonPanel.Height = ((usedGameButtonSize - 1) * _model.ActiveTableSize) + 1;
                 _bottomButtonPanel.Width = _bottomButtonPanel.Height;
 
-                Height = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37 + _bottomButtonPanel.Height + (2 * 2) + 2;
+                Int32 needingHeight = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37 + _bottomButtonPanel.Height + (2 * 2) + 2;
+
+                Height = needingHeight;
+
+                if (needingHeight > _screenHeight)
+                {
+                    while (needingHeight > _screenHeight)
+                    {
+                        usedGameButtonSize -= 2;
+                        _bottomButtonPanel.Height = ((usedGameButtonSize - 1) * _model.ActiveTableSize) + 1;
+                        _bottomButtonPanel.Width = _bottomButtonPanel.Height;
+
+                        needingHeight = _topRowMinimumHeight + _menuStrip.Height + _statusStrip.Height + 37 + _bottomButtonPanel.Height + (2 * 2) + 2;
+
+                        Height = needingHeight;
+                    }
+                }
 
                 Int32 widthDifferencia = _topRowMinimumWidth - (_bottomButtonPanel.Width + _bottomButtonPanelMarginLeftDefault + _bottomButtonPanel.Margin.Right);
 
@@ -457,8 +479,8 @@ namespace Reversi.View
                     {
                         //TODO: Make circle buttons inside the grid.
                         _buttonGrid[x, y] = new Button();
-                        _buttonGrid[x, y].Location = new Point(x + x * (_gameButtonSize - 2), y + y * (_gameButtonSize - 2));
-                        _buttonGrid[x, y].Size = new Size(_gameButtonSize, _gameButtonSize);
+                        _buttonGrid[x, y].Location = new Point(x + x * (usedGameButtonSize - 2), y + y * (usedGameButtonSize - 2));
+                        _buttonGrid[x, y].Size = new Size(usedGameButtonSize, usedGameButtonSize);
                         _buttonGrid[x, y].Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
                         _buttonGrid[x, y].TabIndex = 1000 + (x * _model.ActiveTableSize) + y;
                         _buttonGrid[x, y].FlatStyle = FlatStyle.Popup;
