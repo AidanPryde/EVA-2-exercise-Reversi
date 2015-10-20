@@ -23,12 +23,8 @@
   <Import Project="$(VSToolsPath)\ArchitectureTools\Microsoft.VisualStudio.TeamArchitect.ModelingProject.targets" Condition="'$(VSToolsPath)' != ''" />
   <ItemGroup>
     <Folder Include="ModelDefinition\" />
-    <Content Include="Az alkalmazás osztálydiagramja.classdiagram">
+    <Content Include="Az alkalmazás csomagdiagramja.dgml">
       <SubType>Content</SubType>
-    </Content>
-    <Content Include="Az alkalmazás osztálydiagramja.classdiagram.layout">
-      <SubType>Content</SubType>
-      <DependentUpon>Az alkalmazás osztálydiagramja.classdiagram</DependentUpon>
     </Content>
     <Content Include="Felhasználói esetek diagramja.usecasediagram">
       <SubType>Content</SubType>
