@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi 1 WFA", "Reversi 1 WFA\Reversi 1 WFA.csproj", "{FAA399E9-B982-4D0C-AC07-B771E6FA0483}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversiTest", "ReversiTest\ReversiTest.csproj", "{41A34B80-39EA-4973-A240-7B9A60F36197}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi 1 WFA Test", "ReversiTest\Reversi 1 WFA Test.csproj", "{41A34B80-39EA-4973-A240-7B9A60F36197}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FAA399E9-B982-4D0C-AC07-B771E6FA0483} = {FAA399E9-B982-4D0C-AC07-B771E6FA0483}
 	EndProjectSection
