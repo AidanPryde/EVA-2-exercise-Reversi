@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reversi.Model;
 using Reversi.Persistence;
 using System.Threading.Tasks;
+//using System.Diagnostics;
 
 namespace ReversiTest
 {
@@ -82,7 +83,6 @@ namespace ReversiTest
             _model.UpdateTable += new EventHandler<ReversiUpdateTableEventArgs>(model_UpdateTable);
             _model.SetGameEnded += new EventHandler<ReversiSetGameEndedEventArgs>(model_SetGameEnded);
             _model.UpdatePlayerTime += new EventHandler<ReversiUpdatePlayerTimeEventArgs>(model_UpdatePlayerTime);
-
         }
 
         [TestMethod]
@@ -634,8 +634,7 @@ namespace ReversiTest
             if (!_simpleEvents)
             {
                 removeStep(e);
-            }
-            
+            } 
         }
 
         private void model_UpdatePlayerTime(Object sender, ReversiUpdatePlayerTimeEventArgs e)
