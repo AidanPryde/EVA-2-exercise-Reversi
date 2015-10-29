@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reversi.Model;
-using Reversi.Persistence;
+using Reversi_WFA.Model;
+using Reversi_WFA.Persistence;
 using System.Threading.Tasks;
-//using System.Diagnostics;
+using System.Diagnostics;
 
-namespace ReversiTest
+namespace Reversi_WFA_Test
 {
     [TestClass]
     public class ReversiGameModelTest
@@ -395,7 +395,7 @@ namespace ReversiTest
 
             _simpleEvents = false;
 
-            _model.TableSizeSetting = 4;
+            _model.TableSizeSetting = 6;
 
             // Init the array of doom and the other stuffs.
             _remainingSteps = new Int32[(_model.TableSizeSetting * _model.TableSizeSetting * 2) + 1, (_model.TableSizeSetting * _model.TableSizeSetting * 2) + 1];
@@ -427,7 +427,7 @@ namespace ReversiTest
                 //Debug.Print(_possibleGameCount.ToString());
             }
 
-            /*
+            
             Debug.Print(_maximumPossiblePutDownsSize.ToString());
             Debug.Print(_maximumReversedPutDownsSize.ToString());
             Debug.Print(_possibleGameCount.ToString());
@@ -435,7 +435,7 @@ namespace ReversiTest
             Debug.Print(_possibleResults[0].ToString());
             Debug.Print(_possibleResults[1].ToString());
             Debug.Print(_possibleResults[2].ToString());
-            */
+            
 
             /*
             Assert.AreEqual(0, _maximumPossiblePutDownsSize); // 9

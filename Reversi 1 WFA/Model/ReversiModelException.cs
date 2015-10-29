@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Reversi.Model
+namespace Reversi_WFA.Model
 {
     public class ReversiModelException : Exception
     {

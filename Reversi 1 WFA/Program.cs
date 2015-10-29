@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Reversi
+namespace Reversi_WFA
 {
     static class Program
     {

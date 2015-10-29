@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Reversi.Persistence
+namespace Reversi_WFA.Persistence
 {
     /// <summary>
     /// Reversi file handler interface.

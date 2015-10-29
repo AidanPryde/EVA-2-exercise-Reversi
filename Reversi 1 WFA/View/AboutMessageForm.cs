@@ -1,8 +1,9 @@
-﻿using System;
+﻿
+using System;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Reversi.View
+namespace Reversi_WFA.View
 {
     /// <summary>
     /// The about message window type.

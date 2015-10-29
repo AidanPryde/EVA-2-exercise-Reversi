@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Reversi.Persistence
+namespace Reversi_WFA.Persistence
 {
     public class ReversiGameDescriptiveData
     {
