@@ -194,27 +194,35 @@ namespace Reversi_WFA.View
         }
 
         /// <summary>
+        /// The FormClosing event occurs as the form is being closed. When a form is closed, it is disposed,
+        /// releasing all resources associated with the form. If you cancel this event, the form remains opened.
+        /// To cancel the closure of a form, set the Cancel property of the FormClosingEventArgs passed to your event handler to true.
+        /// </summary>
+        /// <param name="sender">This object. We do not use.</param>
+        /// <param name="e">The event argument that can help us, stop the closing if we want</param>
+        private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _model.Pause();
+
+            if (_saved == false)
+            {
+                if (MessageBox.Show("Are you sure you want to exit?", "Reversi game", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+
+                    _model.Unpause();
+                }
+            }
+        }
+
+        /// <summary>
         /// The exit game menu item clicked event handler.
         /// </summary>
         /// <param name="sender">The _fileExitToolStripMenuItem object, we do not use it as a param.</param>
         /// <param name="e">Auto param, we do not use it.</param>
         private void fileExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _model.Pause();
-
-            if (!_saved)
-            {
-                if (MessageBox.Show("Are you sure you want to exit?", "Reversi game", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Close();
-                }
-            }
-            else
-            {
-                Close();
-            }
-
-            _model.Unpause();
+            Close();
         }
 
         /// <summary>
