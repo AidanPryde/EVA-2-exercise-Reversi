@@ -359,6 +359,7 @@ namespace Reversi_WFA.View
         private void model_SetGameEnded(Object sender, ReversiSetGameEndedEventArgs e)
         {
             _pauseButton.Enabled = false;
+            _passButton.Enabled = false;
             _saved = true;
             _fileSaveToolStripMenuItem.Enabled = false;
             if (e.Player1Points > e.Player2Points)
