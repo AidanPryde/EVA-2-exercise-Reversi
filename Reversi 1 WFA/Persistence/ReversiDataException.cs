@@ -12,12 +12,21 @@ namespace Reversi.Persistence
         #region Fields
 
         private String _message;
+        private String _info;
 
         #endregion
 
         #region Properties
 
-        override public String Message
+        public String ReversiMessage
+        {
+            get
+            {
+                return _message;
+            }
+        }
+
+        public String ReversiInfo
         {
             get
             {
@@ -32,10 +41,10 @@ namespace Reversi.Persistence
         /// <summary>
         /// Create Reversi data access exception instance.
         /// </summary>
-        public ReversiDataException(String source, String message)
+        public ReversiDataException(String message, String info)
         {
-            this.Source = source;
             _message = message;
+            _info = info;
         }
 
         #endregion

@@ -108,7 +108,7 @@ namespace Reversi.View
             }
             catch (ReversiModelException)
             {
-                MessageBox.Show("Unsupportable table size given to model.", "Model initialization problem.");
+                MessageBox.Show("Model initialization problem." + System.Environment.NewLine + System.Environment.NewLine + "Unsupportable table size given to model. The program will close.", "Reversi");
                 Close();
             }
 
@@ -154,9 +154,16 @@ namespace Reversi.View
                     _saved = true;
                     _pauseButton.Enabled = true;
                 }
+                catch (ReversiDataException ex)
+                {
+                    MessageBox.Show(ex.ReversiMessage + System.Environment.NewLine + System.Environment.NewLine + ex.ReversiInfo, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    _fileSaveToolStripMenuItem.Enabled = true;
+                    _saved = true;
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Source, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     _fileSaveToolStripMenuItem.Enabled = true;
                     _saved = true;
@@ -179,9 +186,19 @@ namespace Reversi.View
                     _saved = true;
                     _pauseButton.Enabled = true;
                 }
+                catch (ReversiDataException ex)
+                {
+                    MessageBox.Show(ex.ReversiMessage + System.Environment.NewLine + System.Environment.NewLine + ex.ReversiInfo, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    _fileSaveToolStripMenuItem.Enabled = true;
+                    _saved = true;
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Source, ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    _fileSaveToolStripMenuItem.Enabled = true;
+                    _saved = true;
                 }
             }
         }
@@ -206,6 +223,8 @@ namespace Reversi.View
             {
                 Close();
             }
+
+            _model.Unpause();
         }
 
         /// <summary>
