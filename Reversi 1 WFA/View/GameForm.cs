@@ -150,23 +150,17 @@ namespace Reversi_WFA.View
                 try
                 {
                     await _model.LoadGame(_loadFileDialog.FileName);
-                    _fileSaveToolStripMenuItem.Enabled = true;
                     _saved = true;
+                    _fileSaveToolStripMenuItem.Enabled = true;
                     _pauseButton.Enabled = true;
                 }
                 catch (ReversiDataException ex)
                 {
                     MessageBox.Show(ex.ReversiMessage + System.Environment.NewLine + System.Environment.NewLine + ex.ReversiInfo, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    _fileSaveToolStripMenuItem.Enabled = true;
-                    _saved = true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    _fileSaveToolStripMenuItem.Enabled = true;
-                    _saved = true;
                 }
             }
         }
@@ -189,16 +183,10 @@ namespace Reversi_WFA.View
                 catch (ReversiDataException ex)
                 {
                     MessageBox.Show(ex.ReversiMessage + System.Environment.NewLine + System.Environment.NewLine + ex.ReversiInfo, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    _fileSaveToolStripMenuItem.Enabled = true;
-                    _saved = true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Reversi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    _fileSaveToolStripMenuItem.Enabled = true;
-                    _saved = true;
                 }
             }
         }
@@ -316,9 +304,10 @@ namespace Reversi_WFA.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void passButton_Click(object sender, EventArgs e)
         {
-            _passButton.Enabled = false;
-            _model.Pass();
             _saved = false;
+            _passButton.Enabled = false;
+
+            _model.Pass(); 
         }
 
         /// <summary>
@@ -348,6 +337,7 @@ namespace Reversi_WFA.View
         private void gameButton_Clicked(object sender, EventArgs e)
         {
             _saved = false;
+
             Button button = (sender as Button);
             Int32 x = (button.TabIndex - 1000) / _model.ActiveTableSize;
             Int32 y = (button.TabIndex - 1000) % _model.ActiveTableSize;
