@@ -153,6 +153,7 @@ namespace Reversi_WFA.View
                     _saved = true;
                     _fileSaveToolStripMenuItem.Enabled = true;
                     _pauseButton.Enabled = true;
+                    _pauseButton.Text = "Pause";
                 }
                 catch (ReversiDataException ex)
                 {
@@ -179,6 +180,7 @@ namespace Reversi_WFA.View
                     await _model.SaveGame(_saveFileDialog.FileName);
                     _saved = true;
                     _pauseButton.Enabled = true;
+                    _pauseButton.Text = "Pause";
                 }
                 catch (ReversiDataException ex)
                 {
