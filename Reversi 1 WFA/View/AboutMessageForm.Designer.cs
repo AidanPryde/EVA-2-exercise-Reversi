@@ -1,4 +1,5 @@
-﻿namespace Reversi.View
+﻿
+namespace Reversi_WFA.View
 {
     partial class AboutMessageForm
     {

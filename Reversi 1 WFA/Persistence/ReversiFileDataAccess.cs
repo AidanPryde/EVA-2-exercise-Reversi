@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Security;
 
-namespace Reversi.Persistence
+namespace Reversi_WFA.Persistence
 {
     /// <summary>
     /// The type of the Reversi file manager.

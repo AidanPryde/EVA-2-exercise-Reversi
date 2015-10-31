@@ -1,12 +1,12 @@
 ﻿
-using Reversi.Model;
-using Reversi.Persistence;
+using Reversi_WFA.Model;
+using Reversi_WFA.Persistence;
 
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Reversi.View
+namespace Reversi_WFA.View
 {
     /// <summary>
     /// Game window type
