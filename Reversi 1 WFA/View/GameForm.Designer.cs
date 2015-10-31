@@ -149,7 +149,7 @@
             this._gameSizeMediumToolStripMenuItem,
             this._gameSizeLargeToolStripMenuItem});
             this.gameSizeToolStripMenuItem.Name = "gameSizeToolStripMenuItem";
-            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.gameSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.gameSizeToolStripMenuItem.Text = "Size";
             // 
             // _gameSizeSmallToolStripMenuItem
@@ -158,22 +158,22 @@
             this._gameSizeSmallToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this._gameSizeSmallToolStripMenuItem.Enabled = false;
             this._gameSizeSmallToolStripMenuItem.Name = "_gameSizeSmallToolStripMenuItem";
-            this._gameSizeSmallToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._gameSizeSmallToolStripMenuItem.Text = "Small (10 × 10)";
+            this._gameSizeSmallToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._gameSizeSmallToolStripMenuItem.Text = "Small";
             this._gameSizeSmallToolStripMenuItem.Click += new System.EventHandler(this.gameSizeSmallToolStripMenuItem_Click);
             // 
             // _gameSizeMediumToolStripMenuItem
             // 
             this._gameSizeMediumToolStripMenuItem.Name = "_gameSizeMediumToolStripMenuItem";
-            this._gameSizeMediumToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._gameSizeMediumToolStripMenuItem.Text = "Medium (20 × 20)";
+            this._gameSizeMediumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._gameSizeMediumToolStripMenuItem.Text = "Medium";
             this._gameSizeMediumToolStripMenuItem.Click += new System.EventHandler(this.gameSizeMediumToolStripMenuItem_Click);
             // 
             // _gameSizeLargeToolStripMenuItem
             // 
             this._gameSizeLargeToolStripMenuItem.Name = "_gameSizeLargeToolStripMenuItem";
-            this._gameSizeLargeToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this._gameSizeLargeToolStripMenuItem.Text = "Large  (30 × 30)";
+            this._gameSizeLargeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this._gameSizeLargeToolStripMenuItem.Text = "Large";
             this._gameSizeLargeToolStripMenuItem.Click += new System.EventHandler(this.gameSizeLargeToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
