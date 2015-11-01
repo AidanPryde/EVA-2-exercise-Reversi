@@ -566,9 +566,11 @@ namespace Reversi_WFA.View
                     else
                     {
                         _buttonGrid[x, y].Text = "";
-                        _buttonGrid[x, y].BackColor = Color.YellowGreen;
                         _buttonGrid[x, y].Enabled = false;
                     }
+
+                    _buttonGrid[x, y].BackColor = Color.YellowGreen;
+
                     break;
 
                 case 6:
@@ -582,9 +584,11 @@ namespace Reversi_WFA.View
                     else
                     {
                         _buttonGrid[x, y].Text = "";
-                        _buttonGrid[x, y].BackColor = Color.YellowGreen;
                         _buttonGrid[x, y].Enabled = false;
                     }
+
+                    _buttonGrid[x, y].BackColor = Color.YellowGreen;
+
                     break;
 
                 case 4:
@@ -598,8 +602,11 @@ namespace Reversi_WFA.View
                     {
                         _buttonGrid[x, y].ForeColor = Color.Black;
                     }
+
                     //_buttonGrid[x, y].ForeColor = Color.Gray;
+                    _buttonGrid[x, y].BackColor = Color.YellowGreen;
                     _buttonGrid[x, y].Enabled = true;
+
                     break;
 
                 case 5:
