@@ -289,7 +289,11 @@ namespace Reversi_WFA.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void helpRulesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _model.Pause();
+
             MessageBox.Show(this, " Always the white starts the game. If he can he chooses a put down location, only if he can not he passes. Then the black do the same then the white again, and so on ... ." + Environment.NewLine + "You have to straddle the enemy put downs to make a put down and to make them yours. You can do it in all directions. The game ends if no one can make a put down. The player with the more put downs win.", "Reversi game", MessageBoxButtons.OK, MessageBoxIcon.None);
+
+            _model.Unpause();
         }
 
         /// <summary>
@@ -299,12 +303,16 @@ namespace Reversi_WFA.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _model.Pause();
+
             if (_aboutMessageForm == null)
             {
                 _aboutMessageForm = new AboutMessageForm();
             }
             
             _aboutMessageForm.ShowDialog();
+
+            _model.Unpause();
         }
 
         /// <summary>
