@@ -43,7 +43,7 @@ namespace Reversi_WFA.View
         /// <summary>
         /// To know which players turn is on.
         /// </summary>
-        private Boolean IsPlayer1TurnOn;
+        private Boolean _isPlayer1TurnOn;
 
         /// <summary>
         /// The about window type.
@@ -420,7 +420,7 @@ namespace Reversi_WFA.View
         {
             _toolStripStatusLabel.Text = "Player 1: " + e.Player1Points.ToString() + " -- Player 2: " + e.Player2Points.ToString();
 
-            IsPlayer1TurnOn = e.IsPlayer1TurnOn;
+            _isPlayer1TurnOn = e.IsPlayer1TurnOn;
             _passButton.Enabled = e.IsPassingTurnOn;
 
             if (e.UpdatedFieldsCount == 0)
@@ -557,7 +557,7 @@ namespace Reversi_WFA.View
 
                 case 3:
                     //_buttonGrid[x, y].Text = value.ToString();
-                    if (!IsPlayer1TurnOn)
+                    if (!_isPlayer1TurnOn)
                     {
                         _buttonGrid[x, y].Text = "o";
                         _buttonGrid[x, y].ForeColor = Color.Black;
@@ -573,7 +573,7 @@ namespace Reversi_WFA.View
 
                 case 6:
                     //_buttonGrid[x, y].Text = value.ToString();
-                    if (IsPlayer1TurnOn)
+                    if (_isPlayer1TurnOn)
                     {
                         _buttonGrid[x, y].Text = "o";
                         _buttonGrid[x, y].ForeColor = Color.White;
@@ -590,7 +590,7 @@ namespace Reversi_WFA.View
                 case 4:
                     //_buttonGrid[x, y].Text = value.ToString();
                     _buttonGrid[x, y].Text = "o";
-                    if (IsPlayer1TurnOn)
+                    if (_isPlayer1TurnOn)
                     {
                         _buttonGrid[x, y].ForeColor = Color.White;
                     }
