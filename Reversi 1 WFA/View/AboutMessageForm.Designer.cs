@@ -84,6 +84,7 @@ namespace Reversi_WFA.View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(558, 296);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this._okButton);

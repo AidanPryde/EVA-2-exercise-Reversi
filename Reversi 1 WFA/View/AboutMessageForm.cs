@@ -56,6 +56,7 @@ namespace Reversi_WFA.View
         /// <param name="e">Auto param, we do not use it.</param>
         private void okButton_Click(object sender, EventArgs e)
         {
+
             Close();
         }
 
