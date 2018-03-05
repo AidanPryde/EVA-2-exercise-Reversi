@@ -1,4 +1,5 @@
 # EVA-2-first-exercise-WFA-Reversi 
+The Event Driven Application Development 2 course exercise at hungarian university ELTE IK.
 
 (1.) beadandó feladat: Windows Forms grafikus felületű alkalmazás
 Közös követelmények:
